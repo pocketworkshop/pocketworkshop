@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online PDF merge tool. Combine multiple PDF files into one PDF in your browser." />
+  <title>PDF Merge — PocketWorkshop</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .pdf-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .pdf-item {
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: white;
+    }
+
+    .pdf-meta {
+      min-width: 0;
+    }
+
+    .pdf-name {
+      display: block;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .pdf-size {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .pdf-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pdf-summary {
+      margin: 18px 18px 0;
+      padding: 15px;
+      border-radius: 14px;
+      background: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .pdf-summary span {
+      color: var(--muted);
+    }
+
+    .pdf-empty {
+      padding: 24px 18px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    .note-box {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    @media (max-width: 560px) {
+      .pdf-item {
+        grid-template-columns: 1fr;
+      }
+
+      .pdf-buttons {
+        justify-content: flex-start;
+      }
+
+      .pdf-summary {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="#tool">Tool</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">PDF TOOL</p>
+      <h1>PDF Merge</h1>
+      <p class="hero-copy">Combine multiple PDF files into one PDF directly in your browser. Your files stay on your device.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="file-upload">
+          <label class="file-button" for="pdf-input">Choose PDF files</label>
+          <input id="pdf-input" type="file" accept="application/pdf" multiple />
+          <p id="pdf-file-name" class="file-name">No PDF files selected</p>
+          <small>Select two or more PDF files</small>
+        </div>
+
+        <div class="pdf-summary">
+          <div>
+            <strong id="pdf-count">0 files</strong>
+            <span id="pdf-total-size">0 B total</span>
+          </div>
+          <div class="tool-actions" style="padding:0; min-height:auto;">
+            <button id="pdf-clear-button" type="button">Clear</button>
+            <button id="pdf-merge-button" class="button-primary" type="button">Merge PDFs</button>
+            <span id="pdf-status" class="status" role="status"></span>
+          </div>
+        </div>
+
+        <ul id="pdf-list" class="pdf-list"></ul>
+        <div id="pdf-empty" class="pdf-empty">Add at least two PDF files to merge them.</div>
+
+        <div class="download-panel" id="pdf-download-panel" hidden>
+          <div>
+            <strong>Your merged PDF is ready.</strong>
+            <p id="pdf-download-info"></p>
+          </div>
+          <a id="pdf-download-link" class="primary-button" href="#" download>Download PDF</a>
+        </div>
+      </div>
+
+      <p class="note-box">
+        Tip: use the Up and Down buttons to change the page order before merging.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>Free browser-based tools for everyday tasks.</span>
+  </footer>
+
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script src="/tools/pdf-merge.js"></script>
+</body>
+</html>
