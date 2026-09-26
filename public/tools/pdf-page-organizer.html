@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online PDF page organizer. Reorder or remove PDF pages and save a new PDF directly in your browser." />
+  <title>PDF Page Organizer — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/pdf-page-organizer.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="PDF Page Organizer — PocketWorkshop" />
+  <meta property="og:description" content="Reorder or remove PDF pages and save a new PDF directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/pdf-page-organizer.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PDF Page Organizer — PocketWorkshop" />
+  <meta name="twitter:description" content="Reorder or remove PDF pages and save a new PDF directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .organizer-panel {
+      padding: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .organizer-info {
+      display: grid;
+      grid-template-columns: 1.5fr .7fr .7fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .organizer-info > div {
+      min-width: 0;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--soft);
+    }
+
+    .organizer-info span {
+      display: block;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .organizer-info strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 1rem;
+      overflow-wrap: anywhere;
+    }
+
+    .organizer-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 14px;
+    }
+
+    .page-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 8px 24px rgba(20,35,28,.05);
+    }
+
+    .page-preview {
+      min-height: 180px;
+      padding: 12px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(45deg, #f2f3ef 25%, transparent 25%),
+        linear-gradient(-45deg, #f2f3ef 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f2f3ef 75%),
+        linear-gradient(-45deg, transparent 75%, #f2f3ef 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .page-preview canvas {
+      max-width: 100%;
+      height: auto;
+      box-shadow: 0 5px 16px rgba(20,35,28,.15);
+      background: white;
+    }
+
+    .page-card-body {
+      padding: 12px;
+    }
+
+    .page-card-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: baseline;
+    }
+
+    .page-card-title strong {
+      font-size: .95rem;
+    }
+
+    .page-card-title span {
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .page-card-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .page-card-actions button {
+      padding: 8px 6px;
+      font-size: .8rem;
+    }
+
+    .organizer-note {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    #organizer-download-panel {
+      display: none;
+    }
+
+    #organizer-download-panel.ready {
+      display: flex;
+    }
+
+    @media (max-width: 700px) {
+      .organizer-info {
+        grid-template-columns: 1fr;
+      }
+
+      .page-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .page-preview {
+        min-height: 135px;
+        padding: 8px;
+      }
+
+      .page-card-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .page-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="#tool">Tool</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">PDF TOOL</p>
+      <h1>PDF Page Organizer</h1>
+      <p class="hero-copy">
+        Reorder pages, remove pages you do not need, and save a new PDF.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="file-upload">
+          <label class="file-button" for="organizer-input">Choose a PDF</label>
+          <input id="organizer-input" type="file" accept="application/pdf,.pdf" />
+          <p id="organizer-file-name" class="file-name">No PDF selected</p>
+          <small>Select one PDF file</small>
+        </div>
+
+        <div id="organizer-workspace" class="organizer-panel" hidden>
+          <div class="organizer-info">
+            <div>
+              <span>File</span>
+              <strong id="organizer-file-info">—</strong>
+            </div>
+            <div>
+              <span>Original pages</span>
+              <strong id="organizer-original-pages">—</strong>
+            </div>
+            <div>
+              <span>Pages kept</span>
+              <strong id="organizer-kept-pages">—</strong>
+            </div>
+          </div>
+
+          <div class="organizer-toolbar">
+            <button id="organizer-restore-button" type="button">Restore original order</button>
+            <button id="organizer-create-button" class="button-primary" type="button">Create organized PDF</button>
+            <button id="organizer-reset-button" type="button">Reset</button>
+            <span id="organizer-status" class="status" role="status"></span>
+          </div>
+
+          <div id="organizer-page-grid" class="page-grid" aria-live="polite"></div>
+
+          <p class="organizer-note">
+            Use Up and Down to change the page order. Remove deletes a page from the new PDF only; your original file is not changed.
+          </p>
+        </div>
+
+        <div class="download-panel" id="organizer-download-panel">
+          <div>
+            <strong>Your organized PDF is ready.</strong>
+            <p id="organizer-download-info"></p>
+          </div>
+          <button id="organizer-download-button" class="button-primary" type="button">Download PDF</button>
+        </div>
+      </div>
+
+      <p style="margin-top:18px; color:var(--muted); font-size:.94rem;">
+        Large PDFs may take a moment while page previews are created on mobile devices.
+      </p>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Put PDF pages in the order you want.</h2>
+        <p>See page previews, move pages up or down, remove unwanted pages, and download a newly organized PDF.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>How to use it</h3>
+          <ol>
+            <li>Select a PDF file.</li>
+            <li>Use Up and Down to rearrange pages.</li>
+            <li>Remove any pages you do not need.</li>
+            <li>Create and download the organized PDF.</li>
+          </ol>
+        </article>
+
+        <article class="guide-card">
+          <h3>Page previews</h3>
+          <p>Small page previews make it easier to identify pages before you move or remove them.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common uses</h3>
+          <p>Useful for fixing scanned documents, rearranging forms, removing blank pages, or preparing a cleaner PDF before sharing it.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>The organizing process runs locally in your browser. Your selected PDF is not intentionally uploaded to PocketWorkshop for processing.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="/tools/pdf-page-organizer.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
