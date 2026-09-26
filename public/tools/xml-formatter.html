@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online XML formatter and validator. Pretty-print, minify and validate XML directly in your browser without uploading your data." />
+  <title>XML Formatter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/xml-formatter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="XML Formatter — PocketWorkshop" />
+  <meta property="og:description" content="Format, minify and validate XML directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/xml-formatter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="XML Formatter — PocketWorkshop" />
+  <meta name="twitter:description" content="Format, minify and validate XML directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .xml-layout { display:grid; grid-template-columns:1fr 1fr; }
+    .xml-pane { min-width:0; }
+    .xml-pane:first-child { border-right:1px solid var(--line); }
+    .xml-pane-header { padding:14px 18px; display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid var(--line); background:var(--soft); }
+    .xml-pane-header strong { font-size:.94rem; }
+    .xml-count { color:var(--muted); font-size:.82rem; text-align:right; }
+    .xml-textarea { min-height:360px; border-bottom:0; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.9rem; line-height:1.55; tab-size:4; }
+    .xml-options { padding:14px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:12px 18px; align-items:center; background:rgba(255,255,255,.55); }
+    .xml-field { display:flex; gap:8px; align-items:center; color:var(--muted); font-size:.9rem; font-weight:650; }
+    .xml-field select { min-width:132px; }
+    .xml-check { display:flex; gap:8px; align-items:center; color:var(--muted); font-size:.9rem; font-weight:650; }
+    .xml-check input { width:18px; height:18px; accent-color:var(--accent-dark); }
+    .xml-actions { padding:14px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .xml-summary { margin-left:auto; color:var(--muted); font-size:.88rem; }
+    .xml-error { margin:0 18px 18px; padding:12px 14px; border:1px solid #e6b8b8; border-radius:12px; background:#fff2f2; color:#8a2f2f; font-size:.9rem; line-height:1.5; display:none; white-space:pre-wrap; overflow-wrap:anywhere; }
+    @media (max-width:760px) {
+      .xml-layout { grid-template-columns:1fr; }
+      .xml-pane:first-child { border-right:0; border-bottom:1px solid var(--line); }
+      .xml-textarea { min-height:250px; }
+      .xml-summary { width:100%; margin-left:0; }
+      .xml-field { width:100%; justify-content:space-between; }
+      .xml-field select { flex:1; max-width:210px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home"><span class="brand-mark" aria-hidden="true">▣</span><span>PocketWorkshop</span></a>
+    <nav><a href="/">Home</a><a href="/tools.html">All Tools</a></nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DATA TOOL</p>
+      <h1>XML Formatter</h1>
+      <p class="hero-copy">Pretty-print, minify and validate XML without uploading it. Everything is processed locally in your browser.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="xml-layout">
+          <div class="xml-pane">
+            <div class="xml-pane-header"><strong>XML input</strong><span id="xml-input-count" class="xml-count">0 characters</span></div>
+            <textarea id="xml-input" class="xml-textarea" spellcheck="false" placeholder="Paste XML here..." aria-label="XML input"></textarea>
+          </div>
+          <div class="xml-pane">
+            <div class="xml-pane-header"><strong>Result</strong><span id="xml-output-count" class="xml-count">0 characters</span></div>
+            <textarea id="xml-output" class="xml-textarea" spellcheck="false" placeholder="Formatted or minified XML will appear here..." aria-label="XML result"></textarea>
+          </div>
+        </div>
+
+        <div class="xml-options">
+          <label class="xml-field" for="xml-indent">
+            <span>Indentation</span>
+            <select id="xml-indent">
+              <option value="2" selected>2 spaces</option>
+              <option value="4">4 spaces</option>
+              <option value="tab">Tab</option>
+            </select>
+          </label>
+          <label class="xml-check" for="xml-keep-declaration"><input id="xml-keep-declaration" type="checkbox" checked />Keep XML declaration</label>
+        </div>
+
+        <div class="xml-actions">
+          <button id="xml-format" class="button-primary" type="button">Format XML</button>
+          <button id="xml-minify" type="button">Minify</button>
+          <button id="xml-validate" type="button">Validate</button>
+          <button id="xml-copy" type="button">Copy result</button>
+          <button id="xml-sample" type="button">Load sample</button>
+          <button id="xml-clear" type="button">Clear</button>
+          <span id="xml-status" class="status" role="status"></span>
+          <span id="xml-summary" class="xml-summary"></span>
+        </div>
+        <div id="xml-error" class="xml-error" role="alert"></div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Make XML easier to read and inspect.</h2>
+        <p>Use the formatter for readable indentation, minify XML for compact output, or validate pasted XML before using it elsewhere.</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card"><h3>Format XML</h3><p>Indent nested elements while keeping attributes, comments, CDATA sections, processing instructions and mixed text content intact where possible.</p></article>
+        <article class="guide-card"><h3>Validate XML</h3><p>The browser's built-in XML parser checks whether the document is well formed and reports parsing errors when it can.</p></article>
+        <article class="guide-card"><h3>Minify XML</h3><p>Remove formatting-only whitespace between elements to create a more compact XML string without sending it to a server.</p></article>
+        <article class="guide-card"><h3>Privacy</h3><p>Your XML is processed locally in your browser and is not intentionally uploaded to PocketWorkshop for formatting or validation.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span><a href="/tools.html">All Tools</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+  </footer>
+
+  <script src="/tools/xml-formatter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free slug generator. Turn titles and phrases into clean, URL-friendly slugs directly in your browser." />
+  <title>Slug Generator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/slug-generator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Slug Generator — PocketWorkshop" />
+  <meta property="og:description" content="Turn titles and phrases into clean, URL-friendly slugs directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/slug-generator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Slug Generator — PocketWorkshop" />
+  <meta name="twitter:description" content="Turn titles and phrases into clean, URL-friendly slugs directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .slug-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .slug-pane {
+      min-width: 0;
+    }
+
+    .slug-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .slug-pane-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .slug-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .slug-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .slug-textarea {
+      min-height: 240px;
+      border-bottom: 0;
+    }
+
+    .slug-result-wrap {
+      padding: 18px;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .slug-result {
+      width: 100%;
+      min-height: 112px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .slug-preview {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: .86rem;
+      overflow-wrap: anywhere;
+    }
+
+    .slug-preview strong {
+      color: var(--ink);
+    }
+
+    .slug-options {
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 18px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .slug-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .slug-field label,
+    .slug-option-title {
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .slug-field select,
+    .slug-field input[type="number"] {
+      width: 100%;
+    }
+
+    .slug-checks {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 16px;
+    }
+
+    .slug-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: var(--ink);
+      font-size: .92rem;
+      font-weight: 650;
+    }
+
+    .slug-check input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent-dark);
+      flex: 0 0 auto;
+    }
+
+    .slug-check small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .slug-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .slug-summary {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    @media (max-width: 760px) {
+      .slug-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .slug-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .slug-textarea,
+      .slug-result-wrap {
+        min-height: 190px;
+      }
+
+      .slug-options,
+      .slug-checks {
+        grid-template-columns: 1fr;
+      }
+
+      .slug-summary {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Slug Generator</h1>
+      <p class="hero-copy">
+        Turn a title or phrase into a clean, URL-friendly slug. Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="slug-grid">
+          <div class="slug-pane">
+            <div class="slug-pane-header">
+              <strong>Source text</strong>
+              <span id="slug-input-count" class="slug-count">0 characters</span>
+            </div>
+            <textarea id="slug-input" class="slug-textarea" spellcheck="true" placeholder="Example: 10 Easy Ways to Build a Better Home Office" aria-label="Text to turn into a slug"></textarea>
+          </div>
+
+          <div class="slug-pane">
+            <div class="slug-pane-header">
+              <strong>Generated slug</strong>
+              <span id="slug-output-count" class="slug-count">0 characters</span>
+            </div>
+            <div class="slug-result-wrap">
+              <textarea id="slug-output" class="slug-result" readonly aria-label="Generated slug" placeholder="your-url-friendly-slug"></textarea>
+              <div class="slug-preview">Preview: <strong id="slug-preview">/your-url-friendly-slug</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slug-options">
+          <div class="slug-field">
+            <label for="slug-separator">Word separator</label>
+            <select id="slug-separator">
+              <option value="-" selected>Hyphen (-)</option>
+              <option value="_">Underscore (_)</option>
+            </select>
+          </div>
+
+          <div class="slug-field">
+            <label for="slug-max-length">Maximum length</label>
+            <input id="slug-max-length" type="number" inputmode="numeric" min="0" max="500" step="1" value="0" aria-describedby="slug-length-help" />
+            <small id="slug-length-help">Use 0 for no limit.</small>
+          </div>
+
+          <div class="slug-checks">
+            <label class="slug-check" for="slug-lowercase">
+              <input id="slug-lowercase" type="checkbox" checked />
+              <span>Convert to lowercase<small>Recommended for consistent URLs.</small></span>
+            </label>
+
+            <label class="slug-check" for="slug-remove-accents">
+              <input id="slug-remove-accents" type="checkbox" checked />
+              <span>Remove accents<small>Turns “café” into “cafe” and “über” into “uber”.</small></span>
+            </label>
+
+            <label class="slug-check" for="slug-ampersand">
+              <input id="slug-ampersand" type="checkbox" checked />
+              <span>Replace &amp; with “and”<small>Keeps common titles more readable.</small></span>
+            </label>
+
+            <label class="slug-check" for="slug-ascii-only">
+              <input id="slug-ascii-only" type="checkbox" checked />
+              <span>ASCII-only output<small>Remove characters outside A–Z, a–z and 0–9.</small></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="slug-actions">
+          <button id="slug-generate" class="button-primary" type="button">Generate slug</button>
+          <button id="slug-copy" type="button">Copy slug</button>
+          <button id="slug-sample" type="button">Load sample</button>
+          <button id="slug-clear" type="button">Clear</button>
+          <span id="slug-status" class="status" role="status"></span>
+          <span id="slug-summary" class="slug-summary"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Create clean slugs for URLs and filenames.</h2>
+        <p>Convert human-readable titles into compact strings that are easier to use in page URLs, blog posts, docs and simple filenames.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>What is a slug?</h3>
+          <p>A slug is the readable part of a URL, such as <code>easy-home-office-ideas</code> in <code>/blog/easy-home-office-ideas</code>.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Useful options</h3>
+          <p>Choose hyphens or underscores, remove accents, convert to lowercase, replace ampersands and optionally limit the final length.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Length limiting</h3>
+          <p>When a maximum length is set, the tool avoids leaving a trailing separator and tries to stop at a clean word boundary.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your text is processed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/slug-generator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

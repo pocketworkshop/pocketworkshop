@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free favicon generator. Create favicon.ico, PNG favicons, Apple Touch Icons and Android icons from one image directly in your browser." />
+  <title>Favicon Generator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/favicon-generator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Favicon Generator — PocketWorkshop" />
+  <meta property="og:description" content="Create favicon.ico, PNG favicons, Apple Touch Icons and Android icons from one image directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/favicon-generator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Favicon Generator — PocketWorkshop" />
+  <meta name="twitter:description" content="Create favicon.ico, PNG favicons, Apple Touch Icons and Android icons from one image directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .fav-drop {
+      margin: 20px;
+      padding: 34px 20px;
+      border: 2px dashed var(--line);
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255,255,255,.55);
+      cursor: pointer;
+    }
+
+    .fav-drop.is-dragging {
+      border-color: var(--accent-dark);
+      background: var(--soft);
+    }
+
+    .fav-drop strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+
+    .fav-drop span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    #fav-file {
+      display: none;
+    }
+
+    .fav-workspace {
+      display: grid;
+      grid-template-columns: minmax(220px, 320px) 1fr;
+      border-top: 1px solid var(--line);
+    }
+
+    .fav-preview-panel {
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      background: rgba(255,255,255,.45);
+    }
+
+    .fav-preview-box {
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    }
+
+    .fav-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .fav-preview-empty {
+      color: var(--muted);
+      font-size: .88rem;
+      text-align: center;
+      padding: 18px;
+    }
+
+    .fav-source-meta {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: .86rem;
+      overflow-wrap: anywhere;
+    }
+
+    .fav-options {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      align-content: start;
+    }
+
+    .fav-field {
+      display: grid;
+      gap: 8px;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .fav-field select,
+    .fav-field input[type="number"],
+    .fav-field input[type="text"] {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .fav-range-wrap {
+      display: grid;
+      grid-template-columns: 1fr 72px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .fav-range-wrap input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-dark);
+    }
+
+    .fav-background-row {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 8px;
+    }
+
+    .fav-color {
+      padding: 2px !important;
+      height: 42px;
+      cursor: pointer;
+    }
+
+    .fav-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 650;
+    }
+
+    .fav-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .fav-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .fav-results {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .fav-result-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .fav-result-thumb {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size: 12px 12px;
+      background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+    }
+
+    .fav-result-name {
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .fav-result-meta {
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 3px;
+    }
+
+    .fav-empty {
+      grid-column: 1 / -1;
+      color: var(--muted);
+      text-align: center;
+      padding: 20px;
+    }
+
+    .fav-snippet-wrap {
+      padding: 0 20px 20px;
+    }
+
+    .fav-snippet-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .fav-snippet-head strong {
+      font-size: .94rem;
+    }
+
+    .fav-snippet {
+      min-height: 155px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .84rem;
+      line-height: 1.5;
+    }
+
+    .fav-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 860px) {
+      .fav-workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .fav-preview-panel {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .fav-preview-box {
+        max-width: 300px;
+        margin: 0 auto;
+      }
+
+      .fav-results {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .fav-options {
+        grid-template-columns: 1fr;
+      }
+
+      .fav-result-card {
+        grid-template-columns: 52px 1fr;
+      }
+
+      .fav-result-card button {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE TOOL</p>
+      <h1>Favicon Generator</h1>
+      <p class="hero-copy">
+        Create a favicon.ico and common PNG site icons from one image.
+        Everything is generated locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <label id="fav-drop" class="fav-drop" for="fav-file">
+          <strong>Choose an image or drop it here</strong>
+          <span>JPG, PNG, WebP, SVG and other browser-supported image formats</span>
+        </label>
+        <input id="fav-file" type="file" accept="image/*,.svg" />
+
+        <div class="fav-workspace">
+          <div class="fav-preview-panel">
+            <div class="fav-preview-box">
+              <img id="fav-preview" alt="Favicon source preview" hidden />
+              <span id="fav-preview-empty" class="fav-preview-empty">Your source image will appear here.</span>
+            </div>
+            <div id="fav-source-meta" class="fav-source-meta">No image loaded.</div>
+          </div>
+
+          <div class="fav-options">
+            <label class="fav-field" for="fav-fit">
+              Image fit
+              <select id="fav-fit">
+                <option value="contain" selected>Fit inside (contain)</option>
+                <option value="cover">Fill square (crop edges)</option>
+              </select>
+            </label>
+
+            <label class="fav-field" for="fav-padding-range">
+              Padding
+              <div class="fav-range-wrap">
+                <input id="fav-padding-range" type="range" min="0" max="30" value="8" />
+                <input id="fav-padding-number" type="number" min="0" max="30" value="8" inputmode="numeric" />
+              </div>
+            </label>
+
+            <div class="fav-field">
+              Background
+              <div class="fav-background-row">
+                <input id="fav-background-color" class="fav-color" type="color" value="#ffffff" aria-label="Background color" />
+                <input id="fav-background-text" type="text" value="#ffffff" aria-label="Background color text" />
+              </div>
+              <label class="fav-check">
+                <input id="fav-transparent" type="checkbox" checked />
+                Transparent background
+              </label>
+            </div>
+
+            <div class="fav-field">
+              Output set
+              <label class="fav-check"><input id="fav-output-ico" type="checkbox" checked /> favicon.ico (16, 32, 48, 64)</label>
+              <label class="fav-check"><input id="fav-output-web" type="checkbox" checked /> favicon-16.png + favicon-32.png</label>
+              <label class="fav-check"><input id="fav-output-apple" type="checkbox" checked /> apple-touch-icon.png (180)</label>
+              <label class="fav-check"><input id="fav-output-android" type="checkbox" checked /> icon-192.png + icon-512.png</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="fav-actions">
+          <button id="fav-generate" class="button-primary" type="button">Generate favicons</button>
+          <button id="fav-sample" type="button">Load sample</button>
+          <button id="fav-clear" type="button">Clear</button>
+          <span id="fav-status" class="status" role="status"></span>
+        </div>
+
+        <div id="fav-results" class="fav-results">
+          <div class="fav-empty">Generate icons to see download options here.</div>
+        </div>
+
+        <div class="fav-snippet-wrap">
+          <div class="fav-snippet-head">
+            <strong>HTML snippet</strong>
+            <button id="fav-copy-snippet" type="button">Copy snippet</button>
+          </div>
+          <textarea id="fav-snippet" class="fav-snippet" spellcheck="false" readonly placeholder="Recommended favicon link tags will appear here..." aria-label="Favicon HTML snippet"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Create the common favicon files a website needs.</h2>
+        <p>Start with one square or nearly square logo and generate desktop, browser, Apple and Android icon sizes.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>favicon.ico</h3>
+          <p>The ICO file contains several PNG-compressed icon sizes in one file for broad browser and desktop compatibility.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>PNG icons</h3>
+          <p>Generate 16×16 and 32×32 browser icons, a 180×180 Apple Touch Icon, and 192×192 plus 512×512 Android icons.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Fit and padding</h3>
+          <p>Use contain to keep the whole logo visible, cover to fill the square, and add padding when the artwork feels too close to the edges.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your image and generated icons are processed locally in your browser and are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/favicon-generator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

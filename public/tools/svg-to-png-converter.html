@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free SVG to PNG converter. Convert SVG files or pasted SVG markup to PNG with custom dimensions, scale and background color directly in your browser." />
+  <title>SVG to PNG Converter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/svg-to-png-converter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="SVG to PNG Converter — PocketWorkshop" />
+  <meta property="og:description" content="Convert SVG files or pasted SVG markup to PNG with custom size and background options directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/svg-to-png-converter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SVG to PNG Converter — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert SVG files or pasted SVG markup to PNG with custom size and background options directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .svg-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+      flex-wrap: wrap;
+    }
+
+    .svg-tab {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .svg-tab.is-active {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+      color: white;
+    }
+
+    .svg-panel[hidden] {
+      display: none;
+    }
+
+    .svg-drop {
+      margin: 20px;
+      padding: 34px 20px;
+      border: 2px dashed var(--line);
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255,255,255,.55);
+      cursor: pointer;
+    }
+
+    .svg-drop.is-dragging {
+      border-color: var(--accent-dark);
+      background: var(--soft);
+    }
+
+    .svg-drop strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+
+    .svg-drop span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    #svg-file {
+      display: none;
+    }
+
+    .svg-code-wrap {
+      padding: 18px 20px;
+    }
+
+    .svg-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 750;
+    }
+
+    .svg-count {
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 500;
+    }
+
+    .svg-code {
+      min-height: 240px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .86rem;
+      line-height: 1.5;
+    }
+
+    .svg-options {
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .svg-field {
+      display: grid;
+      gap: 8px;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .svg-field input,
+    .svg-field select {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .svg-background-row {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 8px;
+    }
+
+    .svg-color {
+      padding: 2px !important;
+      height: 42px;
+      cursor: pointer;
+    }
+
+    .svg-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 650;
+    }
+
+    .svg-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .svg-actions {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .svg-result {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 360px);
+      gap: 18px;
+      padding: 20px;
+    }
+
+    .svg-preview-box {
+      min-height: 320px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      padding: 18px;
+      background:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    }
+
+    .svg-preview-box img {
+      max-width: 100%;
+      max-height: 420px;
+      object-fit: contain;
+    }
+
+    .svg-info {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .svg-info-card {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+    }
+
+    .svg-info-card strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .svg-info-card span {
+      color: var(--muted);
+      font-size: .88rem;
+      overflow-wrap: anywhere;
+    }
+
+    .svg-download {
+      width: 100%;
+    }
+
+    .svg-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 860px) {
+      .svg-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .svg-result {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .svg-options {
+        grid-template-columns: 1fr;
+      }
+
+      .svg-preview-box {
+        min-height: 240px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE TOOL</p>
+      <h1>SVG to PNG Converter</h1>
+      <p class="hero-copy">
+        Convert an SVG file or pasted SVG markup to PNG with custom size and background options.
+        Processing happens locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="svg-tabs" role="tablist" aria-label="SVG input mode">
+          <button id="svg-tab-file" class="svg-tab is-active" type="button" role="tab" aria-selected="true">Upload SVG</button>
+          <button id="svg-tab-code" class="svg-tab" type="button" role="tab" aria-selected="false">Paste SVG code</button>
+        </div>
+
+        <div id="svg-panel-file" class="svg-panel">
+          <label id="svg-drop" class="svg-drop" for="svg-file">
+            <strong>Choose an SVG file or drop it here</strong>
+            <span>.svg files · processed locally in your browser</span>
+          </label>
+          <input id="svg-file" type="file" accept=".svg,image/svg+xml" />
+        </div>
+
+        <div id="svg-panel-code" class="svg-panel" hidden>
+          <div class="svg-code-wrap">
+            <div class="svg-label">
+              <span>SVG markup</span>
+              <span id="svg-code-count" class="svg-count">0 characters</span>
+            </div>
+            <textarea id="svg-code" class="svg-code" spellcheck="false"
+              placeholder='<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200">...</svg>'
+              aria-label="SVG markup"></textarea>
+          </div>
+        </div>
+
+        <div class="svg-options">
+          <label class="svg-field" for="svg-width">
+            Width
+            <input id="svg-width" type="number" min="1" max="12000" value="800" inputmode="numeric" />
+          </label>
+
+          <label class="svg-field" for="svg-height">
+            Height
+            <input id="svg-height" type="number" min="1" max="12000" value="800" inputmode="numeric" />
+          </label>
+
+          <label class="svg-field" for="svg-scale">
+            Scale
+            <select id="svg-scale">
+              <option value="1" selected>1×</option>
+              <option value="2">2×</option>
+              <option value="3">3×</option>
+              <option value="4">4×</option>
+            </select>
+          </label>
+
+          <div class="svg-field">
+            Background
+            <div class="svg-background-row">
+              <input id="svg-background-color" class="svg-color" type="color" value="#ffffff" aria-label="Background color" />
+              <input id="svg-background-text" type="text" value="#ffffff" aria-label="Background color text" />
+            </div>
+            <label class="svg-check">
+              <input id="svg-transparent" type="checkbox" checked />
+              Transparent background
+            </label>
+          </div>
+        </div>
+
+        <div class="svg-actions">
+          <button id="svg-convert" class="button-primary" type="button">Convert to PNG</button>
+          <button id="svg-sample" type="button">Load sample</button>
+          <button id="svg-reset-size" type="button">Use SVG size</button>
+          <button id="svg-clear" type="button">Clear</button>
+          <span id="svg-status" class="status" role="status"></span>
+        </div>
+
+        <div class="svg-result">
+          <div class="svg-preview-box">
+            <img id="svg-preview" alt="PNG preview" hidden />
+            <span id="svg-preview-empty" class="svg-count">Converted PNG preview will appear here.</span>
+          </div>
+
+          <div class="svg-info">
+            <div class="svg-info-card">
+              <strong>Source</strong>
+              <span id="svg-source-info">No SVG loaded</span>
+            </div>
+
+            <div class="svg-info-card">
+              <strong>PNG size</strong>
+              <span id="svg-png-size">—</span>
+            </div>
+
+            <div class="svg-info-card">
+              <strong>Output dimensions</strong>
+              <span id="svg-output-dimensions">—</span>
+            </div>
+
+            <button id="svg-download" class="button-primary svg-download" type="button" disabled>Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Turn scalable SVG artwork into a PNG image.</h2>
+        <p>Useful when a website, app, document or social platform needs a raster PNG instead of an SVG file.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Choose your output size</h3>
+          <p>Set width and height manually, use the SVG's original dimensions, or multiply the result with 2×, 3× or 4× scale.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Transparency</h3>
+          <p>Keep transparent areas transparent, or turn transparency off and choose a solid background color for the PNG.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>SVG compatibility</h3>
+          <p>The converter uses your browser's SVG renderer. External fonts, linked images and unsupported SVG features may render differently.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your SVG and PNG are processed locally in your browser and are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/svg-to-png-converter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

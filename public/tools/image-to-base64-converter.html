@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free image to Base64 converter. Convert images to Base64 or Data URLs and preview Base64 images directly in your browser without uploading files." />
+  <title>Image to Base64 Converter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/image-to-base64-converter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Image to Base64 Converter — PocketWorkshop" />
+  <meta property="og:description" content="Convert images to Base64 or Data URLs and preview Base64 images directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/image-to-base64-converter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Image to Base64 Converter — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert images to Base64 or Data URLs and preview Base64 images directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .b64-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+      flex-wrap: wrap;
+    }
+
+    .b64-tab {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .b64-tab.is-active {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+      color: white;
+    }
+
+    .b64-panel[hidden] {
+      display: none;
+    }
+
+    .b64-drop {
+      margin: 20px;
+      padding: 34px 20px;
+      border: 2px dashed var(--line);
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255,255,255,.55);
+      cursor: pointer;
+    }
+
+    .b64-drop.is-dragging {
+      border-color: var(--accent-dark);
+      background: var(--soft);
+    }
+
+    .b64-drop strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+
+    .b64-drop span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    #b64-file {
+      display: none;
+    }
+
+    .b64-preview-wrap {
+      display: none;
+      grid-template-columns: 180px 1fr;
+      gap: 18px;
+      padding: 20px;
+      border-top: 1px solid var(--line);
+      align-items: start;
+    }
+
+    .b64-preview-wrap.is-visible {
+      display: grid;
+    }
+
+    .b64-preview {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    }
+
+    .b64-meta {
+      display: grid;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .b64-meta-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 10px;
+      font-size: .9rem;
+    }
+
+    .b64-meta-row strong {
+      color: var(--muted);
+    }
+
+    .b64-meta-row span {
+      overflow-wrap: anywhere;
+    }
+
+    .b64-output-wrap,
+    .b64-decode-wrap {
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .b64-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 750;
+    }
+
+    .b64-count {
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 500;
+    }
+
+    .b64-textarea {
+      min-height: 220px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .86rem;
+      line-height: 1.5;
+    }
+
+    .b64-options {
+      padding: 14px 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+      background: rgba(255,255,255,.55);
+    }
+
+    .b64-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 650;
+    }
+
+    .b64-option input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .b64-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .b64-decoded-preview {
+      display: none;
+      padding: 20px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .b64-decoded-preview.is-visible {
+      display: block;
+    }
+
+    .b64-decoded-preview img {
+      max-width: 100%;
+      max-height: 420px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    }
+
+    .b64-decode-info {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .b64-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .b64-preview-wrap.is-visible {
+        grid-template-columns: 1fr;
+      }
+
+      .b64-preview {
+        width: 100%;
+        height: 220px;
+      }
+
+      .b64-meta-row {
+        grid-template-columns: 90px 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE TOOL</p>
+      <h1>Image to Base64 Converter</h1>
+      <p class="hero-copy">
+        Convert an image to Base64 or a Data URL, or preview a Base64 image.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="b64-tabs" role="tablist" aria-label="Base64 converter mode">
+          <button id="b64-tab-encode" class="b64-tab is-active" type="button" role="tab" aria-selected="true">Image → Base64</button>
+          <button id="b64-tab-decode" class="b64-tab" type="button" role="tab" aria-selected="false">Base64 → Image</button>
+        </div>
+
+        <div id="b64-panel-encode" class="b64-panel">
+          <label id="b64-drop" class="b64-drop" for="b64-file">
+            <strong>Choose an image or drop it here</strong>
+            <span>JPG, PNG, WebP, GIF, SVG and other browser-supported image formats</span>
+          </label>
+          <input id="b64-file" type="file" accept="image/*" />
+
+          <div id="b64-preview-wrap" class="b64-preview-wrap">
+            <img id="b64-preview" class="b64-preview" alt="Selected image preview" />
+            <div class="b64-meta">
+              <div class="b64-meta-row"><strong>File name</strong><span id="b64-name">—</span></div>
+              <div class="b64-meta-row"><strong>Type</strong><span id="b64-type">—</span></div>
+              <div class="b64-meta-row"><strong>File size</strong><span id="b64-size">—</span></div>
+              <div class="b64-meta-row"><strong>Dimensions</strong><span id="b64-dimensions">—</span></div>
+            </div>
+          </div>
+
+          <div class="b64-options">
+            <label class="b64-option">
+              <input id="b64-data-url" type="checkbox" checked />
+              Include Data URL prefix
+            </label>
+            <label class="b64-option">
+              <input id="b64-wrap-lines" type="checkbox" />
+              Wrap output every 76 characters
+            </label>
+          </div>
+
+          <div class="b64-output-wrap">
+            <div class="b64-label">
+              <span>Base64 output</span>
+              <span id="b64-output-count" class="b64-count">0 characters</span>
+            </div>
+            <textarea id="b64-output" class="b64-textarea" spellcheck="false" readonly placeholder="Your Base64 output will appear here..." aria-label="Base64 output"></textarea>
+          </div>
+
+          <div class="b64-actions">
+            <button id="b64-copy" class="button-primary" type="button">Copy result</button>
+            <button id="b64-download-text" type="button">Download as TXT</button>
+            <button id="b64-clear" type="button">Clear</button>
+            <span id="b64-status" class="status" role="status"></span>
+          </div>
+        </div>
+
+        <div id="b64-panel-decode" class="b64-panel" hidden>
+          <div class="b64-decode-wrap">
+            <div class="b64-label">
+              <span>Base64 or Data URL</span>
+              <span id="b64-decode-count" class="b64-count">0 characters</span>
+            </div>
+            <textarea id="b64-decode-input" class="b64-textarea" spellcheck="false"
+              placeholder="Paste a Data URL such as data:image/png;base64,... or raw Base64 data..."
+              aria-label="Base64 or Data URL to preview"></textarea>
+          </div>
+
+          <div class="b64-actions">
+            <button id="b64-preview-button" class="button-primary" type="button">Preview image</button>
+            <button id="b64-download-image" type="button" disabled>Download image</button>
+            <button id="b64-decode-clear" type="button">Clear</button>
+            <span id="b64-decode-status" class="status" role="status"></span>
+          </div>
+
+          <div id="b64-decoded-preview" class="b64-decoded-preview">
+            <img id="b64-decoded-image" alt="Decoded Base64 image preview" />
+            <div id="b64-decode-info" class="b64-decode-info"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Move images between files and Base64 text.</h2>
+        <p>Useful for CSS, HTML, APIs, JSON payloads, prototypes, debugging and small embedded assets.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Base64 vs Data URL</h3>
+          <p>Raw Base64 is only the encoded data. A Data URL also includes the MIME type and can often be pasted directly into an image source.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>File size</h3>
+          <p>Base64 text is usually larger than the original binary file, so it is best suited to smaller images and embedded assets.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Preview Base64</h3>
+          <p>Paste either a full image Data URL or raw Base64. For raw Base64, PocketWorkshop tries common image MIME types automatically.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your image and Base64 text are processed locally in your browser and are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/image-to-base64-converter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

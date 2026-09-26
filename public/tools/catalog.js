@@ -238,6 +238,166 @@ window.POCKETWORKSHOP_TOOLS = [
     url: "/tools/random-number-generator.html",
     category: "Other",
     popular: false
+  },
+  {
+    title: "Duplicate Line Remover",
+    icon: "DUP",
+    description: "Remove repeated lines with options for case, spaces and which occurrence to keep.",
+    url: "/tools/duplicate-line-remover.html",
+    category: "Text",
+    popular: false
+  },
+  {
+    title: "Text Sorter",
+    icon: "SORT",
+    description: "Sort lines alphabetically, naturally, numerically, by length or randomly.",
+    url: "/tools/text-sorter.html",
+    category: "Text",
+    popular: false
+  },
+  {
+    title: "Slug Generator",
+    icon: "SLUG",
+    description: "Turn titles and text into clean URL-friendly slugs.",
+    url: "/tools/slug-generator.html",
+    category: "Text",
+    popular: false
+  },
+  {
+    title: "Character Frequency Counter",
+    icon: "FREQ",
+    description: "Count character or word frequency and sort or filter the results.",
+    url: "/tools/character-frequency-counter.html",
+    category: "Text",
+    popular: false
+  },
+  {
+    title: "JSON to YAML Converter",
+    icon: "J→Y",
+    description: "Convert JSON data to readable YAML directly in your browser.",
+    url: "/tools/json-to-yaml.html",
+    category: "Data",
+    popular: false
+  },
+  {
+    title: "YAML to JSON Converter",
+    icon: "Y→J",
+    description: "Convert YAML data to formatted or minified JSON locally.",
+    url: "/tools/yaml-to-json.html",
+    category: "Data",
+    popular: false
+  },
+  {
+    title: "XML Formatter",
+    icon: "XML",
+    description: "Format, minify and validate XML directly in your browser.",
+    url: "/tools/xml-formatter.html",
+    category: "Data",
+    popular: false
+  },
+  {
+    title: "XML to JSON Converter",
+    icon: "X→J",
+    description: "Convert XML elements, attributes and repeated nodes into JSON.",
+    url: "/tools/xml-to-json.html",
+    category: "Data",
+    popular: false
+  },
+  {
+    title: "JWT Decoder",
+    icon: "JWT",
+    description: "Decode JWT headers and payloads and inspect common token claims.",
+    url: "/tools/jwt-decoder.html",
+    category: "Developer",
+    popular: false
+  },
+  {
+    title: "Hash Generator",
+    icon: "HASH",
+    description: "Generate SHA-1, SHA-256, SHA-384 or SHA-512 hashes for text or files.",
+    url: "/tools/hash-generator.html",
+    category: "Developer",
+    popular: false
+  },
+  {
+    title: "Regex Tester",
+    icon: ".*",
+    description: "Test JavaScript regular expressions, flags, matches and capture groups.",
+    url: "/tools/regex-tester.html",
+    category: "Developer",
+    popular: false
+  },
+  {
+    title: "URL Parser",
+    icon: "URL",
+    description: "Break URLs into protocol, host, path, query parameters and hash.",
+    url: "/tools/url-parser.html",
+    category: "Developer",
+    popular: false
+  },
+  {
+    title: "Image to Base64 Converter",
+    icon: "64",
+    description: "Convert images to Base64 or Data URLs and preview Base64 images.",
+    url: "/tools/image-to-base64-converter.html",
+    category: "Image",
+    popular: false
+  },
+  {
+    title: "SVG to PNG Converter",
+    icon: "SVG",
+    description: "Convert SVG files or markup to PNG with custom output size and background.",
+    url: "/tools/svg-to-png-converter.html",
+    category: "Image",
+    popular: false
+  },
+  {
+    title: "Favicon Generator",
+    icon: "ICO",
+    description: "Create favicon.ico, PNG favicons, Apple Touch Icons and Android icons.",
+    url: "/tools/favicon-generator.html",
+    category: "Image",
+    popular: false
+  },
+  {
+    title: "Image Watermark Tool",
+    icon: "WM",
+    description: "Add customizable text watermarks to images and download the result.",
+    url: "/tools/image-watermark-tool.html",
+    category: "Image",
+    popular: false
+  },
+  {
+    title: "Aspect Ratio Calculator",
+    icon: "16:9",
+    description: "Simplify aspect ratios and calculate matching image or video dimensions.",
+    url: "/tools/aspect-ratio-calculator.html",
+    category: "Other",
+    popular: false
+  },
+  {
+    title: "Percentage Calculator",
+    icon: "%",
+    description: "Calculate percentages, percentage shares and percentage change.",
+    url: "/tools/percentage-calculator.html",
+    category: "Other",
+    popular: false
+  },
+  {
+    title: "Date Difference Calculator",
+    icon: "DATE",
+    description: "Find days, weeks, weekdays and calendar differences between two dates.",
+    url: "/tools/date-difference-calculator.html",
+    category: "Other",
+    popular: false
+  },
+  {
+    title: "Random Picker",
+    icon: "PICK",
+    description: "Randomly pick one or more names, choices or ideas from a list.",
+    url: "/tools/random-picker.html",
+    category: "Other",
+    popular: false
   }
 ];
 
@@ -251,31 +411,31 @@ window.POCKETWORKSHOP_CATEGORIES = [
   {
     key: "Image",
     title: "Image Tools",
-    description: "Resize, compress, crop, convert, rotate and flip common image formats.",
+    description: "Resize, compress, crop, convert, encode, watermark and create web-ready image assets.",
     icon: "IMG"
   },
   {
     key: "Text",
     title: "Text Tools",
-    description: "Count, clean, convert, preview and compare text.",
+    description: "Count, clean, convert, sort, compare and analyze text.",
     icon: "Aa"
   },
   {
     key: "Data",
     title: "Data Tools",
-    description: "Format and convert structured data such as JSON and CSV.",
+    description: "Format and convert structured data such as JSON, CSV, YAML and XML.",
     icon: "{}"
   },
   {
     key: "Developer",
     title: "Developer Tools",
-    description: "Handy web, encoding, color, timestamp and development utilities.",
+    description: "Handy web, encoding, hashing, regex, token, color and timestamp utilities.",
     icon: "</>"
   },
   {
     key: "Other",
     title: "Other Tools",
-    description: "Useful generators and everyday utilities that fit outside the main groups.",
+    description: "Useful generators, calculators, randomizers and everyday utilities.",
     icon: "＋"
   }
 ];

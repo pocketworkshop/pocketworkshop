@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free YAML to JSON converter. Convert common YAML mappings, arrays and multiline values into formatted JSON locally in your browser." />
+  <title>YAML to JSON Converter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/yaml-to-json.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="YAML to JSON Converter — PocketWorkshop" />
+  <meta property="og:description" content="Convert YAML into readable JSON directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/yaml-to-json.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="YAML to JSON Converter — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert YAML into readable JSON directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .converter-layout { display:grid; grid-template-columns:1fr 1fr; }
+    .converter-pane { min-width:0; }
+    .converter-pane:first-child { border-right:1px solid var(--line); }
+    .converter-pane-header { padding:14px 18px; display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid var(--line); background:var(--soft); }
+    .converter-pane-header strong { font-size:.94rem; }
+    .converter-count { color:var(--muted); font-size:.82rem; }
+    .converter-textarea { min-height:360px; border-bottom:0; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.9rem; line-height:1.55; }
+    .converter-options { padding:18px; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; background:rgba(255,255,255,.55); }
+    .converter-field { display:flex; flex-direction:column; gap:6px; min-width:0; }
+    .converter-field label { font-size:.86rem; font-weight:700; }
+    .converter-field select { width:100%; }
+    .converter-check { display:flex; align-items:center; gap:9px; min-height:44px; color:var(--ink); font-size:.9rem; font-weight:650; }
+    .converter-check input { width:18px; height:18px; accent-color:var(--accent-dark); flex:0 0 auto; }
+    .converter-actions { padding:14px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .converter-note { padding:0 18px 16px; color:var(--muted); font-size:.84rem; }
+    .converter-error { color:#9a2f2f; font-weight:700; }
+    @media (max-width:760px) {
+      .converter-layout { grid-template-columns:1fr; }
+      .converter-pane:first-child { border-right:0; border-bottom:1px solid var(--line); }
+      .converter-textarea { min-height:260px; }
+      .converter-options { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span><span>PocketWorkshop</span>
+    </a>
+    <nav><a href="/">Home</a><a href="/tools.html">All Tools</a></nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DATA TOOL</p>
+      <h1>YAML to JSON Converter</h1>
+      <p class="hero-copy">Convert common YAML into clean JSON without sending your data to a server.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="converter-layout">
+          <div class="converter-pane">
+            <div class="converter-pane-header">
+              <strong>YAML input</strong>
+              <span id="yaml-json-input-count" class="converter-count">0 characters</span>
+            </div>
+            <textarea id="yaml-json-input" class="converter-textarea" spellcheck="false" placeholder="Paste YAML here...\n\nname: PocketWorkshop\nfree: true\ncategories:\n  - Text\n  - Data" aria-label="YAML input"></textarea>
+          </div>
+
+          <div class="converter-pane">
+            <div class="converter-pane-header">
+              <strong>JSON output</strong>
+              <span id="yaml-json-output-count" class="converter-count">0 characters</span>
+            </div>
+            <textarea id="yaml-json-output" class="converter-textarea" spellcheck="false" readonly placeholder="Converted JSON will appear here..." aria-label="JSON output"></textarea>
+          </div>
+        </div>
+
+        <div class="converter-options">
+          <div class="converter-field">
+            <label for="yaml-json-indent">JSON formatting</label>
+            <select id="yaml-json-indent">
+              <option value="2" selected>2-space indent</option>
+              <option value="4">4-space indent</option>
+              <option value="0">Minified</option>
+            </select>
+          </div>
+
+          <label class="converter-check" for="yaml-json-sort">
+            <input id="yaml-json-sort" type="checkbox" />
+            Sort object keys A–Z
+          </label>
+
+          <label class="converter-check" for="yaml-json-legacy-bools">
+            <input id="yaml-json-legacy-bools" type="checkbox" />
+            Treat yes/no/on/off as booleans
+          </label>
+        </div>
+
+        <div class="converter-actions">
+          <button id="yaml-json-convert" class="button-primary" type="button">Convert to JSON</button>
+          <button id="yaml-json-copy" type="button">Copy JSON</button>
+          <button id="yaml-json-sample" type="button">Load sample</button>
+          <button id="yaml-json-clear" type="button">Clear</button>
+          <span id="yaml-json-status" class="status" role="status" aria-live="polite"></span>
+        </div>
+
+        <p class="converter-note">Supports common YAML mappings, sequences, quoted values, comments, flow collections and <code>|</code>/<code>&gt;</code> multiline strings. Advanced YAML features such as anchors, aliases, tags and multiple documents are intentionally rejected instead of being guessed.</p>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Turn everyday YAML into JSON in your browser.</h2>
+        <p>Useful for configuration files, CI settings, API examples and moving structured data between development tools.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Nested structures</h3>
+          <p>Indented mappings and lists are converted recursively into JSON objects and arrays.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common YAML syntax</h3>
+          <p>Handles quoted strings, comments, inline arrays and objects, booleans, numbers, null values and multiline text.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>JSON controls</h3>
+          <p>Choose two- or four-space indentation, minify the result, or sort object keys alphabetically.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your YAML is parsed and converted locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span><a href="/tools.html">All Tools</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+  </footer>
+
+  <script src="/tools/yaml-to-json.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

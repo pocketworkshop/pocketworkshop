@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free duplicate line remover. Remove repeated lines, ignore case or surrounding whitespace, and keep the first or last occurrence directly in your browser." />
+  <title>Duplicate Line Remover — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/duplicate-line-remover.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Duplicate Line Remover — PocketWorkshop" />
+  <meta property="og:description" content="Remove repeated lines from text while controlling case, whitespace and which occurrence to keep." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/duplicate-line-remover.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Duplicate Line Remover — PocketWorkshop" />
+  <meta name="twitter:description" content="Remove repeated lines from text while controlling case, whitespace and which occurrence to keep." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .duplicate-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .duplicate-pane {
+      min-width: 0;
+    }
+
+    .duplicate-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .duplicate-pane-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .duplicate-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .duplicate-count {
+      color: var(--muted);
+      font-size: .82rem;
+      text-align: right;
+    }
+
+    .duplicate-textarea {
+      min-height: 320px;
+      border-bottom: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92rem;
+      line-height: 1.55;
+    }
+
+    .duplicate-options {
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 18px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .duplicate-option {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      color: var(--ink);
+      font-size: .92rem;
+      font-weight: 650;
+    }
+
+    .duplicate-option input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent-dark);
+      flex: 0 0 auto;
+    }
+
+    .duplicate-option small,
+    .duplicate-select-wrap small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .duplicate-select-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: .92rem;
+      font-weight: 650;
+    }
+
+    .duplicate-select-wrap select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .duplicate-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .duplicate-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.35);
+    }
+
+    .duplicate-stat {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .duplicate-stat strong {
+      display: block;
+      font-size: 1.2rem;
+    }
+
+    .duplicate-stat span {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    @media (max-width: 760px) {
+      .duplicate-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .duplicate-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .duplicate-textarea {
+        min-height: 230px;
+      }
+
+      .duplicate-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .duplicate-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .duplicate-actions button {
+        flex: 1 1 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span><span>PocketWorkshop</span>
+    </a>
+    <nav><a href="/">Home</a><a href="/tools.html">All Tools</a></nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Duplicate Line Remover</h1>
+      <p class="hero-copy">
+        Remove repeated lines from lists, copied data and plain text while keeping the original order.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="duplicate-layout">
+          <div class="duplicate-pane">
+            <div class="duplicate-pane-header">
+              <strong>Input</strong>
+              <span id="duplicate-input-count" class="duplicate-count">0 lines · 0 characters</span>
+            </div>
+            <textarea id="duplicate-input" class="duplicate-textarea" spellcheck="false" placeholder="Paste one item or line per row..." aria-label="Text containing duplicate lines"></textarea>
+          </div>
+
+          <div class="duplicate-pane">
+            <div class="duplicate-pane-header">
+              <strong>Unique lines</strong>
+              <span id="duplicate-output-count" class="duplicate-count">0 lines · 0 characters</span>
+            </div>
+            <textarea id="duplicate-output" class="duplicate-textarea" spellcheck="false" placeholder="Your deduplicated text will appear here..." aria-label="Text with duplicate lines removed"></textarea>
+          </div>
+        </div>
+
+        <div class="duplicate-options">
+          <label class="duplicate-option">
+            <input id="duplicate-ignore-case" type="checkbox" />
+            <span>Ignore letter case<small>Treat Apple, APPLE and apple as the same line.</small></span>
+          </label>
+
+          <label class="duplicate-option">
+            <input id="duplicate-ignore-whitespace" type="checkbox" checked />
+            <span>Ignore surrounding whitespace<small>Compare lines after trimming spaces and tabs at both ends.</small></span>
+          </label>
+
+          <label class="duplicate-option">
+            <input id="duplicate-dedupe-blank" type="checkbox" checked />
+            <span>Deduplicate blank lines<small>Keep at most one blank line instead of preserving every blank row.</small></span>
+          </label>
+
+          <label class="duplicate-select-wrap" for="duplicate-keep-mode">
+            <span>When a duplicate is found</span>
+            <select id="duplicate-keep-mode">
+              <option value="first">Keep the first occurrence</option>
+              <option value="last">Keep the last occurrence</option>
+            </select>
+            <small>The surviving line keeps its original spelling and spacing.</small>
+          </label>
+        </div>
+
+        <div class="duplicate-actions">
+          <button id="duplicate-run" class="button-primary" type="button">Remove duplicates</button>
+          <button id="duplicate-copy" type="button">Copy result</button>
+          <button id="duplicate-use-result" type="button">Use result as input</button>
+          <button id="duplicate-sample" type="button">Load sample</button>
+          <button id="duplicate-clear" type="button">Clear</button>
+          <span id="duplicate-status" class="status" role="status"></span>
+        </div>
+
+        <div class="duplicate-summary" aria-label="Duplicate removal summary">
+          <div class="duplicate-stat"><strong id="duplicate-stat-original">0</strong><span>original lines</span></div>
+          <div class="duplicate-stat"><strong id="duplicate-stat-unique">0</strong><span>lines kept</span></div>
+          <div class="duplicate-stat"><strong id="duplicate-stat-removed">0</strong><span>duplicates removed</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Clean repeated entries without rearranging your list.</h2>
+        <p>Useful for email lists, IDs, keywords, URLs, copied spreadsheet values, logs and any other line-based text.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Preserves order</h3>
+          <p>Unique lines stay in their original order. You can choose whether the first or last duplicate occurrence should survive.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Flexible matching</h3>
+          <p>Choose whether capitalization and surrounding whitespace should matter when identifying duplicate lines.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Original text stays intact</h3>
+          <p>Matching options affect comparison only. The kept line retains the original spelling, capitalization and spacing you entered.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your text is processed locally in your browser and is not intentionally uploaded to PocketWorkshop for duplicate removal.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span><a href="/tools.html">All Tools</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+  </footer>
+
+  <script src="/tools/duplicate-line-remover.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

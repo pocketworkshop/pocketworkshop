@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free percentage calculator. Find a percentage of a number, calculate what percent one value is of another, and measure percentage increase or decrease." />
+  <title>Percentage Calculator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/percentage-calculator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Percentage Calculator — PocketWorkshop" />
+  <meta property="og:description" content="Calculate percentages, percentage shares and percentage change directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/percentage-calculator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Percentage Calculator — PocketWorkshop" />
+  <meta name="twitter:description" content="Calculate percentages, percentage shares and percentage change directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .pct-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      padding:20px;
+    }
+
+    .pct-card {
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      overflow:hidden;
+      min-width:0;
+    }
+
+    .pct-card-head {
+      padding:16px 16px 12px;
+      background:var(--soft);
+      border-bottom:1px solid var(--line);
+    }
+
+    .pct-card-head h2 {
+      margin:0 0 5px;
+      font-size:1.02rem;
+    }
+
+    .pct-card-head p {
+      margin:0;
+      color:var(--muted);
+      font-size:.86rem;
+      line-height:1.45;
+    }
+
+    .pct-card-body {
+      padding:16px;
+      display:grid;
+      gap:12px;
+    }
+
+    .pct-field {
+      display:grid;
+      gap:7px;
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    .pct-field input {
+      width:100%;
+      padding:10px 11px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:#fff;
+      color:var(--ink);
+      font:inherit;
+    }
+
+    .pct-row {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .pct-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+
+    .pct-result {
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--soft);
+    }
+
+    .pct-result strong {
+      display:block;
+      font-size:1.35rem;
+      margin-bottom:4px;
+      overflow-wrap:anywhere;
+    }
+
+    .pct-result span {
+      color:var(--muted);
+      font-size:.84rem;
+      line-height:1.45;
+    }
+
+    .pct-toolbar {
+      padding:14px 20px;
+      border-top:1px solid var(--line);
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+
+    .pct-toolbar .pct-spacer {
+      margin-left:auto;
+      color:var(--muted);
+      font-size:.86rem;
+    }
+
+    .pct-error {
+      color:#9a2f2f;
+      font-weight:700;
+    }
+
+    @media (max-width:980px) {
+      .pct-grid {
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:520px) {
+      .pct-row {
+        grid-template-columns:1fr;
+      }
+
+      .pct-toolbar .pct-spacer {
+        width:100%;
+        margin-left:0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">OTHER TOOL</p>
+      <h1>Percentage Calculator</h1>
+      <p class="hero-copy">
+        Calculate percentages, percentage shares, and percentage increases or decreases.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="pct-grid">
+          <article class="pct-card">
+            <div class="pct-card-head">
+              <h2>What is X% of Y?</h2>
+              <p>Example: What is 15% of 240?</p>
+            </div>
+            <div class="pct-card-body">
+              <div class="pct-row">
+                <label class="pct-field" for="pct-of-percent">
+                  Percentage (%)
+                  <input id="pct-of-percent" type="number" step="any" value="15" inputmode="decimal" />
+                </label>
+
+                <label class="pct-field" for="pct-of-number">
+                  Number
+                  <input id="pct-of-number" type="number" step="any" value="240" inputmode="decimal" />
+                </label>
+              </div>
+
+              <div class="pct-actions">
+                <button id="pct-of-calc" class="button-primary" type="button">Calculate</button>
+              </div>
+
+              <div class="pct-result">
+                <strong id="pct-of-result">36</strong>
+                <span id="pct-of-detail">15% of 240 = 36</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pct-card">
+            <div class="pct-card-head">
+              <h2>X is what % of Y?</h2>
+              <p>Example: 36 is what percentage of 240?</p>
+            </div>
+            <div class="pct-card-body">
+              <div class="pct-row">
+                <label class="pct-field" for="pct-share-part">
+                  Part
+                  <input id="pct-share-part" type="number" step="any" value="36" inputmode="decimal" />
+                </label>
+
+                <label class="pct-field" for="pct-share-whole">
+                  Whole
+                  <input id="pct-share-whole" type="number" step="any" value="240" inputmode="decimal" />
+                </label>
+              </div>
+
+              <div class="pct-actions">
+                <button id="pct-share-calc" class="button-primary" type="button">Calculate</button>
+              </div>
+
+              <div class="pct-result">
+                <strong id="pct-share-result">15%</strong>
+                <span id="pct-share-detail">36 is 15% of 240</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pct-card">
+            <div class="pct-card-head">
+              <h2>Percentage change</h2>
+              <p>Find the percent increase or decrease from an old value to a new value.</p>
+            </div>
+            <div class="pct-card-body">
+              <div class="pct-row">
+                <label class="pct-field" for="pct-change-old">
+                  Old value
+                  <input id="pct-change-old" type="number" step="any" value="80" inputmode="decimal" />
+                </label>
+
+                <label class="pct-field" for="pct-change-new">
+                  New value
+                  <input id="pct-change-new" type="number" step="any" value="100" inputmode="decimal" />
+                </label>
+              </div>
+
+              <div class="pct-actions">
+                <button id="pct-change-calc" class="button-primary" type="button">Calculate</button>
+              </div>
+
+              <div class="pct-result">
+                <strong id="pct-change-result">25% increase</strong>
+                <span id="pct-change-detail">80 → 100 · difference +20</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="pct-toolbar">
+          <button id="pct-sample" type="button">Load sample values</button>
+          <button id="pct-clear" type="button">Clear</button>
+          <span id="pct-status" class="status" role="status"></span>
+          <span class="pct-spacer">Results are rounded only for display.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Handle the most common percentage calculations in one place.</h2>
+        <p>Useful for shopping discounts, growth rates, price changes, schoolwork, budgets, statistics and everyday comparisons.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Percentage of a number</h3>
+          <p>Use the first calculator when you know the percent and the original number, such as 20% of 75.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Percentage share</h3>
+          <p>Use the second calculator to find what percentage one number represents of another, such as 30 out of 120.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Increase or decrease</h3>
+          <p>Use percentage change to compare an old value with a new one and see how much it rose or fell.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>All calculations happen locally in your browser. No values are intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/percentage-calculator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

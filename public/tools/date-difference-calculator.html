@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free date difference calculator. Find the number of days, weeks, months and years between two dates, with optional inclusive counting and weekday totals." />
+  <title>Date Difference Calculator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/date-difference-calculator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Date Difference Calculator — PocketWorkshop" />
+  <meta property="og:description" content="Find days, weeks, calendar years and months between two dates directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/date-difference-calculator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Date Difference Calculator — PocketWorkshop" />
+  <meta name="twitter:description" content="Find days, weeks, calendar years and months between two dates directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .date-inputs {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .date-field {
+      display: grid;
+      gap: 8px;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .date-field input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .date-options {
+      padding: 14px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 20px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+    }
+
+    .date-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 650;
+    }
+
+    .date-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .date-actions {
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .date-summary {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .date-stat {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+      text-align: center;
+    }
+
+    .date-stat strong {
+      display: block;
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+      overflow-wrap: anywhere;
+    }
+
+    .date-stat span {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .date-detail {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .date-card {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--soft);
+    }
+
+    .date-card h3 {
+      margin: 0 0 6px;
+      font-size: .96rem;
+    }
+
+    .date-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .9rem;
+    }
+
+    .date-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 820px) {
+      .date-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .date-detail {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .date-inputs {
+        grid-template-columns: 1fr;
+      }
+
+      .date-summary {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">OTHER TOOL</p>
+      <h1>Date Difference Calculator</h1>
+      <p class="hero-copy">
+        Find the difference between two dates in days, weeks, weekdays and calendar years/months/days.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="date-inputs">
+          <label class="date-field" for="date-start">
+            Start date
+            <input id="date-start" type="date" />
+          </label>
+
+          <label class="date-field" for="date-end">
+            End date
+            <input id="date-end" type="date" />
+          </label>
+        </div>
+
+        <div class="date-options">
+          <label class="date-check">
+            <input id="date-inclusive" type="checkbox" />
+            Count both start and end date
+          </label>
+
+          <label class="date-check">
+            <input id="date-abs" type="checkbox" checked />
+            Always show a positive difference
+          </label>
+        </div>
+
+        <div class="date-actions">
+          <button id="date-calculate" class="button-primary" type="button">Calculate difference</button>
+          <button id="date-swap" type="button">Swap dates</button>
+          <button id="date-today" type="button">Set end to today</button>
+          <button id="date-clear" type="button">Clear</button>
+          <span id="date-status" class="status" role="status"></span>
+        </div>
+
+        <div class="date-summary">
+          <div class="date-stat">
+            <strong id="date-days">0</strong>
+            <span>days</span>
+          </div>
+          <div class="date-stat">
+            <strong id="date-weeks">0</strong>
+            <span>weeks</span>
+          </div>
+          <div class="date-stat">
+            <strong id="date-weekdays">0</strong>
+            <span>weekdays</span>
+          </div>
+          <div class="date-stat">
+            <strong id="date-weekend-days">0</strong>
+            <span>weekend days</span>
+          </div>
+        </div>
+
+        <div class="date-detail">
+          <article class="date-card">
+            <h3>Calendar difference</h3>
+            <p id="date-calendar-diff">0 years, 0 months, 0 days</p>
+          </article>
+
+          <article class="date-card">
+            <h3>Date range</h3>
+            <p id="date-range">Choose two dates to calculate the difference.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Measure the gap between two calendar dates.</h2>
+        <p>Useful for deadlines, project schedules, travel planning, contract periods, countdowns and everyday date calculations.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Total days</h3>
+          <p>Shows the exact whole-day difference between the selected dates. Inclusive mode adds both endpoints to the count.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Calendar difference</h3>
+          <p>Also shows the human-readable gap in calendar years, months and days, such as 1 year, 2 months and 5 days.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Weekdays</h3>
+          <p>Weekday totals count Monday through Friday only. Public holidays are not removed.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>All calculations happen locally in your browser. Your selected dates are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/date-difference-calculator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

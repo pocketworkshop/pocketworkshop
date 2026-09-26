@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online JWT decoder. Decode JSON Web Token headers and payloads, inspect claims and timestamps, and view the signature segment locally in your browser." />
+  <title>JWT Decoder — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/jwt-decoder.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="JWT Decoder — PocketWorkshop" />
+  <meta property="og:description" content="Decode JWT headers and payloads and inspect common claims directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/jwt-decoder.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="JWT Decoder — PocketWorkshop" />
+  <meta name="twitter:description" content="Decode JWT headers and payloads and inspect common claims directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .jwt-input-wrap { border-bottom:1px solid var(--line); }
+    .jwt-pane-header { padding:14px 18px; display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid var(--line); background:var(--soft); }
+    .jwt-pane-header strong { font-size:.94rem; }
+    .jwt-count { color:var(--muted); font-size:.82rem; text-align:right; }
+    .jwt-token { min-height:180px; border-bottom:0; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.88rem; line-height:1.55; overflow-wrap:anywhere; }
+    .jwt-actions { padding:14px 18px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; border-bottom:1px solid var(--line); }
+    .jwt-summary { margin-left:auto; color:var(--muted); font-size:.88rem; }
+    .jwt-grid { display:grid; grid-template-columns:1fr 1fr; }
+    .jwt-pane { min-width:0; }
+    .jwt-pane:first-child { border-right:1px solid var(--line); }
+    .jwt-output { min-height:280px; border-bottom:0; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.88rem; line-height:1.55; }
+    .jwt-pane-actions { padding:12px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px; }
+    .jwt-claims { padding:18px; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; background:rgba(255,255,255,.55); }
+    .jwt-claim { padding:12px; border:1px solid var(--line); border-radius:12px; background:#fff; min-width:0; }
+    .jwt-claim span { display:block; color:var(--muted); font-size:.78rem; margin-bottom:4px; }
+    .jwt-claim strong { display:block; font-size:.9rem; overflow-wrap:anywhere; }
+    .jwt-signature { padding:16px 18px; border-top:1px solid var(--line); }
+    .jwt-signature label { display:block; color:var(--muted); font-size:.82rem; font-weight:700; margin-bottom:8px; }
+    .jwt-signature code { display:block; padding:12px; border:1px solid var(--line); border-radius:12px; background:var(--soft); font-size:.82rem; line-height:1.5; overflow-wrap:anywhere; white-space:pre-wrap; }
+    .jwt-warning { padding:12px 18px; border-top:1px solid var(--line); color:#795717; background:#fff8e7; font-size:.86rem; line-height:1.5; }
+    .jwt-error { margin:16px 18px 18px; padding:12px 14px; border:1px solid #e6b8b8; border-radius:12px; background:#fff2f2; color:#8a2f2f; font-size:.9rem; line-height:1.5; display:none; white-space:pre-wrap; overflow-wrap:anywhere; }
+    @media (max-width:760px) {
+      .jwt-grid { grid-template-columns:1fr; }
+      .jwt-pane:first-child { border-right:0; border-bottom:1px solid var(--line); }
+      .jwt-token { min-height:150px; }
+      .jwt-output { min-height:230px; }
+      .jwt-claims { grid-template-columns:1fr 1fr; }
+      .jwt-summary { width:100%; margin-left:0; }
+    }
+    @media (max-width:460px) { .jwt-claims { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home"><span class="brand-mark" aria-hidden="true">▣</span><span>PocketWorkshop</span></a>
+    <nav><a href="/">Home</a><a href="/tools.html">All Tools</a></nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DEVELOPER TOOL</p>
+      <h1>JWT Decoder</h1>
+      <p class="hero-copy">Decode a JSON Web Token and inspect its header, payload and common time claims. Decoding happens locally in your browser.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="jwt-input-wrap">
+          <div class="jwt-pane-header"><strong>JWT input</strong><span id="jwt-input-count" class="jwt-count">0 characters</span></div>
+          <textarea id="jwt-input" class="jwt-token" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Paste a JWT here (header.payload.signature)..." aria-label="JWT input"></textarea>
+        </div>
+
+        <div class="jwt-actions">
+          <button id="jwt-decode" class="button-primary" type="button">Decode JWT</button>
+          <button id="jwt-sample" type="button">Load sample</button>
+          <button id="jwt-clear" type="button">Clear</button>
+          <span id="jwt-status" class="status" role="status"></span>
+          <span id="jwt-summary" class="jwt-summary"></span>
+        </div>
+
+        <div class="jwt-grid">
+          <div class="jwt-pane">
+            <div class="jwt-pane-header"><strong>Header</strong><span id="jwt-header-count" class="jwt-count">0 characters</span></div>
+            <textarea id="jwt-header" class="jwt-output" spellcheck="false" readonly aria-label="Decoded JWT header" placeholder="Decoded header will appear here..."></textarea>
+            <div class="jwt-pane-actions"><button id="jwt-copy-header" type="button">Copy header</button></div>
+          </div>
+          <div class="jwt-pane">
+            <div class="jwt-pane-header"><strong>Payload</strong><span id="jwt-payload-count" class="jwt-count">0 characters</span></div>
+            <textarea id="jwt-payload" class="jwt-output" spellcheck="false" readonly aria-label="Decoded JWT payload" placeholder="Decoded payload will appear here..."></textarea>
+            <div class="jwt-pane-actions"><button id="jwt-copy-payload" type="button">Copy payload</button></div>
+          </div>
+        </div>
+
+        <div class="jwt-claims" aria-label="Common JWT claims">
+          <div class="jwt-claim"><span>Algorithm</span><strong id="jwt-alg">—</strong></div>
+          <div class="jwt-claim"><span>Issuer (iss)</span><strong id="jwt-iss">—</strong></div>
+          <div class="jwt-claim"><span>Subject (sub)</span><strong id="jwt-sub">—</strong></div>
+          <div class="jwt-claim"><span>Issued at (iat)</span><strong id="jwt-iat">—</strong></div>
+          <div class="jwt-claim"><span>Not before (nbf)</span><strong id="jwt-nbf">—</strong></div>
+          <div class="jwt-claim"><span>Expiration (exp)</span><strong id="jwt-exp">—</strong></div>
+        </div>
+
+        <div class="jwt-signature">
+          <label for="jwt-signature-value">Signature segment (Base64URL)</label>
+          <code id="jwt-signature-value">—</code>
+        </div>
+
+        <div class="jwt-warning"><strong>Important:</strong> This tool decodes JWT contents only. It does not verify the signature or prove that a token is authentic. Avoid pasting live session tokens into tools you do not trust.</div>
+        <div id="jwt-error" class="jwt-error" role="alert"></div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Inspect JWT contents without sending the token to a decoder service.</h2>
+        <p>Useful when debugging authentication flows, API integrations and token claims during development.</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card"><h3>Header</h3><p>See metadata such as the signing algorithm (<code>alg</code>) and token type (<code>typ</code>) stored in the first JWT segment.</p></article>
+        <article class="guide-card"><h3>Payload</h3><p>Read claims such as issuer, subject, audience and custom application data stored in the second segment.</p></article>
+        <article class="guide-card"><h3>Time claims</h3><p>Unix timestamps in <code>iat</code>, <code>nbf</code> and <code>exp</code> are displayed as readable dates when possible.</p></article>
+        <article class="guide-card"><h3>Privacy and verification</h3><p>The token is decoded locally in your browser. Decoding is not signature verification, so do not treat decoded data as trusted by itself.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span><a href="/tools.html">All Tools</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+  </footer>
+
+  <script src="/tools/jwt-decoder.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free aspect ratio calculator. Simplify image ratios, calculate missing width or height, and resize dimensions while preserving the same aspect ratio." />
+  <title>Aspect Ratio Calculator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/aspect-ratio-calculator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Aspect Ratio Calculator — PocketWorkshop" />
+  <meta property="og:description" content="Simplify aspect ratios and calculate matching width or height while preserving proportions." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/aspect-ratio-calculator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Aspect Ratio Calculator — PocketWorkshop" />
+  <meta name="twitter:description" content="Simplify aspect ratios and calculate matching width or height while preserving proportions." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .ar-layout {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      border-bottom:1px solid var(--line);
+    }
+
+    .ar-panel {
+      min-width:0;
+      padding:20px;
+    }
+
+    .ar-panel:first-child {
+      border-right:1px solid var(--line);
+    }
+
+    .ar-panel h2 {
+      margin:0 0 6px;
+      font-size:1.08rem;
+    }
+
+    .ar-help {
+      margin:0 0 16px;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    .ar-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .ar-field {
+      display:grid;
+      gap:7px;
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    .ar-field input,
+    .ar-field select {
+      width:100%;
+      padding:10px 11px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:white;
+      color:var(--ink);
+      font:inherit;
+    }
+
+    .ar-actions {
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+
+    .ar-result {
+      margin-top:16px;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:var(--soft);
+    }
+
+    .ar-result strong {
+      display:block;
+      font-size:1.55rem;
+      margin-bottom:4px;
+    }
+
+    .ar-result span {
+      color:var(--muted);
+      font-size:.88rem;
+    }
+
+    .ar-preview-wrap {
+      padding:20px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .ar-preview-head {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+
+    .ar-preview-head strong {
+      font-size:.95rem;
+    }
+
+    .ar-preview-note {
+      color:var(--muted);
+      font-size:.84rem;
+    }
+
+    .ar-preview-stage {
+      min-height:260px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:rgba(255,255,255,.55);
+      overflow:auto;
+    }
+
+    .ar-preview-box {
+      width:320px;
+      max-width:100%;
+      border:2px solid var(--accent-dark);
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:12px;
+      background:white;
+      color:var(--muted);
+      font-size:.88rem;
+      box-shadow:0 8px 24px rgba(0,0,0,.04);
+    }
+
+    .ar-presets {
+      padding:20px;
+    }
+
+    .ar-presets h2 {
+      margin:0 0 12px;
+      font-size:1.08rem;
+    }
+
+    .ar-preset-grid {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .ar-preset {
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:white;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .ar-preset strong {
+      display:block;
+      margin-bottom:3px;
+    }
+
+    .ar-preset span {
+      color:var(--muted);
+      font-size:.8rem;
+    }
+
+    .ar-error {
+      color:#9a2f2f;
+      font-weight:700;
+    }
+
+    @media (max-width:760px) {
+      .ar-layout {
+        grid-template-columns:1fr;
+      }
+
+      .ar-panel:first-child {
+        border-right:0;
+        border-bottom:1px solid var(--line);
+      }
+
+      .ar-preset-grid {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .ar-preview-stage {
+        min-height:220px;
+      }
+    }
+
+    @media (max-width:460px) {
+      .ar-grid {
+        grid-template-columns:1fr;
+      }
+
+      .ar-preset-grid {
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">OTHER TOOL</p>
+      <h1>Aspect Ratio Calculator</h1>
+      <p class="hero-copy">
+        Simplify a width and height into an aspect ratio, or calculate a matching dimension while keeping the same proportions.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="ar-layout">
+          <div class="ar-panel">
+            <h2>Find aspect ratio</h2>
+            <p class="ar-help">Enter width and height to simplify them into a ratio such as 16:9 or 4:3.</p>
+
+            <div class="ar-grid">
+              <label class="ar-field" for="ar-width">
+                Width
+                <input id="ar-width" type="number" min="1" step="1" value="1920" inputmode="numeric" />
+              </label>
+
+              <label class="ar-field" for="ar-height">
+                Height
+                <input id="ar-height" type="number" min="1" step="1" value="1080" inputmode="numeric" />
+              </label>
+            </div>
+
+            <div class="ar-actions">
+              <button id="ar-calculate" class="button-primary" type="button">Calculate ratio</button>
+              <button id="ar-swap" type="button">Swap</button>
+              <span id="ar-status" class="status" role="status"></span>
+            </div>
+
+            <div class="ar-result">
+              <strong id="ar-ratio">16:9</strong>
+              <span id="ar-ratio-detail">1920 × 1080 · 1.7778</span>
+            </div>
+          </div>
+
+          <div class="ar-panel">
+            <h2>Resize with the same ratio</h2>
+            <p class="ar-help">Choose which dimension you know, then calculate the matching value.</p>
+
+            <div class="ar-grid">
+              <label class="ar-field" for="ar-mode">
+                Known dimension
+                <select id="ar-mode">
+                  <option value="width" selected>Width</option>
+                  <option value="height">Height</option>
+                </select>
+              </label>
+
+              <label class="ar-field" for="ar-known">
+                New value
+                <input id="ar-known" type="number" min="1" step="1" value="1280" inputmode="numeric" />
+              </label>
+            </div>
+
+            <div class="ar-actions">
+              <button id="ar-resize" class="button-primary" type="button">Calculate size</button>
+            </div>
+
+            <div class="ar-result">
+              <strong id="ar-resize-result">1280 × 720</strong>
+              <span id="ar-resize-detail">Same 16:9 ratio</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ar-preview-wrap">
+          <div class="ar-preview-head">
+            <strong>Ratio preview</strong>
+            <span id="ar-preview-note" class="ar-preview-note">16:9</span>
+          </div>
+          <div class="ar-preview-stage">
+            <div id="ar-preview-box" class="ar-preview-box">
+              1920 × 1080
+            </div>
+          </div>
+        </div>
+
+        <div class="ar-presets">
+          <h2>Common aspect ratios</h2>
+          <div class="ar-preset-grid">
+            <button class="ar-preset" type="button" data-w="1" data-h="1"><strong>1:1</strong><span>Square</span></button>
+            <button class="ar-preset" type="button" data-w="4" data-h="3"><strong>4:3</strong><span>Classic photo / display</span></button>
+            <button class="ar-preset" type="button" data-w="3" data-h="2"><strong>3:2</strong><span>Photography</span></button>
+            <button class="ar-preset" type="button" data-w="16" data-h="9"><strong>16:9</strong><span>HD video / widescreen</span></button>
+            <button class="ar-preset" type="button" data-w="9" data-h="16"><strong>9:16</strong><span>Vertical video</span></button>
+            <button class="ar-preset" type="button" data-w="4" data-h="5"><strong>4:5</strong><span>Portrait social post</span></button>
+            <button class="ar-preset" type="button" data-w="21" data-h="9"><strong>21:9</strong><span>Ultrawide</span></button>
+            <button class="ar-preset" type="button" data-w="2" data-h="3"><strong>2:3</strong><span>Portrait photo</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Keep images and video dimensions proportional.</h2>
+        <p>Useful when resizing images, videos, thumbnails, social posts, presentations and website graphics without stretching them.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Simplify dimensions</h3>
+          <p>1920 × 1080 simplifies to 16:9, while 1200 × 1200 simplifies to 1:1.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Calculate a missing side</h3>
+          <p>Enter a new width or height and the calculator finds the matching dimension using the current ratio.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common presets</h3>
+          <p>Quickly load common formats such as 1:1, 4:3, 3:2, 16:9, 9:16, 4:5 and 21:9.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>All calculations happen locally in your browser. No files or dimensions are intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/aspect-ratio-calculator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

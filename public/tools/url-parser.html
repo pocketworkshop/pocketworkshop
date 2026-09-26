@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online URL parser. Break a URL into protocol, hostname, port, path, query parameters and hash directly in your browser." />
+  <title>URL Parser — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/url-parser.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="URL Parser — PocketWorkshop" />
+  <meta property="og:description" content="Break a URL into protocol, hostname, port, path, query parameters and hash directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/url-parser.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="URL Parser — PocketWorkshop" />
+  <meta name="twitter:description" content="Break a URL into protocol, hostname, port, path, query parameters and hash directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .url-input-wrap {
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .url-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 750;
+    }
+
+    .url-input {
+      width: 100%;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92rem;
+    }
+
+    .url-actions {
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .url-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .url-field {
+      padding: 14px 18px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      min-width: 0;
+    }
+
+    .url-field:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .url-field:nth-last-child(-n+2) {
+      border-bottom: 0;
+    }
+
+    .url-field-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .url-field-label strong {
+      font-size: .9rem;
+    }
+
+    .url-copy {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      color: var(--accent-dark);
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .url-value {
+      min-height: 22px;
+      color: var(--ink);
+      overflow-wrap: anywhere;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .88rem;
+    }
+
+    .url-value-muted {
+      color: var(--muted);
+    }
+
+    .query-section {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .query-head {
+      padding: 14px 18px;
+      background: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .query-head strong {
+      font-size: .94rem;
+    }
+
+    .query-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .query-table-wrap {
+      overflow-x: auto;
+    }
+
+    .query-table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    .query-table th,
+    .query-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: .87rem;
+    }
+
+    .query-table th {
+      background: rgba(255,255,255,.65);
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .query-table td {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .query-empty {
+      padding: 22px 18px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .url-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .url-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .url-field,
+      .url-field:nth-child(2n),
+      .url-field:nth-last-child(-n+2) {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .url-field:last-child {
+        border-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DEVELOPER TOOL</p>
+      <h1>URL Parser</h1>
+      <p class="hero-copy">
+        Break a URL into its individual parts and inspect query parameters.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="url-input-wrap">
+          <label class="url-label" for="url-input">URL</label>
+          <input id="url-input" class="url-input" type="url" spellcheck="false" autocomplete="off"
+            placeholder="https://example.com:8080/path/page?name=Alex&mode=dark#section"
+            aria-label="URL to parse" />
+        </div>
+
+        <div class="url-actions">
+          <button id="url-parse" class="button-primary" type="button">Parse URL</button>
+          <button id="url-sample" type="button">Load sample</button>
+          <button id="url-copy-all" type="button">Copy parsed data</button>
+          <button id="url-clear" type="button">Clear</button>
+          <span id="url-status" class="status" role="status"></span>
+        </div>
+
+        <div class="url-grid">
+          <div class="url-field">
+            <div class="url-field-label"><strong>Protocol</strong><button class="url-copy" type="button" data-copy="protocol">Copy</button></div>
+            <div id="url-protocol" class="url-value url-value-muted">—</div>
+          </div>
+          <div class="url-field">
+            <div class="url-field-label"><strong>Hostname</strong><button class="url-copy" type="button" data-copy="hostname">Copy</button></div>
+            <div id="url-hostname" class="url-value url-value-muted">—</div>
+          </div>
+          <div class="url-field">
+            <div class="url-field-label"><strong>Port</strong><button class="url-copy" type="button" data-copy="port">Copy</button></div>
+            <div id="url-port" class="url-value url-value-muted">—</div>
+          </div>
+          <div class="url-field">
+            <div class="url-field-label"><strong>Host</strong><button class="url-copy" type="button" data-copy="host">Copy</button></div>
+            <div id="url-host" class="url-value url-value-muted">—</div>
+          </div>
+          <div class="url-field">
+            <div class="url-field-label"><strong>Path</strong><button class="url-copy" type="button" data-copy="pathname">Copy</button></div>
+            <div id="url-pathname" class="url-value url-value-muted">—</div>
+          </div>
+          <div class="url-field">
+            <div class="url-field-label"><strong>Query string</strong><button class="url-copy" type="button" data-copy="search">Copy</button></div>
+            <div id="url-search" class="url-value url-value-muted">—</div>
+          </div>
+          <div class="url-field">
+            <div class="url-field-label"><strong>Hash</strong><button class="url-copy" type="button" data-copy="hash">Copy</button></div>
+            <div id="url-hash" class="url-value url-value-muted">—</div>
+          </div>
+          <div class="url-field">
+            <div class="url-field-label"><strong>Origin</strong><button class="url-copy" type="button" data-copy="origin">Copy</button></div>
+            <div id="url-origin" class="url-value url-value-muted">—</div>
+          </div>
+        </div>
+
+        <div class="query-section">
+          <div class="query-head">
+            <strong>Query parameters</strong>
+            <span id="url-query-count" class="query-count">0 parameters</span>
+          </div>
+          <div id="url-query-wrap" class="query-table-wrap">
+            <div class="query-empty">Parse a URL to see query parameters here.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Understand what is inside a URL.</h2>
+        <p>Useful for debugging links, APIs, redirects, analytics URLs, tracking parameters and web application routes.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>URL parts</h3>
+          <p>See the protocol, hostname, port, host, path, query string, hash fragment and origin separately.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Query parameters</h3>
+          <p>Each query key and value is listed separately, including repeated keys such as <code>tag=one&amp;tag=two</code>.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Copy values</h3>
+          <p>Copy individual URL parts or copy the full parsed result as plain text for debugging and documentation.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your URL is parsed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/url-parser.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online XML to JSON converter. Convert XML elements, attributes and repeated nodes to JSON directly in your browser without uploading your data." />
+  <title>XML to JSON Converter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/xml-to-json.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="XML to JSON Converter — PocketWorkshop" />
+  <meta property="og:description" content="Convert XML elements, attributes and repeated nodes to JSON directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/xml-to-json.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="XML to JSON Converter — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert XML elements, attributes and repeated nodes to JSON directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .xj-layout { display:grid; grid-template-columns:1fr 1fr; }
+    .xj-pane { min-width:0; }
+    .xj-pane:first-child { border-right:1px solid var(--line); }
+    .xj-pane-header { padding:14px 18px; display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid var(--line); background:var(--soft); }
+    .xj-pane-header strong { font-size:.94rem; }
+    .xj-count { color:var(--muted); font-size:.82rem; text-align:right; }
+    .xj-textarea { min-height:360px; border-bottom:0; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.9rem; line-height:1.55; tab-size:4; }
+    .xj-options { padding:14px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:12px 18px; align-items:center; background:rgba(255,255,255,.55); }
+    .xj-field { display:flex; gap:8px; align-items:center; color:var(--muted); font-size:.9rem; font-weight:650; }
+    .xj-field select { min-width:130px; }
+    .xj-check { display:flex; gap:8px; align-items:center; color:var(--muted); font-size:.9rem; font-weight:650; }
+    .xj-check input { width:18px; height:18px; accent-color:var(--accent-dark); }
+    .xj-actions { padding:14px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .xj-summary { margin-left:auto; color:var(--muted); font-size:.88rem; }
+    .xj-error { margin:0 18px 18px; padding:12px 14px; border:1px solid #e6b8b8; border-radius:12px; background:#fff2f2; color:#8a2f2f; font-size:.9rem; line-height:1.5; display:none; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .xj-note { padding:12px 18px; border-top:1px solid var(--line); color:var(--muted); font-size:.84rem; line-height:1.5; background:var(--soft); }
+    .xj-note code { font-size:.82rem; }
+    @media (max-width:760px) {
+      .xj-layout { grid-template-columns:1fr; }
+      .xj-pane:first-child { border-right:0; border-bottom:1px solid var(--line); }
+      .xj-textarea { min-height:250px; }
+      .xj-summary { width:100%; margin-left:0; }
+      .xj-field { width:100%; justify-content:space-between; }
+      .xj-field select { flex:1; max-width:210px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home"><span class="brand-mark" aria-hidden="true">▣</span><span>PocketWorkshop</span></a>
+    <nav><a href="/">Home</a><a href="/tools.html">All Tools</a></nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DATA TOOL</p>
+      <h1>XML to JSON Converter</h1>
+      <p class="hero-copy">Convert XML into readable JSON while keeping attributes and repeated elements. Everything is processed locally in your browser.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="xj-layout">
+          <div class="xj-pane">
+            <div class="xj-pane-header"><strong>XML input</strong><span id="xj-input-count" class="xj-count">0 characters</span></div>
+            <textarea id="xj-input" class="xj-textarea" spellcheck="false" placeholder="Paste XML here..." aria-label="XML input"></textarea>
+          </div>
+          <div class="xj-pane">
+            <div class="xj-pane-header"><strong>JSON result</strong><span id="xj-output-count" class="xj-count">0 characters</span></div>
+            <textarea id="xj-output" class="xj-textarea" spellcheck="false" placeholder="Converted JSON will appear here..." aria-label="JSON result"></textarea>
+          </div>
+        </div>
+
+        <div class="xj-options">
+          <label class="xj-field" for="xj-indent">
+            <span>JSON format</span>
+            <select id="xj-indent">
+              <option value="2" selected>2 spaces</option>
+              <option value="4">4 spaces</option>
+              <option value="0">Minified</option>
+            </select>
+          </label>
+          <label class="xj-check" for="xj-attributes"><input id="xj-attributes" type="checkbox" checked />Include attributes</label>
+          <label class="xj-check" for="xj-root"><input id="xj-root" type="checkbox" checked />Keep root element</label>
+          <label class="xj-check" for="xj-trim"><input id="xj-trim" type="checkbox" checked />Trim text values</label>
+          <label class="xj-check" for="xj-types"><input id="xj-types" type="checkbox" />Detect numbers, booleans and null</label>
+        </div>
+
+        <div class="xj-actions">
+          <button id="xj-convert" class="button-primary" type="button">Convert to JSON</button>
+          <button id="xj-copy" type="button">Copy JSON</button>
+          <button id="xj-download" type="button">Download .json</button>
+          <button id="xj-sample" type="button">Load sample</button>
+          <button id="xj-clear" type="button">Clear</button>
+          <span id="xj-status" class="status" role="status"></span>
+          <span id="xj-summary" class="xj-summary"></span>
+        </div>
+        <div id="xj-error" class="xj-error" role="alert"></div>
+        <div class="xj-note">Attributes are stored under <code>@attributes</code>. Text mixed with child elements is stored under <code>#text</code>. Repeated sibling elements automatically become JSON arrays.</div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Turn XML structures into practical JSON.</h2>
+        <p>Paste an XML document, choose how values should be handled, and convert it without sending the source data to a conversion server.</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card"><h3>Elements and arrays</h3><p>Nested XML elements become nested JSON objects. When sibling elements use the same name, they are grouped into an array automatically.</p></article>
+        <article class="guide-card"><h3>Attributes and text</h3><p>XML attributes can be preserved under <code>@attributes</code>. Mixed text is kept under <code>#text</code> so useful content is not silently discarded.</p></article>
+        <article class="guide-card"><h3>Value detection</h3><p>Keep all XML values as strings by default, or optionally convert simple numbers, booleans and null values into matching JSON types.</p></article>
+        <article class="guide-card"><h3>Privacy</h3><p>Your XML is parsed and converted locally in your browser and is not intentionally uploaded to PocketWorkshop for conversion.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span><a href="/tools.html">All Tools</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+  </footer>
+
+  <script src="/tools/xml-to-json.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

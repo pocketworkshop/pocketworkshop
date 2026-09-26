@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free image watermark tool. Add a text watermark to JPG, PNG or WebP images with custom position, size, color, opacity and rotation directly in your browser." />
+  <title>Image Watermark Tool — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/image-watermark-tool.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Image Watermark Tool — PocketWorkshop" />
+  <meta property="og:description" content="Add a customizable text watermark to images directly in your browser without uploading them." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/image-watermark-tool.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Image Watermark Tool — PocketWorkshop" />
+  <meta name="twitter:description" content="Add a customizable text watermark to images directly in your browser without uploading them." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .wm-drop {
+      margin: 20px;
+      padding: 34px 20px;
+      border: 2px dashed var(--line);
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255,255,255,.55);
+      cursor: pointer;
+    }
+
+    .wm-drop.is-dragging {
+      border-color: var(--accent-dark);
+      background: var(--soft);
+    }
+
+    .wm-drop strong {
+      display:block;
+      margin-bottom:6px;
+      font-size:1.05rem;
+    }
+
+    .wm-drop span {
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    #wm-file {
+      display:none;
+    }
+
+    .wm-main {
+      display:grid;
+      grid-template-columns:minmax(280px, 360px) 1fr;
+      border-top:1px solid var(--line);
+    }
+
+    .wm-controls {
+      padding:20px;
+      border-right:1px solid var(--line);
+      display:grid;
+      gap:14px;
+      align-content:start;
+      background:rgba(255,255,255,.45);
+    }
+
+    .wm-field {
+      display:grid;
+      gap:7px;
+      font-size:.9rem;
+      font-weight:700;
+    }
+
+    .wm-field input[type="text"],
+    .wm-field input[type="number"],
+    .wm-field select {
+      width:100%;
+      padding:10px 11px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:white;
+      color:var(--ink);
+      font:inherit;
+    }
+
+    .wm-inline {
+      display:grid;
+      grid-template-columns:1fr 80px;
+      gap:10px;
+      align-items:center;
+    }
+
+    .wm-inline input[type="range"] {
+      width:100%;
+      accent-color:var(--accent-dark);
+    }
+
+    .wm-color-row {
+      display:grid;
+      grid-template-columns:46px 1fr;
+      gap:8px;
+    }
+
+    .wm-color {
+      padding:2px !important;
+      height:42px;
+      cursor:pointer;
+    }
+
+    .wm-position-grid {
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:7px;
+    }
+
+    .wm-position {
+      min-height:42px;
+      padding:8px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--ink);
+      font-weight:700;
+    }
+
+    .wm-position.is-active {
+      background:var(--accent-dark);
+      color:#fff;
+      border-color:var(--accent-dark);
+    }
+
+    .wm-preview-panel {
+      min-width:0;
+      padding:20px;
+    }
+
+    .wm-preview-box {
+      min-height:360px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:auto;
+      padding:16px;
+      background:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size:16px 16px;
+      background-position:0 0,0 8px,8px -8px,-8px 0;
+    }
+
+    .wm-preview-box img {
+      max-width:100%;
+      max-height:560px;
+      object-fit:contain;
+    }
+
+    .wm-preview-empty {
+      color:var(--muted);
+      text-align:center;
+      font-size:.9rem;
+    }
+
+    .wm-meta {
+      margin-top:10px;
+      color:var(--muted);
+      font-size:.86rem;
+      overflow-wrap:anywhere;
+    }
+
+    .wm-actions {
+      padding:14px 18px;
+      border-top:1px solid var(--line);
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+
+    .wm-error {
+      color:#9a2f2f;
+      font-weight:700;
+    }
+
+    @media (max-width:860px) {
+      .wm-main {
+        grid-template-columns:1fr;
+      }
+
+      .wm-controls {
+        border-right:0;
+        border-bottom:1px solid var(--line);
+      }
+
+      .wm-preview-box {
+        min-height:280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE TOOL</p>
+      <h1>Image Watermark Tool</h1>
+      <p class="hero-copy">
+        Add a text watermark to an image and control its position, size, opacity, color and rotation.
+        Processing happens locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <label id="wm-drop" class="wm-drop" for="wm-file">
+          <strong>Choose an image or drop it here</strong>
+          <span>JPG, PNG, WebP and other browser-supported image formats</span>
+        </label>
+        <input id="wm-file" type="file" accept="image/*" />
+
+        <div class="wm-main">
+          <div class="wm-controls">
+            <label class="wm-field" for="wm-text">
+              Watermark text
+              <input id="wm-text" type="text" value="© PocketWorkshop" maxlength="120" />
+            </label>
+
+            <label class="wm-field" for="wm-size-range">
+              Font size
+              <div class="wm-inline">
+                <input id="wm-size-range" type="range" min="10" max="160" value="42" />
+                <input id="wm-size-number" type="number" min="10" max="160" value="42" inputmode="numeric" />
+              </div>
+            </label>
+
+            <label class="wm-field" for="wm-opacity-range">
+              Opacity
+              <div class="wm-inline">
+                <input id="wm-opacity-range" type="range" min="5" max="100" value="55" />
+                <input id="wm-opacity-number" type="number" min="5" max="100" value="55" inputmode="numeric" />
+              </div>
+            </label>
+
+            <div class="wm-field">
+              Text color
+              <div class="wm-color-row">
+                <input id="wm-color-picker" class="wm-color" type="color" value="#ffffff" aria-label="Watermark color" />
+                <input id="wm-color-text" type="text" value="#ffffff" aria-label="Watermark color text" />
+              </div>
+            </div>
+
+            <label class="wm-field" for="wm-rotation">
+              Rotation
+              <select id="wm-rotation">
+                <option value="-45">-45°</option>
+                <option value="-30">-30°</option>
+                <option value="-15">-15°</option>
+                <option value="0" selected>0°</option>
+                <option value="15">15°</option>
+                <option value="30">30°</option>
+                <option value="45">45°</option>
+              </select>
+            </label>
+
+            <label class="wm-field" for="wm-margin">
+              Edge margin
+              <input id="wm-margin" type="number" min="0" max="500" value="24" inputmode="numeric" />
+            </label>
+
+            <div class="wm-field">
+              Position
+              <div class="wm-position-grid" role="group" aria-label="Watermark position">
+                <button class="wm-position" type="button" data-position="top-left">↖</button>
+                <button class="wm-position" type="button" data-position="top-center">↑</button>
+                <button class="wm-position" type="button" data-position="top-right">↗</button>
+                <button class="wm-position" type="button" data-position="middle-left">←</button>
+                <button class="wm-position" type="button" data-position="center">•</button>
+                <button class="wm-position" type="button" data-position="middle-right">→</button>
+                <button class="wm-position" type="button" data-position="bottom-left">↙</button>
+                <button class="wm-position" type="button" data-position="bottom-center">↓</button>
+                <button class="wm-position is-active" type="button" data-position="bottom-right">↘</button>
+              </div>
+            </div>
+
+            <label class="wm-field" for="wm-format">
+              Output format
+              <select id="wm-format">
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg" selected>JPG</option>
+                <option value="image/webp">WebP</option>
+              </select>
+            </label>
+
+            <label class="wm-field" for="wm-quality">
+              JPG / WebP quality
+              <div class="wm-inline">
+                <input id="wm-quality" type="range" min="40" max="100" value="92" />
+                <input id="wm-quality-number" type="number" min="40" max="100" value="92" inputmode="numeric" />
+              </div>
+            </label>
+          </div>
+
+          <div class="wm-preview-panel">
+            <div class="wm-preview-box">
+              <img id="wm-preview" alt="Watermarked image preview" hidden />
+              <span id="wm-preview-empty" class="wm-preview-empty">Choose an image to preview your watermark.</span>
+            </div>
+            <div id="wm-meta" class="wm-meta">No image loaded.</div>
+          </div>
+        </div>
+
+        <div class="wm-actions">
+          <button id="wm-generate" class="button-primary" type="button">Apply watermark</button>
+          <button id="wm-download" type="button" disabled>Download image</button>
+          <button id="wm-sample" type="button">Load sample</button>
+          <button id="wm-clear" type="button">Clear</button>
+          <span id="wm-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Add a simple text watermark before sharing an image.</h2>
+        <p>Useful for drafts, previews, portfolio images, social posts and other images where you want to show ownership or status.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Position</h3>
+          <p>Choose one of nine common positions from top-left to bottom-right, including centered placement.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Appearance</h3>
+          <p>Adjust text size, opacity, color, rotation and edge margin until the watermark is visible without overpowering the image.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Output</h3>
+          <p>Save the finished image as PNG, JPG or WebP. JPG and WebP include a quality control for file-size tuning.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your image is processed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/image-watermark-tool.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

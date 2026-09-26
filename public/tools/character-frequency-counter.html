@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free character frequency counter. Count how often characters or words appear in text, sort the results, and export them as CSV directly in your browser." />
+  <title>Character Frequency Counter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/character-frequency-counter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Character Frequency Counter — PocketWorkshop" />
+  <meta property="og:description" content="Count character or word frequency in any text and sort or export the results locally in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/character-frequency-counter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Character Frequency Counter — PocketWorkshop" />
+  <meta name="twitter:description" content="Count character or word frequency in text directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .freq-input-wrap { border-bottom:1px solid var(--line); }
+    .freq-input-header { padding:14px 18px; display:flex; justify-content:space-between; gap:12px; align-items:center; background:var(--soft); border-bottom:1px solid var(--line); }
+    .freq-input-header strong { font-size:.94rem; }
+    .freq-count { color:var(--muted); font-size:.82rem; text-align:right; }
+    .freq-textarea { min-height:260px; border-bottom:0; }
+    .freq-options { padding:16px 18px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.55); }
+    .freq-field { min-width:0; }
+    .freq-field label, .freq-label { display:block; margin-bottom:6px; font-size:.82rem; font-weight:700; color:var(--muted); }
+    .freq-field select, .freq-field input[type="text"] { width:100%; }
+    .freq-checks { display:flex; flex-direction:column; justify-content:center; gap:9px; }
+    .freq-check { display:flex; align-items:center; gap:8px; color:var(--ink); font-size:.9rem; font-weight:650; }
+    .freq-check input { width:18px; height:18px; accent-color:var(--accent-dark); }
+    .freq-actions { padding:14px 18px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; border-bottom:1px solid var(--line); }
+    .freq-summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; padding:18px; border-bottom:1px solid var(--line); }
+    .freq-stat { padding:12px; border:1px solid var(--line); border-radius:12px; background:#fff; text-align:center; }
+    .freq-stat strong { display:block; font-size:1.2rem; }
+    .freq-stat span { color:var(--muted); font-size:.82rem; }
+    .freq-table-wrap { overflow-x:auto; }
+    .freq-table { width:100%; min-width:560px; border-collapse:collapse; }
+    .freq-table th, .freq-table td { padding:11px 14px; border-bottom:1px solid var(--line); text-align:left; }
+    .freq-table th { background:var(--soft); font-size:.82rem; color:var(--muted); position:sticky; top:0; z-index:1; }
+    .freq-table td:nth-child(2), .freq-table td:nth-child(3), .freq-table th:nth-child(2), .freq-table th:nth-child(3) { text-align:right; }
+    .freq-token { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .freq-bar { height:7px; min-width:80px; border-radius:999px; background:var(--soft); overflow:hidden; border:1px solid var(--line); }
+    .freq-bar > span { display:block; height:100%; width:0; background:var(--accent-dark); }
+    .freq-empty { padding:28px 18px; text-align:center; color:var(--muted); }
+    @media (max-width:850px) {
+      .freq-options { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width:600px) {
+      .freq-options { grid-template-columns:1fr; }
+      .freq-summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .freq-textarea { min-height:220px; }
+      .freq-count { max-width:48%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span><span>PocketWorkshop</span>
+    </a>
+    <nav><a href="/">Home</a><a href="/tools.html">All Tools</a></nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Character Frequency Counter</h1>
+      <p class="hero-copy">See how often each character or word appears in your text. Everything is processed locally in your browser.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="freq-input-wrap">
+          <div class="freq-input-header">
+            <strong>Input text</strong>
+            <span id="freq-input-count" class="freq-count">0 characters · 0 words</span>
+          </div>
+          <textarea id="freq-input" class="freq-textarea" placeholder="Paste or type text here..." aria-label="Text to analyze"></textarea>
+        </div>
+
+        <div class="freq-options">
+          <div class="freq-field">
+            <label for="freq-mode">Count</label>
+            <select id="freq-mode">
+              <option value="characters">Characters</option>
+              <option value="words">Words</option>
+            </select>
+          </div>
+          <div class="freq-field">
+            <label for="freq-sort">Sort results</label>
+            <select id="freq-sort">
+              <option value="frequency-desc">Frequency: high to low</option>
+              <option value="frequency-asc">Frequency: low to high</option>
+              <option value="az">A → Z</option>
+              <option value="za">Z → A</option>
+            </select>
+          </div>
+          <div class="freq-field">
+            <label for="freq-filter">Filter results</label>
+            <input id="freq-filter" type="text" placeholder="Find a character or word..." autocomplete="off" />
+          </div>
+          <div class="freq-checks">
+            <label class="freq-check"><input id="freq-ignore-case" type="checkbox" />Ignore letter case</label>
+            <label class="freq-check"><input id="freq-ignore-spaces" type="checkbox" checked />Ignore whitespace</label>
+          </div>
+        </div>
+
+        <div class="freq-actions">
+          <button id="freq-analyze" class="button-primary" type="button">Analyze text</button>
+          <button id="freq-copy-csv" type="button">Copy CSV</button>
+          <button id="freq-sample" type="button">Load sample</button>
+          <button id="freq-clear" type="button">Clear</button>
+          <span id="freq-status" class="status" role="status"></span>
+        </div>
+
+        <div class="freq-summary">
+          <div class="freq-stat"><strong id="freq-total">0</strong><span id="freq-total-label">counted characters</span></div>
+          <div class="freq-stat"><strong id="freq-unique">0</strong><span>unique items</span></div>
+          <div class="freq-stat"><strong id="freq-most">—</strong><span>most frequent</span></div>
+          <div class="freq-stat"><strong id="freq-most-count">0</strong><span>top count</span></div>
+        </div>
+
+        <div class="freq-table-wrap">
+          <table class="freq-table">
+            <thead><tr><th>Character / word</th><th>Count</th><th>Percent</th><th>Relative frequency</th></tr></thead>
+            <tbody id="freq-results"></tbody>
+          </table>
+          <div id="freq-empty" class="freq-empty">Analyze some text to see frequency results here.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Find the most common characters or words.</h2>
+        <p>Useful for writing analysis, puzzle making, language study, data cleanup and quick text inspection.</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card"><h3>Character mode</h3><p>Counts visible characters and symbols. Whitespace can be included or ignored, and modern browsers keep many emoji sequences together as a single grapheme.</p></article>
+        <article class="guide-card"><h3>Word mode</h3><p>Counts words using browser language segmentation when available, with a Unicode-aware fallback for letters, numbers and apostrophes.</p></article>
+        <article class="guide-card"><h3>Sort and filter</h3><p>Sort by frequency or alphabetically, then filter the table to quickly locate a specific character or word.</p></article>
+        <article class="guide-card"><h3>Privacy</h3><p>Your text is analyzed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span><a href="/tools.html">All Tools</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+  </footer>
+
+  <script src="/tools/character-frequency-counter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

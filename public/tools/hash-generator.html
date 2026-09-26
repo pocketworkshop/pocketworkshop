@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online hash generator. Create SHA-1, SHA-256, SHA-384 and SHA-512 hashes from text or files directly in your browser." />
+  <title>Hash Generator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/hash-generator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Hash Generator — PocketWorkshop" />
+  <meta property="og:description" content="Generate SHA-1, SHA-256, SHA-384 and SHA-512 hashes from text or files directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/hash-generator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Hash Generator — PocketWorkshop" />
+  <meta name="twitter:description" content="Generate SHA hashes from text or files locally in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .hash-source-tabs { display:flex; gap:8px; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--soft); flex-wrap:wrap; }
+    .hash-source-tabs button[aria-selected="true"] { background:var(--ink); color:#fff; border-color:var(--ink); }
+    .hash-panel { display:none; }
+    .hash-panel.is-active { display:block; }
+    .hash-header { padding:14px 18px; display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid var(--line); background:rgba(255,255,255,.55); }
+    .hash-header strong { font-size:.94rem; }
+    .hash-count { color:var(--muted); font-size:.82rem; text-align:right; }
+    .hash-textarea { min-height:220px; border-bottom:0; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.9rem; line-height:1.55; }
+    .hash-file-wrap { padding:20px 18px; }
+    .hash-file-input { display:block; width:100%; padding:14px; border:1px dashed var(--line); border-radius:12px; background:var(--soft); }
+    .hash-file-meta { margin-top:10px; color:var(--muted); font-size:.86rem; overflow-wrap:anywhere; }
+    .hash-options { padding:18px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 18px; border-top:1px solid var(--line); background:rgba(255,255,255,.55); }
+    .hash-field label { display:block; font-size:.82rem; font-weight:700; color:var(--muted); margin-bottom:6px; }
+    .hash-field select { width:100%; }
+    .hash-actions { padding:14px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .hash-summary { margin-left:auto; color:var(--muted); font-size:.88rem; }
+    .hash-results { border-top:1px solid var(--line); }
+    .hash-result { padding:16px 18px; border-bottom:1px solid var(--line); }
+    .hash-result:last-child { border-bottom:0; }
+    .hash-result-head { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:8px; }
+    .hash-result-head strong { font-size:.92rem; }
+    .hash-value { display:block; width:100%; min-height:76px; padding:12px; border:1px solid var(--line); border-radius:12px; background:var(--soft); color:var(--ink); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.84rem; line-height:1.5; overflow-wrap:anywhere; white-space:pre-wrap; resize:vertical; }
+    .hash-note { padding:12px 18px; border-top:1px solid var(--line); color:var(--muted); font-size:.84rem; line-height:1.5; background:var(--soft); }
+    .hash-error { margin:16px 18px 18px; padding:12px 14px; border:1px solid #e6b8b8; border-radius:12px; background:#fff2f2; color:#8a2f2f; display:none; font-size:.9rem; line-height:1.5; }
+    @media (max-width:760px) {
+      .hash-options { grid-template-columns:1fr; }
+      .hash-textarea { min-height:190px; }
+      .hash-summary { width:100%; margin-left:0; }
+      .hash-result-head { align-items:flex-start; flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home"><span class="brand-mark" aria-hidden="true">▣</span><span>PocketWorkshop</span></a>
+    <nav><a href="/">Home</a><a href="/tools.html">All Tools</a></nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DEVELOPER TOOL</p>
+      <h1>Hash Generator</h1>
+      <p class="hero-copy">Generate SHA hashes from text or files directly in your browser. Your input stays on your device.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="hash-source-tabs" role="tablist" aria-label="Hash input source">
+          <button id="hash-tab-text" type="button" role="tab" aria-selected="true" aria-controls="hash-text-panel">Text</button>
+          <button id="hash-tab-file" type="button" role="tab" aria-selected="false" aria-controls="hash-file-panel">File</button>
+        </div>
+
+        <div id="hash-text-panel" class="hash-panel is-active" role="tabpanel" aria-labelledby="hash-tab-text">
+          <div class="hash-header"><strong>Text input</strong><span id="hash-text-count" class="hash-count">0 characters</span></div>
+          <textarea id="hash-text" class="hash-textarea" spellcheck="false" placeholder="Type or paste text here..." aria-label="Text to hash"></textarea>
+        </div>
+
+        <div id="hash-file-panel" class="hash-panel" role="tabpanel" aria-labelledby="hash-tab-file">
+          <div class="hash-header"><strong>File input</strong><span id="hash-file-status" class="hash-count">No file selected</span></div>
+          <div class="hash-file-wrap">
+            <input id="hash-file" class="hash-file-input" type="file" aria-label="File to hash" />
+            <div id="hash-file-meta" class="hash-file-meta">Choose a file from your device. It is read locally in your browser.</div>
+          </div>
+        </div>
+
+        <div class="hash-options">
+          <div class="hash-field">
+            <label for="hash-algorithm">Algorithm</label>
+            <select id="hash-algorithm">
+              <option value="SHA-256" selected>SHA-256</option>
+              <option value="SHA-512">SHA-512</option>
+              <option value="SHA-384">SHA-384</option>
+              <option value="SHA-1">SHA-1</option>
+            </select>
+          </div>
+          <div class="hash-field">
+            <label for="hash-output-format">Primary output</label>
+            <select id="hash-output-format">
+              <option value="hex" selected>HEX</option>
+              <option value="base64">Base64</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="hash-actions">
+          <button id="hash-generate" class="button-primary" type="button">Generate hash</button>
+          <button id="hash-sample" type="button">Load sample</button>
+          <button id="hash-clear" type="button">Clear</button>
+          <span id="hash-status" class="status" role="status"></span>
+          <span id="hash-summary" class="hash-summary"></span>
+        </div>
+
+        <div class="hash-results">
+          <div class="hash-result">
+            <div class="hash-result-head"><strong id="hash-primary-label">HEX output</strong><button id="hash-copy-primary" type="button">Copy</button></div>
+            <textarea id="hash-primary" class="hash-value" readonly aria-label="Primary hash output" placeholder="Generated hash will appear here..."></textarea>
+          </div>
+          <div class="hash-result">
+            <div class="hash-result-head"><strong id="hash-secondary-label">Base64 output</strong><button id="hash-copy-secondary" type="button">Copy</button></div>
+            <textarea id="hash-secondary" class="hash-value" readonly aria-label="Secondary hash output" placeholder="Alternate encoding will appear here..."></textarea>
+          </div>
+        </div>
+
+        <div class="hash-note"><strong>Note:</strong> SHA-1 is included for compatibility checks, but it is no longer recommended for security-sensitive uses. A hash is one-way and cannot be decoded back into the original input.</div>
+        <div id="hash-error" class="hash-error" role="alert"></div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Create a fingerprint for text or files.</h2>
+        <p>Useful for checksums, comparing content, debugging integrations and verifying that a file has not changed.</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card"><h3>Choose an algorithm</h3><p>Generate SHA-256, SHA-384, SHA-512 or legacy SHA-1 hashes with your browser's built-in cryptography API.</p></article>
+        <article class="guide-card"><h3>Text or file</h3><p>Hash pasted text as UTF-8, or select a local file and calculate its digest without uploading it to PocketWorkshop.</p></article>
+        <article class="guide-card"><h3>HEX and Base64</h3><p>See the same digest as hexadecimal and Base64 so you can use the format required by your workflow.</p></article>
+        <article class="guide-card"><h3>Privacy</h3><p>Your text and files are processed locally in your browser and are not intentionally uploaded to PocketWorkshop.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span><a href="/tools.html">All Tools</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+  </footer>
+
+  <script src="/tools/hash-generator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

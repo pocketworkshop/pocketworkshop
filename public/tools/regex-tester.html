@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online regex tester. Test JavaScript regular expressions, highlight matches, inspect capture groups and experiment with flags directly in your browser." />
+  <title>Regex Tester — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/regex-tester.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Regex Tester — PocketWorkshop" />
+  <meta property="og:description" content="Test JavaScript regular expressions, highlight matches and inspect capture groups directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/regex-tester.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Regex Tester — PocketWorkshop" />
+  <meta name="twitter:description" content="Test JavaScript regular expressions, highlight matches and inspect capture groups directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .regex-row { padding:18px; border-bottom:1px solid var(--line); }
+    .regex-label { display:block; margin-bottom:8px; font-weight:750; }
+    .regex-pattern-wrap { display:grid; grid-template-columns:auto 1fr auto; gap:8px; align-items:center; }
+    .regex-slash { font:700 1.05rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:var(--muted); }
+    .regex-pattern { min-width:0; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .regex-flags { display:flex; flex-wrap:wrap; gap:10px 14px; margin-top:12px; }
+    .regex-flag { display:flex; align-items:center; gap:7px; font-weight:650; color:var(--muted); font-size:.9rem; }
+    .regex-flag input { width:18px; height:18px; accent-color:var(--accent-dark); }
+    .regex-layout { display:grid; grid-template-columns:1fr 1fr; }
+    .regex-pane { min-width:0; }
+    .regex-pane:first-child { border-right:1px solid var(--line); }
+    .regex-pane-head { padding:12px 18px; display:flex; justify-content:space-between; gap:12px; align-items:center; background:var(--soft); border-bottom:1px solid var(--line); }
+    .regex-pane-head strong { font-size:.94rem; }
+    .regex-meta { color:var(--muted); font-size:.82rem; }
+    .regex-text { min-height:300px; border-bottom:0; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.9rem; line-height:1.55; }
+    .regex-preview { min-height:300px; max-height:460px; overflow:auto; padding:16px 18px; white-space:pre-wrap; overflow-wrap:anywhere; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.9rem; line-height:1.55; background:#fff; }
+    .regex-preview mark { padding:1px 2px; border-radius:3px; background:#fff0a8; color:inherit; }
+    .regex-actions { padding:14px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .regex-results { border-top:1px solid var(--line); }
+    .regex-result-head { padding:14px 18px; background:var(--soft); display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid var(--line); }
+    .regex-result-list { max-height:420px; overflow:auto; }
+    .regex-match { padding:14px 18px; border-bottom:1px solid var(--line); }
+    .regex-match:last-child { border-bottom:0; }
+    .regex-match-top { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; margin-bottom:8px; }
+    .regex-match-index { font-weight:800; }
+    .regex-match-pos { color:var(--muted); font-size:.84rem; }
+    .regex-code { display:block; padding:9px 10px; border:1px solid var(--line); border-radius:10px; background:#fff; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:.86rem; }
+    .regex-groups { margin-top:10px; display:grid; gap:7px; }
+    .regex-group { font-size:.86rem; color:var(--muted); }
+    .regex-group strong { color:var(--ink); }
+    .regex-empty { padding:22px 18px; color:var(--muted); text-align:center; }
+    .regex-error { color:#9a2f2f; font-weight:700; }
+    @media (max-width:760px) {
+      .regex-pattern-wrap { grid-template-columns:auto 1fr auto; }
+      .regex-layout { grid-template-columns:1fr; }
+      .regex-pane:first-child { border-right:0; border-bottom:1px solid var(--line); }
+      .regex-text, .regex-preview { min-height:220px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DEVELOPER TOOL</p>
+      <h1>Regex Tester</h1>
+      <p class="hero-copy">
+        Test JavaScript regular expressions, highlight matches and inspect capture groups.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="regex-row">
+          <label class="regex-label" for="regex-pattern">Regular expression</label>
+          <div class="regex-pattern-wrap">
+            <span class="regex-slash">/</span>
+            <input id="regex-pattern" class="regex-pattern" type="text" spellcheck="false" autocomplete="off" placeholder="e.g. (\w+)@([\w.-]+)" aria-label="Regular expression pattern" />
+            <span id="regex-flags-display" class="regex-slash">/g</span>
+          </div>
+
+          <div class="regex-flags" aria-label="Regular expression flags">
+            <label class="regex-flag"><input id="regex-flag-g" type="checkbox" checked /> g · global</label>
+            <label class="regex-flag"><input id="regex-flag-i" type="checkbox" /> i · ignore case</label>
+            <label class="regex-flag"><input id="regex-flag-m" type="checkbox" /> m · multiline</label>
+            <label class="regex-flag"><input id="regex-flag-s" type="checkbox" /> s · dotAll</label>
+            <label class="regex-flag"><input id="regex-flag-u" type="checkbox" /> u · Unicode</label>
+          </div>
+        </div>
+
+        <div class="regex-layout">
+          <div class="regex-pane">
+            <div class="regex-pane-head">
+              <strong>Test text</strong>
+              <span id="regex-text-count" class="regex-meta">0 characters</span>
+            </div>
+            <textarea id="regex-text" class="regex-text" spellcheck="false" placeholder="Paste or type text to test..." aria-label="Text to test"></textarea>
+          </div>
+
+          <div class="regex-pane">
+            <div class="regex-pane-head">
+              <strong>Highlighted matches</strong>
+              <span id="regex-match-summary" class="regex-meta">0 matches</span>
+            </div>
+            <div id="regex-preview" class="regex-preview" aria-live="polite">Matches will be highlighted here.</div>
+          </div>
+        </div>
+
+        <div class="regex-actions">
+          <button id="regex-run" class="button-primary" type="button">Test regex</button>
+          <button id="regex-sample" type="button">Load sample</button>
+          <button id="regex-clear" type="button">Clear</button>
+          <span id="regex-status" class="status" role="status"></span>
+        </div>
+
+        <div class="regex-results">
+          <div class="regex-result-head">
+            <strong>Match details</strong>
+            <span id="regex-result-count" class="regex-meta">0 results</span>
+          </div>
+          <div id="regex-results" class="regex-result-list">
+            <div class="regex-empty">Run a regular expression to inspect matches and capture groups.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Experiment with JavaScript regular expressions.</h2>
+        <p>Useful for testing patterns before putting them into code, validation rules, search tools or text-processing scripts.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Flags</h3>
+          <p>Toggle global, case-insensitive, multiline, dotAll and Unicode matching. The tester uses JavaScript's built-in RegExp engine.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Capture groups</h3>
+          <p>See numbered capture groups and named groups for each match, along with the character position where the match begins.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Highlighting</h3>
+          <p>Matched sections are highlighted in the preview so you can quickly see what your pattern is selecting.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your pattern and test text are processed locally in your browser and are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/regex-tester.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
