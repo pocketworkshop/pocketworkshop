@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online image compressor. Compress JPG, PNG and WebP images in your browser." />
+  <title>Image Compressor — PocketWorkshop</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="#tool">Tool</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE TOOL</p>
+      <h1>Image Compressor</h1>
+      <p class="hero-copy">Reduce image file size directly in your browser. Nothing gets uploaded to PocketWorkshop.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="file-upload">
+          <label class="file-button" for="compressor-input">Choose an image</label>
+          <input id="compressor-input" type="file" accept="image/jpeg,image/png,image/webp" />
+          <p id="compressor-file-name" class="file-name">No image selected</p>
+          <small>JPG, PNG or WebP</small>
+        </div>
+
+        <div class="image-workspace" id="compressor-workspace" hidden>
+          <div class="preview-box">
+            <img id="compressor-preview" alt="Selected image preview" />
+            <p id="compressor-original-info" class="preview-info"></p>
+          </div>
+
+          <div class="controls">
+            <div class="fields">
+              <label>
+                Output format
+                <select id="compressor-format">
+                  <option value="image/jpeg">JPG</option>
+                  <option value="image/webp">WebP</option>
+                  <option value="image/png">PNG</option>
+                </select>
+              </label>
+
+              <label id="compressor-quality-label">
+                Quality <span id="compressor-quality-value">80%</span>
+                <input id="compressor-quality" type="range" min="30" max="100" value="80" />
+              </label>
+            </div>
+
+            <div class="output-info">
+              <span>Expected output</span>
+              <strong id="compressor-output-info">Same dimensions</strong>
+            </div>
+
+            <div class="tool-actions">
+              <button id="compressor-button" class="button-primary" type="button">Compress image</button>
+              <button id="compressor-reset-button" type="button">Reset</button>
+              <span id="compressor-status" class="status" role="status"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="download-panel" id="compressor-download-panel" hidden>
+          <div>
+            <strong>Your compressed image is ready.</strong>
+            <p id="compressor-download-info"></p>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <span class="badge" id="compressor-saving-badge"></span>
+            <a id="compressor-download-link" class="primary-button" href="#" download>Download image</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>Free browser-based tools for everyday tasks.</span>
+  </footer>
+
+  <canvas id="compressor-canvas" hidden></canvas>
+  <script src="/tools/image-compressor.js"></script>
+</body>
+</html>

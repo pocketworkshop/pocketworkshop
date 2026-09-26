@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online image resizer. Resize JPG, PNG and WebP images in your browser." />
+  <title>Image Resizer — PocketWorkshop</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="#tool">Tool</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE TOOL</p>
+      <h1>Image Resizer</h1>
+      <p class="hero-copy">Resize JPG, PNG or WebP images without uploading them anywhere. Processing stays in your browser.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="file-upload">
+          <label class="file-button" for="image-input">Choose an image</label>
+          <input id="image-input" type="file" accept="image/jpeg,image/png,image/webp" />
+          <p id="image-file-name" class="file-name">No image selected</p>
+          <small>JPG, PNG or WebP</small>
+        </div>
+
+        <div class="image-workspace" id="image-workspace" hidden>
+          <div class="preview-box">
+            <img id="image-preview" alt="Selected image preview" />
+            <p id="image-original-info" class="preview-info"></p>
+          </div>
+
+          <div class="controls">
+            <div class="fields">
+              <label>
+                Width
+                <div class="number-wrap">
+                  <input id="image-width" type="number" min="1" max="12000" inputmode="numeric" />
+                  <span>px</span>
+                </div>
+              </label>
+
+              <label>
+                Height
+                <div class="number-wrap">
+                  <input id="image-height" type="number" min="1" max="12000" inputmode="numeric" />
+                  <span>px</span>
+                </div>
+              </label>
+            </div>
+
+            <label class="check-row">
+              <input id="image-lock-aspect" type="checkbox" checked />
+              Keep aspect ratio
+            </label>
+
+            <div class="fields">
+              <label>
+                Format
+                <select id="image-format">
+                  <option value="image/jpeg">JPG</option>
+                  <option value="image/png">PNG</option>
+                  <option value="image/webp">WebP</option>
+                </select>
+              </label>
+
+              <label id="image-quality-label">
+                Quality <span id="image-quality-value">90%</span>
+                <input id="image-quality" type="range" min="40" max="100" value="90" />
+              </label>
+            </div>
+
+            <div class="output-info">
+              <span>Output size</span>
+              <strong id="image-output-size">—</strong>
+            </div>
+
+            <div class="tool-actions">
+              <button id="image-resize-button" class="button-primary" type="button">Resize image</button>
+              <button id="image-reset-button" type="button">Reset</button>
+              <span id="image-status" class="status" role="status"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="download-panel" id="image-download-panel" hidden>
+          <div>
+            <strong>Your resized image is ready.</strong>
+            <p id="image-download-info"></p>
+          </div>
+          <a id="image-download-link" class="primary-button" href="#" download>Download image</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>Free browser-based tools for everyday tasks.</span>
+  </footer>
+
+  <canvas id="image-resize-canvas" hidden></canvas>
+  <script src="/tools/image-resizer.js"></script>
+</body>
+</html>

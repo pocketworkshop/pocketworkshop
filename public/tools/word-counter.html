@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online word counter. Count words, characters, sentences and paragraphs instantly." />
+  <title>Word Counter — PocketWorkshop</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="#tool">Tool</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Word Counter</h1>
+      <p class="hero-copy">Paste or type text below. Everything is processed locally in your browser.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <textarea id="text-input" placeholder="Type or paste your text here..." aria-label="Text to count"></textarea>
+
+        <div class="stats" aria-live="polite">
+          <div><strong id="words">0</strong><span>Words</span></div>
+          <div><strong id="characters">0</strong><span>Characters</span></div>
+          <div><strong id="characters-no-spaces">0</strong><span>No spaces</span></div>
+          <div><strong id="sentences">0</strong><span>Sentences</span></div>
+          <div><strong id="paragraphs">0</strong><span>Paragraphs</span></div>
+          <div><strong id="reading-time">0 min</strong><span>Reading time</span></div>
+        </div>
+
+        <div class="tool-actions">
+          <button id="clear-button" type="button">Clear</button>
+          <button id="copy-button" type="button">Copy text</button>
+          <span id="copy-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>Free browser-based tools for everyday tasks.</span>
+  </footer>
+
+  <script src="/tools/word-counter.js"></script>
+</body>
+</html>
