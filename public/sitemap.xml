@@ -16,21 +16,6 @@
     <loc>https://pocketworkshop.pwtools.workers.dev/terms.html</loc>
   </url>
   <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/word-counter.html</loc>
-  </url>
-  <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/text-case-converter.html</loc>
-  </url>
-  <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-resizer.html</loc>
-  </url>
-  <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-compressor.html</loc>
-  </url>
-  <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-cropper.html</loc>
-  </url>
-  <url>
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/pdf-merge.html</loc>
   </url>
   <url>
@@ -49,13 +34,37 @@
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/pdf-page-organizer.html</loc>
   </url>
   <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/qr-code-generator.html</loc>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-resizer.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-compressor.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-cropper.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-format-converter.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-rotate-flip.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/word-counter.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/text-case-converter.html</loc>
   </url>
   <url>
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/text-cleaner.html</loc>
   </url>
   <url>
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/lorem-ipsum-generator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/markdown-previewer.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/text-diff-checker.html</loc>
   </url>
   <url>
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/json-formatter.html</loc>
@@ -76,12 +85,6 @@
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/uuid-generator.html</loc>
   </url>
   <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/password-generator.html</loc>
-  </url>
-  <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/random-number-generator.html</loc>
-  </url>
-  <url>
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/unix-timestamp-converter.html</loc>
   </url>
   <url>
@@ -91,18 +94,75 @@
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/css-gradient-generator.html</loc>
   </url>
   <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-format-converter.html</loc>
-  </url>
-  <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-rotate-flip.html</loc>
-  </url>
-  <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/markdown-previewer.html</loc>
-  </url>
-  <url>
     <loc>https://pocketworkshop.pwtools.workers.dev/tools/html-entity-encoder-decoder.html</loc>
   </url>
   <url>
-    <loc>https://pocketworkshop.pwtools.workers.dev/tools/text-diff-checker.html</loc>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/qr-code-generator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/password-generator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/random-number-generator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/duplicate-line-remover.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/text-sorter.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/slug-generator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/character-frequency-counter.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/json-to-yaml.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/yaml-to-json.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/xml-formatter.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/xml-to-json.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/jwt-decoder.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/hash-generator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/regex-tester.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/url-parser.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-to-base64-converter.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/svg-to-png-converter.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/favicon-generator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/image-watermark-tool.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/aspect-ratio-calculator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/percentage-calculator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/date-difference-calculator.html</loc>
+  </url>
+  <url>
+    <loc>https://pocketworkshop.pwtools.workers.dev/tools/random-picker.html</loc>
   </url>
 </urlset>
