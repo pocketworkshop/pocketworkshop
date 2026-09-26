@@ -24,9 +24,7 @@
       background: white;
     }
 
-    .pdf-meta {
-      min-width: 0;
-    }
+    .pdf-meta { min-width: 0; }
 
     .pdf-name {
       display: block;
@@ -59,9 +57,7 @@
       align-items: center;
     }
 
-    .pdf-summary span {
-      color: var(--muted);
-    }
+    .pdf-summary span { color: var(--muted); }
 
     .pdf-empty {
       padding: 24px 18px;
@@ -75,15 +71,17 @@
       font-size: .94rem;
     }
 
+    #pdf-download-panel {
+      display: none;
+    }
+
+    #pdf-download-panel.ready {
+      display: flex;
+    }
+
     @media (max-width: 560px) {
-      .pdf-item {
-        grid-template-columns: 1fr;
-      }
-
-      .pdf-buttons {
-        justify-content: flex-start;
-      }
-
+      .pdf-item { grid-template-columns: 1fr; }
+      .pdf-buttons { justify-content: flex-start; }
       .pdf-summary {
         align-items: flex-start;
         flex-direction: column;
@@ -116,7 +114,7 @@
       <div class="tool-shell">
         <div class="file-upload">
           <label class="file-button" for="pdf-input">Choose PDF files</label>
-          <input id="pdf-input" type="file" accept="application/pdf" multiple />
+          <input id="pdf-input" type="file" accept="application/pdf,.pdf" multiple />
           <p id="pdf-file-name" class="file-name">No PDF files selected</p>
           <small>Select two or more PDF files</small>
         </div>
@@ -128,7 +126,7 @@
           </div>
           <div class="tool-actions" style="padding:0; min-height:auto;">
             <button id="pdf-clear-button" type="button">Clear</button>
-            <button id="pdf-merge-button" class="button-primary" type="button">Merge PDFs</button>
+            <button id="pdf-merge-button" class="button-primary" type="button" disabled>Merge PDFs</button>
             <span id="pdf-status" class="status" role="status"></span>
           </div>
         </div>
@@ -136,17 +134,17 @@
         <ul id="pdf-list" class="pdf-list"></ul>
         <div id="pdf-empty" class="pdf-empty">Add at least two PDF files to merge them.</div>
 
-        <div class="download-panel" id="pdf-download-panel" hidden>
+        <div class="download-panel" id="pdf-download-panel">
           <div>
             <strong>Your merged PDF is ready.</strong>
             <p id="pdf-download-info"></p>
           </div>
-          <a id="pdf-download-link" class="primary-button" href="#" download>Download PDF</a>
+          <button id="pdf-download-button" class="button-primary" type="button">Download PDF</button>
         </div>
       </div>
 
       <p class="note-box">
-        Tip: use the Up and Down buttons to change the page order before merging.
+        Tip: use the Up and Down buttons to change the file order before merging.
       </p>
     </section>
   </main>
@@ -156,7 +154,7 @@
     <span>Free browser-based tools for everyday tasks.</span>
   </footer>
 
-  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script src="/tools/pdf-merge.js"></script>
 </body>
 </html>

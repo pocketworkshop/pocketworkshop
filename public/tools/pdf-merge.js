@@ -8,11 +8,11 @@ const clearButton = document.getElementById("pdf-clear-button");
 const mergeButton = document.getElementById("pdf-merge-button");
 const statusEl = document.getElementById("pdf-status");
 const downloadPanel = document.getElementById("pdf-download-panel");
-const downloadLink = document.getElementById("pdf-download-link");
+const downloadButton = document.getElementById("pdf-download-button");
 const downloadInfo = document.getElementById("pdf-download-info");
 
 let files = [];
-let outputUrl = "";
+let mergedBlob = null;
 
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
@@ -20,11 +20,10 @@ function formatBytes(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-function revokeOutputUrl() {
-  if (outputUrl) {
-    URL.revokeObjectURL(outputUrl);
-    outputUrl = "";
-  }
+function hideDownload() {
+  mergedBlob = null;
+  downloadPanel.classList.remove("ready");
+  downloadInfo.textContent = "";
 }
 
 function updateSummary() {
@@ -102,13 +101,14 @@ function moveFile(from, to) {
   const [moved] = copy.splice(from, 1);
   copy.splice(to, 0, moved);
   files = copy;
+  hideDownload();
+  statusEl.textContent = "";
   renderList();
 }
 
 function removeFile(index) {
   files.splice(index, 1);
-  revokeOutputUrl();
-  downloadPanel.hidden = true;
+  hideDownload();
   statusEl.textContent = "";
   renderList();
 }
@@ -116,24 +116,25 @@ function removeFile(index) {
 function clearFiles() {
   files = [];
   input.value = "";
-  revokeOutputUrl();
-  downloadPanel.hidden = true;
+  hideDownload();
   statusEl.textContent = "";
   renderList();
 }
 
 input.addEventListener("change", () => {
   const selected = Array.from(input.files || []);
-  const valid = selected.filter(file => file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf"));
+  const valid = selected.filter(
+    file => file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")
+  );
 
   if (valid.length === 0) {
     statusEl.textContent = "Please choose PDF files.";
+    input.value = "";
     return;
   }
 
   files = [...files, ...valid];
-  revokeOutputUrl();
-  downloadPanel.hidden = true;
+  hideDownload();
   statusEl.textContent = "";
   renderList();
   input.value = "";
@@ -152,6 +153,7 @@ mergeButton.addEventListener("click", async () => {
     return;
   }
 
+  hideDownload();
   statusEl.textContent = "Merging…";
   mergeButton.disabled = true;
 
@@ -159,33 +161,53 @@ mergeButton.addEventListener("click", async () => {
     const mergedPdf = await PDFLib.PDFDocument.create();
 
     for (const file of files) {
-      const bytes = await file.arrayBuffer();
-      const sourcePdf = await PDFLib.PDFDocument.load(bytes);
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const sourcePdf = await PDFLib.PDFDocument.load(bytes, {
+        ignoreEncryption: false
+      });
+
       const pageIndices = sourcePdf.getPageIndices();
       const pages = await mergedPdf.copyPages(sourcePdf, pageIndices);
-
       pages.forEach(page => mergedPdf.addPage(page));
     }
 
     const mergedBytes = await mergedPdf.save();
-    const blob = new Blob([mergedBytes], { type: "application/pdf" });
+    mergedBlob = new Blob([mergedBytes], { type: "application/pdf" });
 
-    revokeOutputUrl();
-    outputUrl = URL.createObjectURL(blob);
-
-    downloadLink.href = outputUrl;
-    downloadLink.download = "merged.pdf";
-    downloadInfo.textContent = `${files.length} files merged · ${formatBytes(blob.size)}`;
-
-    downloadPanel.hidden = false;
+    downloadInfo.textContent =
+      `${files.length} files merged · ${formatBytes(mergedBlob.size)}`;
+    downloadPanel.classList.add("ready");
     statusEl.textContent = "Done";
+
     downloadPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
   } catch (error) {
     console.error(error);
-    statusEl.textContent = "Could not merge these PDF files.";
+    mergedBlob = null;
+    statusEl.textContent =
+      "Could not merge these PDFs. Password-protected or damaged PDFs may not work.";
   } finally {
     mergeButton.disabled = files.length < 2;
   }
+});
+
+downloadButton.addEventListener("click", () => {
+  if (!mergedBlob) {
+    statusEl.textContent = "Merge the PDFs first.";
+    return;
+  }
+
+  const url = URL.createObjectURL(mergedBlob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "merged.pdf";
+  anchor.style.display = "none";
+
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+
+  // Android browsers sometimes need a little time before the Blob URL is revoked.
+  window.setTimeout(() => URL.revokeObjectURL(url), 30000);
 });
 
 renderList();
