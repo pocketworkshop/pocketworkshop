@@ -30,7 +30,7 @@
       <span>PocketWorkshop</span>
     </a>
     <nav>
-      <a href="#tools">Tools</a>
+      <a href="/tools.html">Tools</a>
       <a href="#privacy">Privacy</a>
     </nav>
   </header>
@@ -40,86 +40,37 @@
       <p class="eyebrow">EVERYDAY TOOLS, RIGHT IN YOUR POCKET</p>
       <h1>Small tools.<br />Less hassle.</h1>
       <p class="hero-copy">
-        Free browser-based utilities for text, images, PDFs, data, video, and more.
+        Free browser-based utilities for text, images, PDFs and more.
         No account required.
       </p>
-      <a class="primary-button" href="/tools/pdf-split.html">Try PDF Split</a>
+      <div class="hero-actions">
+        <a class="primary-button" href="/tools.html">Browse all tools</a>
+        <span class="tool-total"><strong data-tool-count>11</strong> tools and growing</span>
+      </div>
     </section>
 
-    <section class="section" id="tools" aria-labelledby="tools-title">
+    <section class="section" aria-labelledby="popular-title">
+      <div class="section-heading section-heading-row">
+        <div>
+          <p class="eyebrow">POPULAR TOOLS</p>
+          <h2 id="popular-title">Quick picks.</h2>
+          <p>A few useful tools to get you started. The full toolbox lives on one tidy page.</p>
+        </div>
+        <a class="text-link" href="/tools.html">View all tools →</a>
+      </div>
+
+      <div class="tool-grid" data-popular-tools></div>
+      <noscript><p><a href="/tools.html">Browse all PocketWorkshop tools.</a></p></noscript>
+    </section>
+
+    <section class="section" aria-labelledby="categories-title">
       <div class="section-heading">
-        <p class="eyebrow">TOOLBOX</p>
-        <h2 id="tools-title">Useful tools, one pocket.</h2>
-        <p>Each tool has its own page, so PocketWorkshop can keep growing without turning the homepage into a monster.</p>
+        <p class="eyebrow">CATEGORIES</p>
+        <h2 id="categories-title">Find the right toolbox.</h2>
+        <p>Browse by task instead of scrolling through one giant list.</p>
       </div>
 
-      <div class="tool-grid">
-        <a class="tool-card active" href="/tools/word-counter.html">
-          <span class="icon">Aa</span>
-          <strong>Word Counter</strong>
-          <span>Count words, characters, sentences and paragraphs instantly.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/image-resizer.html">
-          <span class="icon">IMG</span>
-          <strong>Image Resizer</strong>
-          <span>Resize JPG, PNG and WebP images directly in your browser.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/image-compressor.html">
-          <span class="icon">ZIP</span>
-          <strong>Image Compressor</strong>
-          <span>Compress images in your browser and download a lighter file.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/pdf-merge.html">
-          <span class="icon">PDF</span>
-          <strong>PDF Merge</strong>
-          <span>Combine multiple PDF files into a single PDF in your browser.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/pdf-split.html">
-          <span class="icon">CUT</span>
-          <strong>PDF Split</strong>
-          <span>Extract selected pages or split every page into separate PDFs.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/qr-code-generator.html">
-          <span class="icon">QR</span>
-          <strong>QR Code Generator</strong>
-          <span>Create and download QR codes from URLs or text directly in your browser.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/pdf-to-jpg.html">
-          <span class="icon">JPG</span>
-          <strong>PDF to JPG</strong>
-          <span>Convert PDF pages to JPG images directly in your browser.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/jpg-to-pdf.html">
-          <span class="icon">PDF</span>
-          <strong>JPG to PDF</strong>
-          <span>Combine JPG, PNG and WebP images into one PDF in your browser.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/pdf-rotate.html">
-          <span class="icon">↻</span>
-          <strong>PDF Rotate</strong>
-          <span>Rotate selected PDF pages by 90°, 180° or 270° in your browser.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/pdf-page-organizer.html">
-          <span class="icon">123</span>
-          <strong>PDF Page Organizer</strong>
-          <span>Reorder or remove PDF pages and save a cleaned-up copy.</span>
-        </a>
-
-        <a class="tool-card active" href="/tools/image-cropper.html">
-          <span class="icon">CROP</span>
-          <strong>Image Cropper</strong>
-          <span>Crop JPG, PNG and WebP images with free or fixed aspect ratios.</span>
-        </a>
-      </div>
+      <div class="category-grid" data-category-grid></div>
     </section>
 
     <section class="section trust" id="privacy">
@@ -137,6 +88,8 @@
   <footer>
     <span>© 2026 PocketWorkshop</span>
     <span>
+      <a href="/tools.html">All Tools</a>
+      ·
       <a href="/about.html">About</a>
       ·
       <a href="/privacy.html">Privacy Policy</a>
@@ -144,6 +97,9 @@
       <a href="/terms.html">Terms of Use</a>
     </span>
   </footer>
+
+  <script src="/tools/catalog.js"></script>
+  <script src="/tools/catalog-renderer.js"></script>
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
