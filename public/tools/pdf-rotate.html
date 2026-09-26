@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online PDF rotation tool. Rotate all or selected PDF pages by 90, 180 or 270 degrees directly in your browser." />
+  <title>PDF Rotate — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/pdf-rotate.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="PDF Rotate — PocketWorkshop" />
+  <meta property="og:description" content="Rotate all or selected PDF pages by 90°, 180° or 270° directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/pdf-rotate.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PDF Rotate — PocketWorkshop" />
+  <meta name="twitter:description" content="Rotate all or selected PDF pages by 90°, 180° or 270° directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .rotate-panel {
+      padding: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .rotate-info {
+      display: grid;
+      grid-template-columns: 1.5fr .7fr .7fr;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .rotate-info > div {
+      min-width: 0;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--soft);
+    }
+
+    .rotate-info span {
+      display: block;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .rotate-info strong {
+      display: block;
+      margin-top: 4px;
+      font-size: 1rem;
+      overflow-wrap: anywhere;
+    }
+
+    .rotate-fields {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .rotate-fields label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .rotate-input,
+    .rotate-select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      outline: 0;
+    }
+
+    .rotate-input:focus,
+    .rotate-select:focus {
+      border-color: #9ed0b5;
+      box-shadow: 0 0 0 3px rgba(34,160,107,.10);
+    }
+
+    .rotate-help {
+      margin: -6px 0 18px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    #rotate-download-panel {
+      display: none;
+    }
+
+    #rotate-download-panel.ready {
+      display: flex;
+    }
+
+    @media (max-width: 700px) {
+      .rotate-info,
+      .rotate-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="#tool">Tool</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">PDF TOOL</p>
+      <h1>PDF Rotate</h1>
+      <p class="hero-copy">
+        Rotate all pages or only the pages you choose.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="file-upload">
+          <label class="file-button" for="rotate-input">Choose a PDF</label>
+          <input id="rotate-input" type="file" accept="application/pdf,.pdf" />
+          <p id="rotate-file-name" class="file-name">No PDF selected</p>
+          <small>Select one PDF file</small>
+        </div>
+
+        <div id="rotate-workspace" class="rotate-panel" hidden>
+          <div class="rotate-info">
+            <div>
+              <span>File</span>
+              <strong id="rotate-file-info">—</strong>
+            </div>
+            <div>
+              <span>Pages</span>
+              <strong id="rotate-page-count">—</strong>
+            </div>
+            <div>
+              <span>Size</span>
+              <strong id="rotate-file-size">—</strong>
+            </div>
+          </div>
+
+          <div class="rotate-fields">
+            <label for="rotate-pages">
+              Pages to rotate
+              <input id="rotate-pages" class="rotate-input" type="text" inputmode="text" placeholder="All pages, or e.g. 1-3,5" />
+            </label>
+
+            <label for="rotate-angle">
+              Rotation
+              <select id="rotate-angle" class="rotate-select">
+                <option value="90" selected>90° clockwise</option>
+                <option value="270">90° counterclockwise</option>
+                <option value="180">180°</option>
+              </select>
+            </label>
+          </div>
+
+          <p class="rotate-help">
+            Leave the page box blank to rotate every page. You can also enter pages such as 1-3,5,8.
+          </p>
+
+          <div class="tool-actions" style="padding:0; min-height:auto;">
+            <button id="rotate-button" class="button-primary" type="button">Rotate PDF</button>
+            <button id="rotate-reset-button" type="button">Reset</button>
+            <span id="rotate-status" class="status" role="status"></span>
+          </div>
+        </div>
+
+        <div class="download-panel" id="rotate-download-panel">
+          <div>
+            <strong>Your rotated PDF is ready.</strong>
+            <p id="rotate-download-info"></p>
+          </div>
+          <button id="rotate-download-button" class="button-primary" type="button">Download PDF</button>
+        </div>
+      </div>
+
+      <p style="margin-top:18px; color:var(--muted); font-size:.94rem;">
+        Password-protected or damaged PDFs may not work.
+      </p>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Fix sideways or upside-down PDF pages.</h2>
+        <p>Rotate an entire PDF or only selected pages, then download a new PDF with the rotation saved.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>How to use it</h3>
+          <ol>
+            <li>Select a PDF file.</li>
+            <li>Leave the page box blank for all pages, or enter a range such as 1-3,5.</li>
+            <li>Choose the rotation angle.</li>
+            <li>Rotate and download the new PDF.</li>
+          </ol>
+        </article>
+
+        <article class="guide-card">
+          <h3>Selected pages</h3>
+          <p>You can rotate only the pages that need fixing. Other pages keep their existing orientation.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common uses</h3>
+          <p>Useful for scanned documents, receipts, forms, reports, or PDFs where some pages were saved sideways or upside down.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>The rotation runs locally in your browser. Your selected PDF is not intentionally uploaded to PocketWorkshop for processing.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="/tools/pdf-rotate.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
