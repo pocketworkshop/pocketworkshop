@@ -6,58 +6,6 @@
   <meta name="description" content="PocketWorkshop is a collection of free browser-based tools for everyday tasks. Fast, simple, and privacy-friendly." />
   <title>PocketWorkshop — Free Browser Tools</title>
   <link rel="stylesheet" href="/styles.css" />
-  <style>
-    .image-section { padding: 70px 0; border-top: 1px solid var(--line); }
-    .image-shell { overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: 24px; box-shadow: var(--shadow); }
-    .image-upload { padding: 32px 24px; text-align: center; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, rgba(233,246,239,.65), rgba(255,255,255,.25)); }
-    .image-upload input[type="file"] { display: none; }
-    .image-file-button { display: inline-block; padding: 12px 18px; border-radius: 12px; background: var(--ink); color: white; font-weight: 750; cursor: pointer; }
-    #image-file-name { margin: 14px 0 2px; font-weight: 700; overflow-wrap: anywhere; }
-    .image-upload small { color: var(--muted); }
-    .image-workspace { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .85fr); }
-    .image-preview-box {
-      min-height: 360px; padding: 22px; display: grid; place-items: center; align-content: center; gap: 12px;
-      background:
-        linear-gradient(45deg, #f0f2ed 25%, transparent 25%),
-        linear-gradient(-45deg, #f0f2ed 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #f0f2ed 75%),
-        linear-gradient(-45deg, transparent 75%, #f0f2ed 75%);
-      background-size: 24px 24px;
-      background-position: 0 0, 0 12px, 12px -12px, -12px 0;
-      border-right: 1px solid var(--line);
-    }
-    #image-preview { max-width: 100%; max-height: 410px; border-radius: 10px; box-shadow: 0 8px 30px rgba(20,35,28,.15); }
-    #image-original-info { margin: 0; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.92); color: var(--muted); font-size: .84rem; }
-    .image-controls { padding: 26px; }
-    .image-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
-    .image-fields label, .image-controls > label { display: grid; gap: 8px; font-weight: 700; font-size: .92rem; }
-    .image-number { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 11px; overflow: hidden; background: white; }
-    .image-number input { width: 100%; min-width: 0; padding: 11px 12px; border: 0; outline: 0; color: var(--ink); background: transparent; font: inherit; }
-    .image-number span { padding: 0 11px; color: var(--muted); font-size: .86rem; }
-    .image-check { display: flex !important; align-items: center; gap: 8px !important; margin: 0 0 20px; color: var(--muted); font-weight: 650 !important; }
-    .image-check input { width: 18px; height: 18px; accent-color: var(--accent-dark); }
-    .image-controls select { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 11px; background: white; color: var(--ink); font: inherit; }
-    #image-quality { width: 100%; accent-color: var(--accent-dark); }
-    .image-output-info { margin: 5px 0 18px; padding: 15px; border-radius: 14px; background: var(--soft); display: flex; justify-content: space-between; gap: 16px; }
-    .image-output-info span { color: var(--muted); }
-    .image-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-    .image-primary { background: var(--ink); color: white; border-color: var(--ink); }
-    #image-status { color: var(--accent-dark); font-size: .9rem; }
-    .image-download { padding: 20px 24px; border-top: 1px solid var(--line); background: var(--soft); display: flex; justify-content: space-between; align-items: center; gap: 18px; }
-    .image-download p { margin: 4px 0 0; color: var(--muted); font-size: .9rem; }
-    .image-download .primary-button { margin: 0; white-space: nowrap; }
-    @media (max-width: 850px) {
-      .image-workspace { grid-template-columns: 1fr; }
-      .image-preview-box { border-right: 0; border-bottom: 1px solid var(--line); }
-    }
-    @media (max-width: 560px) {
-      .image-preview-box { min-height: 280px; padding: 18px; }
-      .image-controls { padding: 22px 18px; }
-      .image-fields { grid-template-columns: 1fr; }
-      .image-download { flex-direction: column; align-items: stretch; }
-      .image-download .primary-button { text-align: center; }
-    }
-  </style>
 </head>
 <body>
   <header class="site-header">
@@ -79,26 +27,33 @@
         Free browser-based utilities for text, images, PDFs, data, video, and more.
         No account required.
       </p>
-      <a class="primary-button" href="#image-resizer">Try the Image Resizer</a>
+      <a class="primary-button" href="/tools/image-compressor.html">Try the Image Compressor</a>
     </section>
 
-    <section class="categories" id="tools" aria-labelledby="tools-title">
+    <section class="section" id="tools" aria-labelledby="tools-title">
       <div class="section-heading">
         <p class="eyebrow">TOOLBOX</p>
         <h2 id="tools-title">Useful tools, one pocket.</h2>
+        <p>Each tool now has its own page, so PocketWorkshop can keep growing without turning the homepage into a monster.</p>
       </div>
 
       <div class="tool-grid">
-        <a class="tool-card active" href="#word-counter">
+        <a class="tool-card active" href="/tools/word-counter.html">
           <span class="icon">Aa</span>
           <strong>Word Counter</strong>
           <span>Count words, characters, sentences and paragraphs instantly.</span>
         </a>
 
-        <a class="tool-card active" href="#image-resizer">
+        <a class="tool-card active" href="/tools/image-resizer.html">
           <span class="icon">IMG</span>
           <strong>Image Resizer</strong>
           <span>Resize JPG, PNG and WebP images directly in your browser.</span>
+        </a>
+
+        <a class="tool-card active" href="/tools/image-compressor.html">
+          <span class="icon">ZIP</span>
+          <strong>Image Compressor</strong>
+          <span>Compress images in your browser and download a lighter file.</span>
         </a>
 
         <div class="tool-card upcoming">
@@ -107,135 +62,17 @@
           <span>Merge, split and reorganize PDFs.</span>
           <small>Coming soon</small>
         </div>
-
-        <div class="tool-card upcoming">
-          <span class="icon">CSV</span>
-          <strong>Data Tools</strong>
-          <span>Clean, format and transform everyday data.</span>
-          <small>Coming soon</small>
-        </div>
       </div>
     </section>
 
-    <section class="counter-section" id="word-counter" aria-labelledby="counter-title">
-      <div class="section-heading">
-        <p class="eyebrow">TEXT TOOL</p>
-        <h2 id="counter-title">Word Counter</h2>
-        <p>Paste or type text below. Everything is processed locally in your browser.</p>
-      </div>
-
-      <div class="counter-shell">
-        <textarea id="text-input" placeholder="Type or paste your text here..." aria-label="Text to count"></textarea>
-
-        <div class="stats" aria-live="polite">
-          <div><strong id="words">0</strong><span>Words</span></div>
-          <div><strong id="characters">0</strong><span>Characters</span></div>
-          <div><strong id="characters-no-spaces">0</strong><span>No spaces</span></div>
-          <div><strong id="sentences">0</strong><span>Sentences</span></div>
-          <div><strong id="paragraphs">0</strong><span>Paragraphs</span></div>
-          <div><strong id="reading-time">0 min</strong><span>Reading time</span></div>
-        </div>
-
-        <div class="tool-actions">
-          <button id="clear-button" type="button">Clear</button>
-          <button id="copy-button" type="button">Copy text</button>
-          <span id="copy-status" role="status"></span>
-        </div>
-      </div>
-    </section>
-
-    <section class="image-section" id="image-resizer" aria-labelledby="image-resizer-title">
-      <div class="section-heading">
-        <p class="eyebrow">IMAGE TOOL</p>
-        <h2 id="image-resizer-title">Image Resizer</h2>
-        <p>Resize JPG, PNG or WebP images without uploading them anywhere. Processing stays in your browser.</p>
-      </div>
-
-      <div class="image-shell">
-        <div class="image-upload">
-          <label class="image-file-button" for="image-input">Choose an image</label>
-          <input id="image-input" type="file" accept="image/jpeg,image/png,image/webp" />
-          <p id="image-file-name">No image selected</p>
-          <small>JPG, PNG or WebP</small>
-        </div>
-
-        <div class="image-workspace" id="image-workspace" hidden>
-          <div class="image-preview-box">
-            <img id="image-preview" alt="Selected image preview" />
-            <p id="image-original-info"></p>
-          </div>
-
-          <div class="image-controls">
-            <div class="image-fields">
-              <label>
-                Width
-                <div class="image-number">
-                  <input id="image-width" type="number" min="1" max="12000" inputmode="numeric" />
-                  <span>px</span>
-                </div>
-              </label>
-
-              <label>
-                Height
-                <div class="image-number">
-                  <input id="image-height" type="number" min="1" max="12000" inputmode="numeric" />
-                  <span>px</span>
-                </div>
-              </label>
-            </div>
-
-            <label class="image-check">
-              <input id="image-lock-aspect" type="checkbox" checked />
-              Keep aspect ratio
-            </label>
-
-            <div class="image-fields">
-              <label>
-                Format
-                <select id="image-format">
-                  <option value="image/jpeg">JPG</option>
-                  <option value="image/png">PNG</option>
-                  <option value="image/webp">WebP</option>
-                </select>
-              </label>
-
-              <label id="image-quality-label">
-                Quality <span id="image-quality-value">90%</span>
-                <input id="image-quality" type="range" min="40" max="100" value="90" />
-              </label>
-            </div>
-
-            <div class="image-output-info">
-              <span>Output size</span>
-              <strong id="image-output-size">—</strong>
-            </div>
-
-            <div class="image-buttons">
-              <button id="image-resize-button" class="image-primary" type="button">Resize image</button>
-              <button id="image-reset-button" type="button">Reset</button>
-              <span id="image-status" role="status"></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="image-download" id="image-download-panel" hidden>
-          <div>
-            <strong>Your resized image is ready.</strong>
-            <p id="image-download-info"></p>
-          </div>
-          <a id="image-download-link" class="primary-button" href="#" download>Download image</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="trust" id="privacy">
+    <section class="section trust" id="privacy">
       <div>
         <p class="eyebrow">PRIVACY FIRST</p>
         <h2>Your files should stay yours.</h2>
       </div>
       <p>
         PocketWorkshop is designed to run tools in your browser whenever practical.
-        Text and images used by the current tools are processed locally and are not uploaded to PocketWorkshop.
+        Current tools process text and images locally and do not upload them to PocketWorkshop.
       </p>
     </section>
   </main>
@@ -244,261 +81,5 @@
     <span>© 2026 PocketWorkshop</span>
     <span>Free browser-based tools for everyday tasks.</span>
   </footer>
-
-  <canvas id="image-resize-canvas" hidden></canvas>
-
-  <script>
-    (() => {
-      const imageInput = document.getElementById("image-input");
-      const fileNameEl = document.getElementById("image-file-name");
-      const workspace = document.getElementById("image-workspace");
-      const preview = document.getElementById("image-preview");
-      const originalInfo = document.getElementById("image-original-info");
-      const widthInput = document.getElementById("image-width");
-      const heightInput = document.getElementById("image-height");
-      const lockAspect = document.getElementById("image-lock-aspect");
-      const formatSelect = document.getElementById("image-format");
-      const qualityInput = document.getElementById("image-quality");
-      const qualityValue = document.getElementById("image-quality-value");
-      const qualityLabel = document.getElementById("image-quality-label");
-      const outputSize = document.getElementById("image-output-size");
-      const resizeButton = document.getElementById("image-resize-button");
-      const resetButton = document.getElementById("image-reset-button");
-      const status = document.getElementById("image-status");
-      const downloadPanel = document.getElementById("image-download-panel");
-      const downloadLink = document.getElementById("image-download-link");
-      const downloadInfo = document.getElementById("image-download-info");
-      const canvas = document.getElementById("image-resize-canvas");
-
-      let sourceImage = null;
-      let sourceFile = null;
-      let sourceUrl = "";
-      let outputUrl = "";
-      let aspectRatio = 1;
-      let syncing = false;
-
-      function formatBytes(bytes) {
-        if (bytes < 1024) return `${bytes} B`;
-        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-        return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-      }
-
-      function extensionFor(type) {
-        if (type === "image/png") return "png";
-        if (type === "image/webp") return "webp";
-        return "jpg";
-      }
-
-      function baseName(name) {
-        return name.replace(/\.[^.]+$/, "") || "image";
-      }
-
-      function refreshOutputSize() {
-        const w = Number(widthInput.value);
-        const h = Number(heightInput.value);
-        outputSize.textContent =
-          w > 0 && h > 0 ? `${Math.round(w).toLocaleString()} × ${Math.round(h).toLocaleString()} px` : "—";
-      }
-
-      function refreshQualityVisibility() {
-        qualityLabel.hidden = formatSelect.value === "image/png";
-      }
-
-      function revokeOutputUrl() {
-        if (outputUrl) {
-          URL.revokeObjectURL(outputUrl);
-          outputUrl = "";
-        }
-      }
-
-      function resetTool() {
-        revokeOutputUrl();
-
-        if (sourceUrl) {
-          URL.revokeObjectURL(sourceUrl);
-          sourceUrl = "";
-        }
-
-        sourceImage = null;
-        sourceFile = null;
-        imageInput.value = "";
-        fileNameEl.textContent = "No image selected";
-        preview.removeAttribute("src");
-        workspace.hidden = true;
-        downloadPanel.hidden = true;
-        status.textContent = "";
-        originalInfo.textContent = "";
-        widthInput.value = "";
-        heightInput.value = "";
-        outputSize.textContent = "—";
-      }
-
-      imageInput.addEventListener("change", () => {
-        const file = imageInput.files && imageInput.files[0];
-        if (!file) return;
-
-        const allowed = ["image/jpeg", "image/png", "image/webp"];
-        if (!allowed.includes(file.type)) {
-          status.textContent = "Please choose a JPG, PNG or WebP image.";
-          imageInput.value = "";
-          return;
-        }
-
-        if (sourceUrl) URL.revokeObjectURL(sourceUrl);
-        revokeOutputUrl();
-
-        sourceFile = file;
-        sourceUrl = URL.createObjectURL(file);
-        sourceImage = new Image();
-
-        sourceImage.onload = () => {
-          aspectRatio = sourceImage.naturalWidth / sourceImage.naturalHeight;
-
-          preview.src = sourceUrl;
-          fileNameEl.textContent = file.name;
-          originalInfo.textContent =
-            `${sourceImage.naturalWidth.toLocaleString()} × ${sourceImage.naturalHeight.toLocaleString()} px · ${formatBytes(file.size)}`;
-
-          widthInput.value = sourceImage.naturalWidth;
-          heightInput.value = sourceImage.naturalHeight;
-
-          if (file.type === "image/png") formatSelect.value = "image/png";
-          else if (file.type === "image/webp") formatSelect.value = "image/webp";
-          else formatSelect.value = "image/jpeg";
-
-          refreshQualityVisibility();
-          refreshOutputSize();
-          workspace.hidden = false;
-          downloadPanel.hidden = true;
-          status.textContent = "";
-        };
-
-        sourceImage.onerror = () => {
-          status.textContent = "This image could not be opened.";
-        };
-
-        sourceImage.src = sourceUrl;
-      });
-
-      widthInput.addEventListener("input", () => {
-        if (syncing) return;
-        const width = Math.round(Number(widthInput.value));
-
-        if (lockAspect.checked && sourceImage && width > 0) {
-          syncing = true;
-          heightInput.value = Math.max(1, Math.round(width / aspectRatio));
-          syncing = false;
-        }
-
-        refreshOutputSize();
-      });
-
-      heightInput.addEventListener("input", () => {
-        if (syncing) return;
-        const height = Math.round(Number(heightInput.value));
-
-        if (lockAspect.checked && sourceImage && height > 0) {
-          syncing = true;
-          widthInput.value = Math.max(1, Math.round(height * aspectRatio));
-          syncing = false;
-        }
-
-        refreshOutputSize();
-      });
-
-      lockAspect.addEventListener("change", () => {
-        if (lockAspect.checked && sourceImage && Number(widthInput.value) > 0) {
-          heightInput.value = Math.max(1, Math.round(Number(widthInput.value) / aspectRatio));
-          refreshOutputSize();
-        }
-      });
-
-      qualityInput.addEventListener("input", () => {
-        qualityValue.textContent = `${qualityInput.value}%`;
-      });
-
-      formatSelect.addEventListener("change", refreshQualityVisibility);
-      resetButton.addEventListener("click", resetTool);
-
-      resizeButton.addEventListener("click", () => {
-        if (!sourceImage || !sourceFile) {
-          status.textContent = "Choose an image first.";
-          return;
-        }
-
-        const width = Math.round(Number(widthInput.value));
-        const height = Math.round(Number(heightInput.value));
-
-        if (!Number.isFinite(width) || !Number.isFinite(height) || width < 1 || height < 1) {
-          status.textContent = "Enter a valid width and height.";
-          return;
-        }
-
-        if (width > 12000 || height > 12000 || width * height > 80000000) {
-          status.textContent = "That output is too large. Try smaller dimensions.";
-          return;
-        }
-
-        status.textContent = "Resizing…";
-        resizeButton.disabled = true;
-
-        requestAnimationFrame(() => {
-          try {
-            canvas.width = width;
-            canvas.height = height;
-
-            const context = canvas.getContext("2d", {
-              alpha: formatSelect.value !== "image/jpeg"
-            });
-
-            context.clearRect(0, 0, width, height);
-
-            if (formatSelect.value === "image/jpeg") {
-              context.fillStyle = "#ffffff";
-              context.fillRect(0, 0, width, height);
-            }
-
-            context.imageSmoothingEnabled = true;
-            context.imageSmoothingQuality = "high";
-            context.drawImage(sourceImage, 0, 0, width, height);
-
-            const quality = Number(qualityInput.value) / 100;
-
-            canvas.toBlob((blob) => {
-              resizeButton.disabled = false;
-
-              if (!blob) {
-                status.textContent = "The resized image could not be created.";
-                return;
-              }
-
-              revokeOutputUrl();
-              outputUrl = URL.createObjectURL(blob);
-
-              const ext = extensionFor(formatSelect.value);
-              const filename = `${baseName(sourceFile.name)}-${width}x${height}.${ext}`;
-
-              downloadLink.href = outputUrl;
-              downloadLink.download = filename;
-              downloadInfo.textContent =
-                `${width.toLocaleString()} × ${height.toLocaleString()} px · ${formatBytes(blob.size)} · ${ext.toUpperCase()}`;
-
-              downloadPanel.hidden = false;
-              status.textContent = "Done";
-              downloadPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }, formatSelect.value, quality);
-          } catch (e) {
-            resizeButton.disabled = false;
-            status.textContent = "Something went wrong while resizing.";
-          }
-        });
-      });
-
-      refreshQualityVisibility();
-      refreshOutputSize();
-    })();
-  </script>
-
-  <script src="/app.js"></script>
 </body>
 </html>
