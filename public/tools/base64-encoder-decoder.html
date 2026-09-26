@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online Base64 encoder and decoder. Encode Unicode text to Base64 or decode Base64 back to readable text directly in your browser." />
+  <title>Base64 Encoder & Decoder — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/base64-encoder-decoder.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Base64 Encoder & Decoder — PocketWorkshop" />
+  <meta property="og:description" content="Encode Unicode text to Base64 or decode Base64 back to readable text directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/base64-encoder-decoder.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Base64 Encoder & Decoder — PocketWorkshop" />
+  <meta name="twitter:description" content="Encode Unicode text to Base64 or decode Base64 back to readable text directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .b64-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .b64-pane {
+      min-width: 0;
+    }
+
+    .b64-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .b64-pane-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .b64-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .b64-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .b64-textarea {
+      min-height: 320px;
+      border-bottom: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92rem;
+    }
+
+    .b64-options {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+    }
+
+    .b64-options label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .b64-options select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .b64-check {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center;
+      gap: 9px !important;
+      color: var(--muted);
+      font-weight: 650 !important;
+    }
+
+    .b64-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .b64-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .b64-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .b64-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .b64-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .b64-textarea {
+        min-height: 230px;
+      }
+
+      .b64-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Base64 Encoder & Decoder</h1>
+      <p class="hero-copy">
+        Encode text to Base64 or decode Base64 back to readable Unicode text.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="b64-layout">
+          <div class="b64-pane">
+            <div class="b64-pane-header">
+              <strong>Input</strong>
+              <span id="b64-input-count" class="b64-count">0 characters</span>
+            </div>
+            <textarea id="b64-input" class="b64-textarea" spellcheck="false" placeholder="Type or paste text here..." aria-label="Base64 input"></textarea>
+          </div>
+
+          <div class="b64-pane">
+            <div class="b64-pane-header">
+              <strong>Result</strong>
+              <span id="b64-output-count" class="b64-count">0 characters</span>
+            </div>
+            <textarea id="b64-output" class="b64-textarea" spellcheck="false" placeholder="Encoded or decoded text will appear here..." aria-label="Base64 output"></textarea>
+          </div>
+        </div>
+
+        <div class="b64-options">
+          <label for="b64-variant">
+            Base64 variant
+            <select id="b64-variant">
+              <option value="standard" selected>Standard Base64</option>
+              <option value="url">Base64 URL-safe</option>
+            </select>
+          </label>
+
+          <label class="b64-check" for="b64-padding">
+            <input id="b64-padding" type="checkbox" checked />
+            Keep = padding when encoding
+          </label>
+        </div>
+
+        <div class="b64-actions">
+          <button id="b64-encode-button" class="button-primary" type="button">Encode</button>
+          <button id="b64-decode-button" type="button">Decode</button>
+          <button id="b64-swap-button" type="button">Use result as input</button>
+          <button id="b64-copy-button" type="button">Copy result</button>
+          <button id="b64-sample-button" type="button">Load sample</button>
+          <button id="b64-clear-button" type="button">Clear</button>
+          <span id="b64-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Encode or decode Base64 without losing Unicode text.</h2>
+        <p>The converter uses UTF-8, so non-English text and emoji can be encoded and decoded correctly.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Standard Base64</h3>
+          <p>Use the regular Base64 alphabet for general text encoding and decoding.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>URL-safe Base64</h3>
+          <p>Use the URL-safe variant when Base64 needs to fit more cleanly into URLs, filenames or tokens.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Unicode support</h3>
+          <p>Japanese text, accented characters and emoji are handled as UTF-8 rather than being limited to plain ASCII.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your text is processed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/base64-encoder-decoder.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

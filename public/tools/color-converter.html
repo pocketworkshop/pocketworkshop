@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online color converter. Convert HEX, RGB and HSL colors, preview the result and copy values directly in your browser." />
+  <title>Color Converter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/color-converter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Color Converter — PocketWorkshop" />
+  <meta property="og:description" content="Convert HEX, RGB and HSL colors, preview the result and copy values directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/color-converter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Color Converter — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert HEX, RGB and HSL colors, preview the result and copy values directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .color-tool {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      min-height: 480px;
+    }
+
+    .color-preview-panel {
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+    }
+
+    .color-preview {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #22a06b;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
+    }
+
+    .color-picker-row {
+      margin-top: 14px;
+      display: grid;
+      gap: 8px;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    #color-picker {
+      width: 100%;
+      height: 48px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .color-controls {
+      padding: 22px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .color-section {
+      display: grid;
+      gap: 10px;
+    }
+
+    .color-section h2 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .color-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .color-row input[type="text"] {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .color-triple {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .color-field {
+      display: grid;
+      gap: 6px;
+      font-size: .84rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .color-field input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .color-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .color-swatch-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .color-swatch {
+      min-height: 44px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      cursor: pointer;
+    }
+
+    .color-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .color-tool {
+        grid-template-columns: 1fr;
+      }
+
+      .color-preview-panel {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .color-preview {
+        aspect-ratio: 16 / 7;
+      }
+
+      .color-triple {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">COLOR TOOL</p>
+      <h1>Color Converter</h1>
+      <p class="hero-copy">
+        Convert colors between HEX, RGB and HSL, preview them instantly and copy the format you need.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="color-tool">
+          <div class="color-preview-panel">
+            <div id="color-preview" class="color-preview" aria-label="Color preview"></div>
+
+            <label class="color-picker-row" for="color-picker">
+              Pick a color
+              <input id="color-picker" type="color" value="#22a06b" />
+            </label>
+
+            <div class="color-swatch-row" aria-label="Quick color examples">
+              <button class="color-swatch" type="button" data-color="#22a06b" style="background:#22a06b" aria-label="Green example"></button>
+              <button class="color-swatch" type="button" data-color="#2563eb" style="background:#2563eb" aria-label="Blue example"></button>
+              <button class="color-swatch" type="button" data-color="#ef4444" style="background:#ef4444" aria-label="Red example"></button>
+              <button class="color-swatch" type="button" data-color="#f59e0b" style="background:#f59e0b" aria-label="Orange example"></button>
+              <button class="color-swatch" type="button" data-color="#8b5cf6" style="background:#8b5cf6" aria-label="Purple example"></button>
+            </div>
+          </div>
+
+          <div class="color-controls">
+            <div class="color-section">
+              <h2>HEX</h2>
+              <div class="color-row">
+                <input id="hex-input" type="text" value="#22A06B" spellcheck="false" aria-label="HEX color" />
+                <button type="button" data-copy-target="hex-input">Copy</button>
+              </div>
+            </div>
+
+            <div class="color-section">
+              <h2>RGB</h2>
+              <div class="color-triple">
+                <label class="color-field" for="rgb-r">
+                  Red
+                  <input id="rgb-r" type="number" min="0" max="255" value="34" />
+                </label>
+                <label class="color-field" for="rgb-g">
+                  Green
+                  <input id="rgb-g" type="number" min="0" max="255" value="160" />
+                </label>
+                <label class="color-field" for="rgb-b">
+                  Blue
+                  <input id="rgb-b" type="number" min="0" max="255" value="107" />
+                </label>
+              </div>
+              <div class="color-row">
+                <input id="rgb-output" type="text" value="rgb(34, 160, 107)" readonly aria-label="RGB result" />
+                <button type="button" data-copy-target="rgb-output">Copy</button>
+              </div>
+            </div>
+
+            <div class="color-section">
+              <h2>HSL</h2>
+              <div class="color-triple">
+                <label class="color-field" for="hsl-h">
+                  Hue
+                  <input id="hsl-h" type="number" min="0" max="360" value="155" />
+                </label>
+                <label class="color-field" for="hsl-s">
+                  Saturation %
+                  <input id="hsl-s" type="number" min="0" max="100" value="65" />
+                </label>
+                <label class="color-field" for="hsl-l">
+                  Lightness %
+                  <input id="hsl-l" type="number" min="0" max="100" value="38" />
+                </label>
+              </div>
+              <div class="color-row">
+                <input id="hsl-output" type="text" value="hsl(155, 65%, 38%)" readonly aria-label="HSL result" />
+                <button type="button" data-copy-target="hsl-output">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="color-actions">
+          <button id="color-random-button" class="button-primary" type="button">Random color</button>
+          <button id="color-reset-button" type="button">Reset</button>
+          <span id="color-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Move between common web color formats.</h2>
+        <p>Edit HEX, RGB or HSL values and the other formats update automatically.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>HEX</h3>
+          <p>Use familiar six-digit web colors such as <strong>#22A06B</strong>. Three-digit HEX values such as <strong>#0A7</strong> are accepted too.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>RGB</h3>
+          <p>RGB describes red, green and blue channels from 0 to 255 and is widely used in CSS and digital design.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>HSL</h3>
+          <p>HSL separates hue, saturation and lightness, which can be more intuitive when adjusting a color's tone.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>All color conversion happens locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/color-converter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

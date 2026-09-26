@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online JSON to CSV converter. Convert arrays of JSON objects into CSV, TSV or semicolon-separated text directly in your browser." />
+  <title>JSON to CSV — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/json-to-csv.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="JSON to CSV — PocketWorkshop" />
+  <meta property="og:description" content="Convert arrays of JSON objects into CSV, TSV or semicolon-separated text directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/json-to-csv.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="JSON to CSV — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert arrays of JSON objects into CSV, TSV or semicolon-separated text directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .jtc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .jtc-pane {
+      min-width: 0;
+    }
+
+    .jtc-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .jtc-pane-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .jtc-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .jtc-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .jtc-textarea {
+      min-height: 360px;
+      border-bottom: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9rem;
+      tab-size: 2;
+    }
+
+    .jtc-options {
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .jtc-options label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .jtc-options select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .jtc-checks {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 20px;
+    }
+
+    .jtc-check {
+      display: flex !important;
+      align-items: center;
+      gap: 8px !important;
+      color: var(--muted);
+      font-weight: 650 !important;
+    }
+
+    .jtc-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .jtc-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .jtc-summary {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .jtc-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 800px) {
+      .jtc-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .jtc-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .jtc-textarea {
+        min-height: 260px;
+      }
+
+      .jtc-options {
+        grid-template-columns: 1fr;
+      }
+
+      .jtc-checks {
+        grid-column: auto;
+        flex-direction: column;
+      }
+
+      .jtc-summary {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DATA TOOL</p>
+      <h1>JSON to CSV</h1>
+      <p class="hero-copy">
+        Turn JSON arrays into CSV, TSV or semicolon-separated text.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="jtc-layout">
+          <div class="jtc-pane">
+            <div class="jtc-pane-header">
+              <strong>JSON input</strong>
+              <span id="jtc-input-count" class="jtc-count">0 characters</span>
+            </div>
+            <textarea id="jtc-input" class="jtc-textarea" spellcheck="false" placeholder='[{"name":"Alice","age":31},{"name":"Bob","age":28}]' aria-label="JSON input"></textarea>
+          </div>
+
+          <div class="jtc-pane">
+            <div class="jtc-pane-header">
+              <strong>Delimited result</strong>
+              <span id="jtc-output-count" class="jtc-count">0 characters</span>
+            </div>
+            <textarea id="jtc-output" class="jtc-textarea" spellcheck="false" placeholder="CSV output will appear here..." aria-label="CSV output"></textarea>
+          </div>
+        </div>
+
+        <div class="jtc-options">
+          <label for="jtc-delimiter">
+            Output format
+            <select id="jtc-delimiter">
+              <option value="," selected>CSV · comma</option>
+              <option value="tab">TSV · tab</option>
+              <option value=";">Semicolon</option>
+              <option value="|">Pipe</option>
+            </select>
+          </label>
+
+          <label for="jtc-nested-mode">
+            Nested values
+            <select id="jtc-nested-mode">
+              <option value="json" selected>JSON string</option>
+              <option value="flatten">Flatten objects</option>
+              <option value="blank">Leave blank</option>
+            </select>
+          </label>
+
+          <label for="jtc-line-ending">
+            Line endings
+            <select id="jtc-line-ending">
+              <option value="lf" selected>LF</option>
+              <option value="crlf">CRLF</option>
+            </select>
+          </label>
+
+          <div class="jtc-checks">
+            <label class="jtc-check" for="jtc-header">
+              <input id="jtc-header" type="checkbox" checked />
+              Include header row
+            </label>
+
+            <label class="jtc-check" for="jtc-bom">
+              <input id="jtc-bom" type="checkbox" />
+              Add UTF-8 BOM for spreadsheet apps
+            </label>
+          </div>
+        </div>
+
+        <div class="jtc-actions">
+          <button id="jtc-convert-button" class="button-primary" type="button">Convert to CSV</button>
+          <button id="jtc-copy-button" type="button">Copy result</button>
+          <button id="jtc-download-button" type="button">Download file</button>
+          <button id="jtc-sample-button" type="button">Load sample</button>
+          <button id="jtc-clear-button" type="button">Clear</button>
+          <span id="jtc-status" class="status" role="status"></span>
+          <span id="jtc-summary" class="jtc-summary"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Turn JSON into spreadsheet-friendly text.</h2>
+        <p>Paste an array of JSON objects, choose a delimiter, and export a clean table without uploading your data.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Column detection</h3>
+          <p>The converter gathers keys from all objects so rows with slightly different fields can still share one table.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Nested data</h3>
+          <p>Keep nested arrays and objects as JSON strings, flatten nested object keys, or leave nested values blank.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Spreadsheet export</h3>
+          <p>You can add a UTF-8 BOM when needed for spreadsheet apps that otherwise struggle with non-English characters.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your JSON is processed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/json-to-csv.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

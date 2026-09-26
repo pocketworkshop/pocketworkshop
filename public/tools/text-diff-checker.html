@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free text diff checker. Compare two blocks of text line by line, highlight additions and removals, and review differences directly in your browser." />
+  <title>Text Diff Checker — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/text-diff-checker.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Text Diff Checker — PocketWorkshop" />
+  <meta property="og:description" content="Compare two blocks of text line by line and highlight additions and removals directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/text-diff-checker.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Text Diff Checker — PocketWorkshop" />
+  <meta name="twitter:description" content="Compare two blocks of text line by line and highlight additions and removals directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .diff-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .diff-pane {
+      min-width: 0;
+    }
+
+    .diff-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .diff-pane-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .diff-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .diff-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .diff-textarea {
+      min-height: 300px;
+      border-bottom: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9rem;
+      line-height: 1.55;
+    }
+
+    .diff-options {
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 20px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+    }
+
+    .diff-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 650;
+    }
+
+    .diff-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .diff-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .diff-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      padding: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .diff-stat {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .diff-stat strong {
+      display: block;
+      font-size: 1.2rem;
+    }
+
+    .diff-stat span {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .diff-result-wrap {
+      border-top: 1px solid var(--line);
+      overflow-x: auto;
+    }
+
+    .diff-result-header,
+    .diff-row {
+      min-width: 760px;
+      display: grid;
+      grid-template-columns: 52px 1fr 52px 1fr;
+    }
+
+    .diff-result-header {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: var(--soft);
+      border-bottom: 1px solid var(--line);
+      font-size: .84rem;
+      font-weight: 700;
+    }
+
+    .diff-result-header > div,
+    .diff-row > div {
+      padding: 9px 10px;
+      border-right: 1px solid var(--line);
+    }
+
+    .diff-result-header > div:last-child,
+    .diff-row > div:last-child {
+      border-right: 0;
+    }
+
+    .diff-row {
+      border-bottom: 1px solid var(--line);
+      background: white;
+    }
+
+    .diff-line-no {
+      color: var(--muted);
+      text-align: right;
+      user-select: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .82rem;
+    }
+
+    .diff-line {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .86rem;
+    }
+
+    .diff-removed {
+      background: #fff0f0;
+    }
+
+    .diff-added {
+      background: #eefbf4;
+    }
+
+    .diff-empty {
+      color: var(--muted);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .diff-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .diff-inputs {
+        grid-template-columns: 1fr;
+      }
+
+      .diff-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .diff-textarea {
+        min-height: 220px;
+      }
+
+      .diff-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Text Diff Checker</h1>
+      <p class="hero-copy">
+        Compare two versions of text line by line and spot additions, removals and unchanged lines.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="diff-inputs">
+          <div class="diff-pane">
+            <div class="diff-pane-header">
+              <strong>Original text</strong>
+              <span id="diff-left-count" class="diff-count">0 lines · 0 characters</span>
+            </div>
+            <textarea id="diff-left" class="diff-textarea" spellcheck="false" placeholder="Paste the original text here..." aria-label="Original text"></textarea>
+          </div>
+
+          <div class="diff-pane">
+            <div class="diff-pane-header">
+              <strong>Changed text</strong>
+              <span id="diff-right-count" class="diff-count">0 lines · 0 characters</span>
+            </div>
+            <textarea id="diff-right" class="diff-textarea" spellcheck="false" placeholder="Paste the changed text here..." aria-label="Changed text"></textarea>
+          </div>
+        </div>
+
+        <div class="diff-options">
+          <label class="diff-check" for="diff-ignore-case">
+            <input id="diff-ignore-case" type="checkbox" />
+            Ignore letter case
+          </label>
+
+          <label class="diff-check" for="diff-ignore-whitespace">
+            <input id="diff-ignore-whitespace" type="checkbox" />
+            Ignore surrounding whitespace
+          </label>
+
+          <label class="diff-check" for="diff-collapse-spaces">
+            <input id="diff-collapse-spaces" type="checkbox" />
+            Treat repeated spaces as one
+          </label>
+        </div>
+
+        <div class="diff-actions">
+          <button id="diff-compare" class="button-primary" type="button">Compare text</button>
+          <button id="diff-swap" type="button">Swap sides</button>
+          <button id="diff-sample" type="button">Load sample</button>
+          <button id="diff-clear" type="button">Clear</button>
+          <span id="diff-status" class="status" role="status"></span>
+        </div>
+
+        <div class="diff-summary">
+          <div class="diff-stat"><strong id="diff-stat-same">0</strong><span>unchanged</span></div>
+          <div class="diff-stat"><strong id="diff-stat-added">0</strong><span>added</span></div>
+          <div class="diff-stat"><strong id="diff-stat-removed">0</strong><span>removed</span></div>
+          <div class="diff-stat"><strong id="diff-stat-total">0</strong><span>diff rows</span></div>
+        </div>
+
+        <div class="diff-result-wrap">
+          <div class="diff-result-header">
+            <div>Line</div>
+            <div>Original</div>
+            <div>Line</div>
+            <div>Changed</div>
+          </div>
+          <div id="diff-result">
+            <div class="diff-empty">Compare two texts to see the differences here.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">See what changed between two text versions.</h2>
+        <p>Useful for drafts, configuration files, copied notes, code snippets and other line-based text comparisons.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Line alignment</h3>
+          <p>The checker aligns matching lines so an inserted or deleted line does not automatically make every following line look different.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Comparison options</h3>
+          <p>Ignore capitalization, trim surrounding whitespace, or treat repeated spaces as a single space when matching lines.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Color cues</h3>
+          <p>Removed lines are highlighted on the original side, while added lines are highlighted on the changed side.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Both texts are compared locally in your browser and are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/text-diff-checker.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

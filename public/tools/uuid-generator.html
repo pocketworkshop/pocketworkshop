@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free UUID v4 generator. Create one or many random UUIDs securely in your browser and copy or download them instantly." />
+  <title>UUID Generator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/uuid-generator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="UUID Generator — PocketWorkshop" />
+  <meta property="og:description" content="Create one or many random UUID v4 values securely in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/uuid-generator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="UUID Generator — PocketWorkshop" />
+  <meta name="twitter:description" content="Create one or many random UUID v4 values securely in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .uuid-controls {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+    }
+
+    .uuid-controls label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .uuid-controls input[type="number"],
+    .uuid-controls select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .uuid-checks {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 20px;
+    }
+
+    .uuid-check {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center;
+      gap: 8px !important;
+      color: var(--muted);
+      font-weight: 650 !important;
+    }
+
+    .uuid-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .uuid-output-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .uuid-output-header strong {
+      font-size: .94rem;
+    }
+
+    .uuid-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    #uuid-output {
+      min-height: 340px;
+      border-bottom: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .94rem;
+      line-height: 1.7;
+    }
+
+    .uuid-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .uuid-summary {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    @media (max-width: 720px) {
+      .uuid-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .uuid-checks {
+        grid-column: auto;
+        flex-direction: column;
+      }
+
+      #uuid-output {
+        min-height: 280px;
+      }
+
+      .uuid-summary {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DEVELOPER TOOL</p>
+      <h1>UUID Generator</h1>
+      <p class="hero-copy">
+        Generate secure random UUID v4 values in your browser.
+        Create one or hundreds at a time.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="uuid-controls">
+          <label for="uuid-amount">
+            Number of UUIDs
+            <input id="uuid-amount" type="number" min="1" max="1000" value="10" inputmode="numeric" />
+          </label>
+
+          <label for="uuid-separator">
+            Separator
+            <select id="uuid-separator">
+              <option value="newline" selected>New line</option>
+              <option value="comma">Comma</option>
+              <option value="space">Space</option>
+            </select>
+          </label>
+
+          <label for="uuid-version">
+            Version
+            <select id="uuid-version">
+              <option value="v4" selected>UUID v4 (random)</option>
+            </select>
+          </label>
+
+          <div class="uuid-checks">
+            <label class="uuid-check" for="uuid-uppercase">
+              <input id="uuid-uppercase" type="checkbox" />
+              Uppercase letters
+            </label>
+
+            <label class="uuid-check" for="uuid-no-hyphens">
+              <input id="uuid-no-hyphens" type="checkbox" />
+              Remove hyphens
+            </label>
+
+            <label class="uuid-check" for="uuid-braces">
+              <input id="uuid-braces" type="checkbox" />
+              Wrap each UUID in braces
+            </label>
+          </div>
+        </div>
+
+        <div class="uuid-output-header">
+          <strong>Generated UUIDs</strong>
+          <span id="uuid-output-count" class="uuid-count">0 UUIDs</span>
+        </div>
+
+        <textarea id="uuid-output" spellcheck="false" aria-label="Generated UUIDs" readonly></textarea>
+
+        <div class="uuid-actions">
+          <button id="uuid-generate-button" class="button-primary" type="button">Generate UUIDs</button>
+          <button id="uuid-copy-button" type="button">Copy all</button>
+          <button id="uuid-download-button" type="button">Download .txt</button>
+          <button id="uuid-clear-button" type="button">Clear</button>
+          <span id="uuid-status" class="status" role="status"></span>
+          <span id="uuid-summary" class="uuid-summary"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Generate random UUID v4 values instantly.</h2>
+        <p>Useful for test data, database records, identifiers, development fixtures and other places that need unique-looking random IDs.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>UUID v4</h3>
+          <p>UUID v4 values are random identifiers in the familiar 8-4-4-4-12 hexadecimal format.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Bulk generation</h3>
+          <p>Create up to 1,000 UUIDs at once and choose whether they are separated by lines, commas or spaces.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Output options</h3>
+          <p>Use uppercase letters, remove hyphens, or wrap each value in braces depending on the format you need.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>UUIDs are generated locally using your browser's cryptographic random number generator and are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/uuid-generator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

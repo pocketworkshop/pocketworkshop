@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free Lorem Ipsum generator. Create placeholder paragraphs, sentences or words directly in your browser." />
+  <title>Lorem Ipsum Generator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/lorem-ipsum-generator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Lorem Ipsum Generator — PocketWorkshop" />
+  <meta property="og:description" content="Generate placeholder paragraphs, sentences or words directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/lorem-ipsum-generator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Lorem Ipsum Generator — PocketWorkshop" />
+  <meta name="twitter:description" content="Generate placeholder paragraphs, sentences or words directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .lorem-controls {
+      padding: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .lorem-controls label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .lorem-controls select,
+    .lorem-controls input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .lorem-check {
+      grid-column: 1 / -1;
+      display: flex !important;
+      align-items: center;
+      gap: 9px !important;
+      color: var(--muted);
+      font-weight: 650 !important;
+    }
+
+    .lorem-check input {
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      accent-color: var(--accent-dark);
+    }
+
+    .lorem-output-wrap {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .lorem-output-header {
+      padding: 14px 18px;
+      background: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .lorem-output-header strong {
+      font-size: .94rem;
+    }
+
+    .lorem-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    #lorem-output {
+      min-height: 340px;
+      border-bottom: 0;
+    }
+
+    .lorem-actions {
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    @media (max-width: 720px) {
+      .lorem-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .lorem-check {
+        grid-column: auto;
+      }
+
+      #lorem-output {
+        min-height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Lorem Ipsum Generator</h1>
+      <p class="hero-copy">
+        Generate placeholder text for layouts, mockups and drafts.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="lorem-controls">
+          <label for="lorem-type">
+            Generate
+            <select id="lorem-type">
+              <option value="paragraphs" selected>Paragraphs</option>
+              <option value="sentences">Sentences</option>
+              <option value="words">Words</option>
+            </select>
+          </label>
+
+          <label for="lorem-amount">
+            Amount
+            <input id="lorem-amount" type="number" min="1" max="100" value="3" inputmode="numeric" />
+          </label>
+
+          <label for="lorem-length">
+            Length
+            <select id="lorem-length">
+              <option value="short">Short</option>
+              <option value="medium" selected>Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </label>
+
+          <label class="lorem-check" for="lorem-classic-start">
+            <input id="lorem-classic-start" type="checkbox" checked />
+            Start with “Lorem ipsum dolor sit amet...”
+          </label>
+        </div>
+
+        <div class="lorem-output-wrap">
+          <div class="lorem-output-header">
+            <strong>Generated text</strong>
+            <span id="lorem-count" class="lorem-count">0 words · 0 characters</span>
+          </div>
+          <textarea id="lorem-output" aria-label="Generated Lorem Ipsum text"></textarea>
+        </div>
+
+        <div class="lorem-actions">
+          <button id="lorem-generate-button" class="button-primary" type="button">Generate</button>
+          <button id="lorem-copy-button" type="button">Copy text</button>
+          <button id="lorem-clear-button" type="button">Clear</button>
+          <span id="lorem-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Placeholder text without the fuss.</h2>
+        <p>Create as much or as little dummy copy as you need for design, layout and content testing.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Three modes</h3>
+          <p>Generate whole paragraphs, individual sentences, or an exact-ish block of words depending on what your layout needs.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Length control</h3>
+          <p>Choose short, medium, or long output to quickly vary the density of your placeholder content.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common uses</h3>
+          <p>Useful for website mockups, UI cards, brochures, presentation layouts, templates, wireframes and design testing.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>The generator runs locally in your browser. Nothing needs to be uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/lorem-ipsum-generator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

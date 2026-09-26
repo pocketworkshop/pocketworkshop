@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free HTML entity encoder and decoder. Escape special characters for HTML or decode HTML entities back to readable text directly in your browser." />
+  <title>HTML Entity Encoder & Decoder — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/html-entity-encoder-decoder.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="HTML Entity Encoder & Decoder — PocketWorkshop" />
+  <meta property="og:description" content="Escape special characters for HTML or decode HTML entities back to readable text directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/html-entity-encoder-decoder.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HTML Entity Encoder & Decoder — PocketWorkshop" />
+  <meta name="twitter:description" content="Escape special characters for HTML or decode HTML entities back to readable text directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .entity-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .entity-pane {
+      min-width: 0;
+    }
+
+    .entity-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .entity-pane-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .entity-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .entity-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .entity-textarea {
+      min-height: 330px;
+      border-bottom: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92rem;
+      line-height: 1.6;
+    }
+
+    .entity-options {
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .entity-field {
+      display: grid;
+      gap: 8px;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .entity-field select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .entity-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-weight: 650;
+      font-size: .92rem;
+    }
+
+    .entity-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .entity-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .entity-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .entity-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .entity-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .entity-textarea {
+        min-height: 240px;
+      }
+
+      .entity-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">WEB TOOL</p>
+      <h1>HTML Entity Encoder & Decoder</h1>
+      <p class="hero-copy">
+        Escape special characters for HTML or decode entities back to readable text.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="entity-layout">
+          <div class="entity-pane">
+            <div class="entity-pane-header">
+              <strong>Input</strong>
+              <span id="entity-input-count" class="entity-count">0 characters</span>
+            </div>
+            <textarea id="entity-input" class="entity-textarea" spellcheck="false" placeholder='Example: <div class="note">Tom & Jerry</div>' aria-label="HTML entity input"></textarea>
+          </div>
+
+          <div class="entity-pane">
+            <div class="entity-pane-header">
+              <strong>Result</strong>
+              <span id="entity-output-count" class="entity-count">0 characters</span>
+            </div>
+            <textarea id="entity-output" class="entity-textarea" spellcheck="false" placeholder="Encoded or decoded text will appear here..." aria-label="HTML entity output"></textarea>
+          </div>
+        </div>
+
+        <div class="entity-options">
+          <label class="entity-field" for="entity-quote-mode">
+            Quote handling when encoding
+            <select id="entity-quote-mode">
+              <option value="both" selected>Encode single and double quotes</option>
+              <option value="double">Encode double quotes only</option>
+              <option value="none">Do not encode quotes</option>
+            </select>
+          </label>
+
+          <label class="entity-check" for="entity-numeric">
+            <input id="entity-numeric" type="checkbox" />
+            Use numeric entities for non-ASCII characters
+          </label>
+        </div>
+
+        <div class="entity-actions">
+          <button id="entity-encode-button" class="button-primary" type="button">Encode</button>
+          <button id="entity-decode-button" type="button">Decode</button>
+          <button id="entity-swap-button" type="button">Use result as input</button>
+          <button id="entity-copy-button" type="button">Copy result</button>
+          <button id="entity-sample-button" type="button">Load sample</button>
+          <button id="entity-clear-button" type="button">Clear</button>
+          <span id="entity-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Escape text for HTML—or turn entities back into text.</h2>
+        <p>Useful when HTML-sensitive characters such as angle brackets, ampersands and quotes need to be stored or displayed safely as text.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Encode</h3>
+          <p>Characters such as <strong>&lt;</strong>, <strong>&gt;</strong> and <strong>&amp;</strong> are converted to HTML entities so browsers treat them as text.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Decode</h3>
+          <p>Named and numeric HTML entities can be converted back to their readable characters.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Unicode option</h3>
+          <p>Turn on numeric entities when you want non-ASCII characters, including Japanese text and symbols, represented as character references.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your text is processed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/html-entity-encoder-decoder.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

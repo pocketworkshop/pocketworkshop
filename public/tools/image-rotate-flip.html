@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free image rotate and flip tool. Rotate JPG, PNG and WebP images by 90, 180 or 270 degrees, or flip them horizontally or vertically in your browser." />
+  <title>Image Rotate & Flip — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/image-rotate-flip.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Image Rotate & Flip — PocketWorkshop" />
+  <meta property="og:description" content="Rotate JPG, PNG and WebP images by 90, 180 or 270 degrees, or flip them horizontally or vertically in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/image-rotate-flip.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Image Rotate & Flip — PocketWorkshop" />
+  <meta name="twitter:description" content="Rotate and flip JPG, PNG and WebP images directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .irf-drop {
+      margin: 20px;
+      padding: 34px 20px;
+      border: 2px dashed var(--line);
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255,255,255,.55);
+      cursor: pointer;
+    }
+
+    .irf-drop.is-dragging {
+      border-color: var(--accent-dark);
+      background: var(--soft);
+    }
+
+    .irf-drop strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+
+    .irf-drop span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    #irf-file-input {
+      display: none;
+    }
+
+    .irf-workspace {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) minmax(280px, 360px);
+      border-top: 1px solid var(--line);
+    }
+
+    .irf-preview-wrap {
+      padding: 22px;
+      min-width: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.35);
+    }
+
+    .irf-preview-stage {
+      width: 100%;
+      min-height: 360px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+    }
+
+    #irf-preview {
+      display: none;
+      max-width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      transform-origin: center;
+    }
+
+    .irf-placeholder {
+      color: var(--muted);
+      text-align: center;
+      padding: 30px;
+    }
+
+    .irf-controls {
+      padding: 22px;
+      border-left: 1px solid var(--line);
+      display: grid;
+      align-content: start;
+      gap: 18px;
+    }
+
+    .irf-group {
+      display: grid;
+      gap: 9px;
+    }
+
+    .irf-group h2 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .irf-button-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .irf-field {
+      display: grid;
+      gap: 8px;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .irf-field select,
+    .irf-field input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .irf-quality-row {
+      display: grid;
+      grid-template-columns: 1fr 72px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #irf-quality-range {
+      accent-color: var(--accent-dark);
+    }
+
+    .irf-meta {
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.55;
+    }
+
+    .irf-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .irf-summary {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .irf-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 820px) {
+      .irf-workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .irf-controls {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .irf-preview-stage {
+        min-height: 280px;
+      }
+
+      .irf-summary {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE TOOL</p>
+      <h1>Image Rotate & Flip</h1>
+      <p class="hero-copy">
+        Rotate or mirror JPG, PNG and WebP images, preview the result and download a new file.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <label id="irf-drop" class="irf-drop" for="irf-file-input">
+          <strong>Choose an image or drop it here</strong>
+          <span>JPG, PNG or WebP</span>
+        </label>
+        <input id="irf-file-input" type="file" accept="image/jpeg,image/png,image/webp" />
+
+        <div class="irf-workspace">
+          <div class="irf-preview-wrap">
+            <div class="irf-preview-stage">
+              <div id="irf-placeholder" class="irf-placeholder">Your transformed image preview will appear here.</div>
+              <img id="irf-preview" alt="Image preview" />
+            </div>
+          </div>
+
+          <div class="irf-controls">
+            <div class="irf-group">
+              <h2>Rotate</h2>
+              <div class="irf-button-grid">
+                <button id="irf-rotate-left" type="button">↶ 90° left</button>
+                <button id="irf-rotate-right" type="button">↷ 90° right</button>
+                <button id="irf-rotate-180" type="button">180°</button>
+                <button id="irf-reset" type="button">Reset</button>
+              </div>
+            </div>
+
+            <div class="irf-group">
+              <h2>Flip</h2>
+              <div class="irf-button-grid">
+                <button id="irf-flip-horizontal" type="button">⇆ Horizontal</button>
+                <button id="irf-flip-vertical" type="button">⇅ Vertical</button>
+              </div>
+            </div>
+
+            <label class="irf-field" for="irf-format">
+              Save as
+              <select id="irf-format">
+                <option value="original" selected>Original format</option>
+                <option value="image/jpeg">JPG</option>
+                <option value="image/png">PNG</option>
+                <option value="image/webp">WebP</option>
+              </select>
+            </label>
+
+            <label class="irf-field" for="irf-quality-range">
+              Quality
+              <div class="irf-quality-row">
+                <input id="irf-quality-range" type="range" min="10" max="100" value="92" />
+                <input id="irf-quality-number" type="number" min="10" max="100" value="92" inputmode="numeric" />
+              </div>
+            </label>
+
+            <label class="irf-field" for="irf-background">
+              Transparent areas when saving JPG
+              <select id="irf-background">
+                <option value="#ffffff" selected>White</option>
+                <option value="#000000">Black</option>
+                <option value="#f3f4f6">Light gray</option>
+              </select>
+            </label>
+
+            <div id="irf-meta" class="irf-meta">No image selected.</div>
+          </div>
+        </div>
+
+        <div class="irf-actions">
+          <button id="irf-download" class="button-primary" type="button">Download transformed image</button>
+          <button id="irf-clear" type="button">Clear</button>
+          <span id="irf-status" class="status" role="status"></span>
+          <span id="irf-summary" class="irf-summary"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Fix image orientation or mirror an image quickly.</h2>
+        <p>Rotate by quarter turns, flip horizontally or vertically, and save the result without uploading the image.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Rotate</h3>
+          <p>Turn an image 90° left, 90° right or 180°. Width and height are swapped automatically for quarter turns.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Flip</h3>
+          <p>Mirror the image horizontally or vertically. Rotate and flip operations can be combined.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Save format</h3>
+          <p>Keep the original format or save as JPG, PNG or WebP. JPG and WebP quality can be adjusted.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your image is transformed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/image-rotate-flip.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

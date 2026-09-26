@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online text cleaner. Remove extra spaces, blank lines, duplicate lines, trim lines and normalize text directly in your browser." />
+  <title>Text Cleaner — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/text-cleaner.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Text Cleaner — PocketWorkshop" />
+  <meta property="og:description" content="Clean pasted text by removing extra spaces, blank lines, duplicate lines and more directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/text-cleaner.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Text Cleaner — PocketWorkshop" />
+  <meta name="twitter:description" content="Clean pasted text by removing extra spaces, blank lines, duplicate lines and more directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .cleaner-layout { display:grid; grid-template-columns:1fr 1fr; }
+    .cleaner-pane { min-width:0; }
+    .cleaner-pane:first-child { border-right:1px solid var(--line); }
+    .cleaner-pane-header { padding:14px 18px; display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid var(--line); background:var(--soft); }
+    .cleaner-pane-header strong { font-size:.94rem; }
+    .cleaner-count { color:var(--muted); font-size:.82rem; }
+    .cleaner-textarea { min-height:320px; border-bottom:0; }
+    .cleaner-options { padding:18px; border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 16px; background:rgba(255,255,255,.55); }
+    .cleaner-option { display:flex; gap:9px; align-items:flex-start; color:var(--ink); font-size:.92rem; font-weight:650; }
+    .cleaner-option input { width:18px; height:18px; margin-top:2px; accent-color:var(--accent-dark); flex:0 0 auto; }
+    .cleaner-option small { display:block; margin-top:2px; color:var(--muted); font-weight:500; }
+    .cleaner-actions { padding:14px 18px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .cleaner-summary { margin-left:auto; color:var(--muted); font-size:.88rem; }
+    @media (max-width:760px) {
+      .cleaner-layout { grid-template-columns:1fr; }
+      .cleaner-pane:first-child { border-right:0; border-bottom:1px solid var(--line); }
+      .cleaner-textarea { min-height:240px; }
+      .cleaner-options { grid-template-columns:1fr; }
+      .cleaner-summary { width:100%; margin-left:0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span><span>PocketWorkshop</span>
+    </a>
+    <nav><a href="/">Home</a><a href="/tools.html">All Tools</a></nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Text Cleaner</h1>
+      <p class="hero-copy">Clean messy pasted text in a few clicks. Everything is processed locally in your browser.</p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="cleaner-layout">
+          <div class="cleaner-pane">
+            <div class="cleaner-pane-header"><strong>Input</strong><span id="cleaner-input-count" class="cleaner-count">0 characters</span></div>
+            <textarea id="cleaner-input" class="cleaner-textarea" placeholder="Paste messy text here..." aria-label="Text to clean"></textarea>
+          </div>
+          <div class="cleaner-pane">
+            <div class="cleaner-pane-header"><strong>Cleaned result</strong><span id="cleaner-output-count" class="cleaner-count">0 characters</span></div>
+            <textarea id="cleaner-output" class="cleaner-textarea" placeholder="Your cleaned text will appear here..." aria-label="Cleaned text"></textarea>
+          </div>
+        </div>
+
+        <div class="cleaner-options">
+          <label class="cleaner-option"><input id="opt-trim-lines" type="checkbox" checked /><span>Trim each line<small>Remove spaces from the start and end of every line.</small></span></label>
+          <label class="cleaner-option"><input id="opt-extra-spaces" type="checkbox" checked /><span>Remove extra spaces<small>Turn repeated spaces and tabs into a single space.</small></span></label>
+          <label class="cleaner-option"><input id="opt-blank-lines" type="checkbox" checked /><span>Reduce blank lines<small>Keep at most one blank line between paragraphs.</small></span></label>
+          <label class="cleaner-option"><input id="opt-duplicate-lines" type="checkbox" /><span>Remove duplicate lines<small>Keep the first occurrence and remove repeated identical lines.</small></span></label>
+          <label class="cleaner-option"><input id="opt-empty-lines" type="checkbox" /><span>Remove all empty lines<small>Join non-empty lines without blank lines between them.</small></span></label>
+          <label class="cleaner-option"><input id="opt-smart-quotes" type="checkbox" /><span>Normalize smart quotes<small>Convert curly quotes and long dashes to simple text characters.</small></span></label>
+        </div>
+
+        <div class="cleaner-actions">
+          <button id="cleaner-run-button" class="button-primary" type="button">Clean text</button>
+          <button id="cleaner-copy-button" type="button">Copy result</button>
+          <button id="cleaner-use-result-button" type="button">Use result as input</button>
+          <button id="cleaner-clear-button" type="button">Clear</button>
+          <span id="cleaner-status" class="status" role="status"></span>
+          <span id="cleaner-summary" class="cleaner-summary"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Tidy up copied text fast.</h2>
+        <p>Remove formatting leftovers, repeated whitespace and duplicate lines without installing anything.</p>
+      </div>
+      <div class="guide-grid">
+        <article class="guide-card"><h3>What it cleans</h3><p>Trim line edges, collapse repeated spaces, reduce blank lines, remove duplicate lines and normalize common smart punctuation.</p></article>
+        <article class="guide-card"><h3>How to use it</h3><ol><li>Paste text into the input box.</li><li>Choose cleanup options.</li><li>Click Clean text.</li><li>Copy the result or use it as the next input.</li></ol></article>
+        <article class="guide-card"><h3>Common uses</h3><p>Useful for text copied from PDFs, websites, spreadsheets, emails, AI outputs, forms and documents with messy spacing.</p></article>
+        <article class="guide-card"><h3>Privacy</h3><p>Your text is processed locally in your browser and is not intentionally uploaded to PocketWorkshop for cleaning.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span><a href="/tools.html">All Tools</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms of Use</a></span>
+  </footer>
+
+  <script src="/tools/text-cleaner.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

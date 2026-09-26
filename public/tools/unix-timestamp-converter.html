@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free Unix timestamp converter. Convert Unix seconds or milliseconds to readable dates, or turn a date and time into a Unix timestamp directly in your browser." />
+  <title>Unix Timestamp Converter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/unix-timestamp-converter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Unix Timestamp Converter — PocketWorkshop" />
+  <meta property="og:description" content="Convert Unix seconds or milliseconds to readable dates, or turn a date and time into a Unix timestamp." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/unix-timestamp-converter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Unix Timestamp Converter — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert Unix seconds or milliseconds to readable dates, or turn a date and time into a Unix timestamp." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .ts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .ts-panel {
+      padding: 22px;
+      min-width: 0;
+    }
+
+    .ts-panel:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .ts-panel h2 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+    }
+
+    .ts-panel > p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .ts-fields {
+      display: grid;
+      gap: 14px;
+    }
+
+    .ts-field {
+      display: grid;
+      gap: 8px;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .ts-field input,
+    .ts-field select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .ts-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .ts-results {
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      padding: 20px;
+    }
+
+    .ts-results h3 {
+      margin: 0 0 14px;
+      font-size: 1rem;
+    }
+
+    .ts-result-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .ts-result {
+      display: grid;
+      grid-template-columns: 150px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+    }
+
+    .ts-result strong {
+      font-size: .86rem;
+    }
+
+    .ts-value {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9rem;
+      overflow-wrap: anywhere;
+    }
+
+    .ts-copy {
+      padding: 7px 10px;
+      font-size: .82rem;
+    }
+
+    .ts-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .ts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ts-panel:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .ts-result {
+        grid-template-columns: 1fr;
+      }
+
+      .ts-copy {
+        width: fit-content;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DATE & TIME TOOL</p>
+      <h1>Unix Timestamp Converter</h1>
+      <p class="hero-copy">
+        Convert Unix timestamps to readable dates, or turn a date and time into Unix seconds and milliseconds.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="ts-grid">
+          <div class="ts-panel">
+            <h2>Timestamp → Date</h2>
+            <p>Enter Unix seconds or milliseconds. Auto detect works for most modern timestamps.</p>
+
+            <div class="ts-fields">
+              <label class="ts-field" for="ts-input">
+                Unix timestamp
+                <input id="ts-input" type="text" inputmode="numeric" placeholder="e.g. 1780000000" />
+              </label>
+
+              <label class="ts-field" for="ts-unit">
+                Unit
+                <select id="ts-unit">
+                  <option value="auto" selected>Auto detect</option>
+                  <option value="seconds">Seconds</option>
+                  <option value="milliseconds">Milliseconds</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="ts-actions">
+              <button id="ts-convert-button" class="button-primary" type="button">Convert timestamp</button>
+              <button id="ts-now-button" type="button">Use current time</button>
+              <span id="ts-status" class="status" role="status"></span>
+            </div>
+          </div>
+
+          <div class="ts-panel">
+            <h2>Date → Timestamp</h2>
+            <p>Choose a local date and time, or interpret the entered values as UTC.</p>
+
+            <div class="ts-fields">
+              <label class="ts-field" for="date-input">
+                Date
+                <input id="date-input" type="date" />
+              </label>
+
+              <label class="ts-field" for="time-input">
+                Time
+                <input id="time-input" type="time" step="1" />
+              </label>
+
+              <label class="ts-field" for="date-zone">
+                Interpret as
+                <select id="date-zone">
+                  <option value="local" selected>Your local time</option>
+                  <option value="utc">UTC</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="ts-actions">
+              <button id="date-convert-button" class="button-primary" type="button">Convert date</button>
+              <button id="date-now-button" type="button">Set to now</button>
+              <span id="date-status" class="status" role="status"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ts-results">
+          <h3>Conversion results</h3>
+          <div class="ts-result-list">
+            <div class="ts-result">
+              <strong>Unix seconds</strong>
+              <span id="result-seconds" class="ts-value">—</span>
+              <button class="ts-copy" type="button" data-copy-target="result-seconds">Copy</button>
+            </div>
+
+            <div class="ts-result">
+              <strong>Milliseconds</strong>
+              <span id="result-milliseconds" class="ts-value">—</span>
+              <button class="ts-copy" type="button" data-copy-target="result-milliseconds">Copy</button>
+            </div>
+
+            <div class="ts-result">
+              <strong>ISO 8601</strong>
+              <span id="result-iso" class="ts-value">—</span>
+              <button class="ts-copy" type="button" data-copy-target="result-iso">Copy</button>
+            </div>
+
+            <div class="ts-result">
+              <strong>UTC</strong>
+              <span id="result-utc" class="ts-value">—</span>
+              <button class="ts-copy" type="button" data-copy-target="result-utc">Copy</button>
+            </div>
+
+            <div class="ts-result">
+              <strong>Local time</strong>
+              <span id="result-local" class="ts-value">—</span>
+              <button class="ts-copy" type="button" data-copy-target="result-local">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Convert Unix time in either direction.</h2>
+        <p>Useful when logs, APIs, databases or code use numeric timestamps instead of human-readable dates.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Seconds and milliseconds</h3>
+          <p>Unix timestamps commonly use seconds, while JavaScript and many APIs use milliseconds. This tool supports both.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>UTC and local time</h3>
+          <p>See the same moment as UTC, ISO 8601 and in your browser's local time zone.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Date conversion</h3>
+          <p>Enter a date and time and choose whether to interpret it as your local time or as UTC before converting.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>All conversions happen locally in your browser and are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/unix-timestamp-converter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

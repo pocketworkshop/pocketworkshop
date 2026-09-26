@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free image format converter. Convert JPG, PNG and WebP images directly in your browser without uploading them." />
+  <title>Image Format Converter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/image-format-converter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Image Format Converter — PocketWorkshop" />
+  <meta property="og:description" content="Convert JPG, PNG and WebP images directly in your browser without uploading them." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/image-format-converter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Image Format Converter — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert JPG, PNG and WebP images directly in your browser without uploading them." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .ifc-drop {
+      margin: 20px;
+      padding: 34px 20px;
+      border: 2px dashed var(--line);
+      border-radius: 16px;
+      text-align: center;
+      background: rgba(255,255,255,.55);
+      cursor: pointer;
+    }
+
+    .ifc-drop.is-dragging {
+      border-color: var(--accent-dark);
+      background: var(--soft);
+    }
+
+    .ifc-drop strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+
+    .ifc-drop span {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    #ifc-file-input {
+      display: none;
+    }
+
+    .ifc-options {
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .ifc-field {
+      display: grid;
+      gap: 8px;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .ifc-field select,
+    .ifc-field input[type="number"] {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .ifc-quality-wrap {
+      display: grid;
+      grid-template-columns: 1fr 72px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #ifc-quality-range {
+      width: 100%;
+      accent-color: var(--accent-dark);
+    }
+
+    .ifc-list {
+      display: grid;
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .ifc-empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 18px;
+    }
+
+    .ifc-item {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: white;
+    }
+
+    .ifc-thumb {
+      width: 72px;
+      height: 72px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      object-fit: cover;
+      background:
+        linear-gradient(45deg,#eee 25%,transparent 25%),
+        linear-gradient(-45deg,#eee 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#eee 75%),
+        linear-gradient(-45deg,transparent 75%,#eee 75%);
+      background-size: 14px 14px;
+      background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+    }
+
+    .ifc-name {
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .ifc-meta {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .ifc-item-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .ifc-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .ifc-summary {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .ifc-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .ifc-options {
+        grid-template-columns: 1fr;
+      }
+
+      .ifc-item {
+        grid-template-columns: 64px 1fr;
+      }
+
+      .ifc-thumb {
+        width: 64px;
+        height: 64px;
+      }
+
+      .ifc-item-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+      }
+
+      .ifc-summary {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE TOOL</p>
+      <h1>Image Format Converter</h1>
+      <p class="hero-copy">
+        Convert JPG, PNG and WebP images without changing their dimensions.
+        Processing happens locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <label id="ifc-drop" class="ifc-drop" for="ifc-file-input">
+          <strong>Choose images or drop them here</strong>
+          <span>JPG, PNG and WebP · multiple files supported</span>
+        </label>
+        <input id="ifc-file-input" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+
+        <div class="ifc-options">
+          <label class="ifc-field" for="ifc-format">
+            Convert to
+            <select id="ifc-format">
+              <option value="image/jpeg">JPG</option>
+              <option value="image/png">PNG</option>
+              <option value="image/webp" selected>WebP</option>
+            </select>
+          </label>
+
+          <label class="ifc-field" for="ifc-quality-range">
+            Quality
+            <div class="ifc-quality-wrap">
+              <input id="ifc-quality-range" type="range" min="10" max="100" value="90" />
+              <input id="ifc-quality-number" type="number" min="10" max="100" value="90" inputmode="numeric" />
+            </div>
+          </label>
+
+          <label class="ifc-field" for="ifc-background">
+            Transparent areas when saving JPG
+            <select id="ifc-background">
+              <option value="#ffffff" selected>White</option>
+              <option value="#000000">Black</option>
+              <option value="#f3f4f6">Light gray</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="ifc-list" class="ifc-list">
+          <div class="ifc-empty">No images selected yet.</div>
+        </div>
+
+        <div class="ifc-actions">
+          <button id="ifc-convert-all" class="button-primary" type="button">Convert all</button>
+          <button id="ifc-clear" type="button">Clear</button>
+          <span id="ifc-status" class="status" role="status"></span>
+          <span id="ifc-summary" class="ifc-summary"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Change image format without resizing.</h2>
+        <p>Use it when you need the same image in JPG, PNG or WebP while keeping the original width and height.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>JPG</h3>
+          <p>Good for photographs and smaller file sizes. JPG does not support transparency, so transparent areas need a background color.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>PNG</h3>
+          <p>Useful for graphics and images that need transparency. PNG output is lossless and ignores the quality setting.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>WebP</h3>
+          <p>A modern web format that can provide good quality at relatively small file sizes in supported browsers.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your images are converted locally in your browser and are not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/image-format-converter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

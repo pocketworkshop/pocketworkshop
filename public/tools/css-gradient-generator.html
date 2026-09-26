@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free CSS gradient generator. Build linear and radial gradients, preview them live and copy the CSS directly in your browser." />
+  <title>CSS Gradient Generator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/css-gradient-generator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="CSS Gradient Generator — PocketWorkshop" />
+  <meta property="og:description" content="Build linear and radial gradients, preview them live and copy the CSS directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/css-gradient-generator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CSS Gradient Generator — PocketWorkshop" />
+  <meta name="twitter:description" content="Build linear and radial gradients, preview them live and copy the CSS directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .gradient-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 380px) 1fr;
+    }
+
+    .gradient-controls {
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      gap: 18px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .gradient-field {
+      display: grid;
+      gap: 8px;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .gradient-field select,
+    .gradient-field input[type="number"],
+    .gradient-field input[type="text"] {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .gradient-color-row {
+      display: grid;
+      grid-template-columns: 52px 1fr 82px;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .gradient-color-row input[type="color"] {
+      width: 52px;
+      height: 44px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .gradient-color-row input[type="text"] {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .gradient-preview-panel {
+      padding: 22px;
+      min-width: 0;
+    }
+
+    .gradient-preview {
+      min-height: 330px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(135deg, #22A06B 0%, #2563EB 100%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
+    }
+
+    .gradient-code-wrap {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .gradient-code-wrap label {
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    #gradient-code {
+      width: 100%;
+      min-height: 110px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9rem;
+      resize: vertical;
+    }
+
+    .gradient-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .gradient-presets {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .gradient-preset {
+      min-height: 46px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      cursor: pointer;
+    }
+
+    .gradient-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 820px) {
+      .gradient-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .gradient-controls {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .gradient-preview {
+        min-height: 250px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .gradient-color-row {
+        grid-template-columns: 52px 1fr;
+      }
+
+      .gradient-color-row .gradient-stop {
+        grid-column: 1 / -1;
+      }
+
+      .gradient-presets {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">CSS TOOL</p>
+      <h1>CSS Gradient Generator</h1>
+      <p class="hero-copy">
+        Build linear or radial gradients, preview them instantly and copy ready-to-use CSS.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="gradient-layout">
+          <div class="gradient-controls">
+            <label class="gradient-field" for="gradient-type">
+              Gradient type
+              <select id="gradient-type">
+                <option value="linear" selected>Linear</option>
+                <option value="radial">Radial</option>
+              </select>
+            </label>
+
+            <label class="gradient-field" for="gradient-angle">
+              Angle
+              <input id="gradient-angle" type="number" min="0" max="360" value="135" />
+            </label>
+
+            <label class="gradient-field" for="gradient-shape">
+              Radial shape
+              <select id="gradient-shape" disabled>
+                <option value="circle" selected>Circle</option>
+                <option value="ellipse">Ellipse</option>
+              </select>
+            </label>
+
+            <div class="gradient-field">
+              <span>Color 1</span>
+              <div class="gradient-color-row">
+                <input id="gradient-color-1" type="color" value="#22a06b" aria-label="First gradient color" />
+                <input id="gradient-hex-1" type="text" value="#22A06B" aria-label="First gradient HEX value" />
+                <input id="gradient-stop-1" class="gradient-stop" type="number" min="0" max="100" value="0" aria-label="First color stop" />
+              </div>
+            </div>
+
+            <div class="gradient-field">
+              <span>Color 2</span>
+              <div class="gradient-color-row">
+                <input id="gradient-color-2" type="color" value="#2563eb" aria-label="Second gradient color" />
+                <input id="gradient-hex-2" type="text" value="#2563EB" aria-label="Second gradient HEX value" />
+                <input id="gradient-stop-2" class="gradient-stop" type="number" min="0" max="100" value="100" aria-label="Second color stop" />
+              </div>
+            </div>
+
+            <div class="gradient-field">
+              <span>Quick presets</span>
+              <div class="gradient-presets">
+                <button class="gradient-preset" type="button" data-c1="#22A06B" data-c2="#2563EB" data-angle="135" style="background:linear-gradient(135deg,#22A06B,#2563EB)" aria-label="Green to blue preset"></button>
+                <button class="gradient-preset" type="button" data-c1="#F97316" data-c2="#EC4899" data-angle="120" style="background:linear-gradient(120deg,#F97316,#EC4899)" aria-label="Orange to pink preset"></button>
+                <button class="gradient-preset" type="button" data-c1="#8B5CF6" data-c2="#06B6D4" data-angle="145" style="background:linear-gradient(145deg,#8B5CF6,#06B6D4)" aria-label="Purple to cyan preset"></button>
+                <button class="gradient-preset" type="button" data-c1="#111827" data-c2="#6B7280" data-angle="160" style="background:linear-gradient(160deg,#111827,#6B7280)" aria-label="Dark gray preset"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="gradient-preview-panel">
+            <div id="gradient-preview" class="gradient-preview" aria-label="Gradient preview"></div>
+
+            <div class="gradient-code-wrap">
+              <label for="gradient-code">CSS</label>
+              <textarea id="gradient-code" readonly spellcheck="false"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="gradient-actions">
+          <button id="gradient-copy-button" class="button-primary" type="button">Copy CSS</button>
+          <button id="gradient-swap-button" type="button">Swap colors</button>
+          <button id="gradient-random-button" type="button">Random gradient</button>
+          <button id="gradient-reset-button" type="button">Reset</button>
+          <span id="gradient-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Build CSS gradients visually.</h2>
+        <p>Choose colors, stops and direction, then copy the generated CSS into a stylesheet or inline style.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Linear gradients</h3>
+          <p>Set an angle from 0 to 360 degrees and control where each color starts and ends.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Radial gradients</h3>
+          <p>Switch to radial mode and choose a circle or ellipse while keeping the same color-stop controls.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Ready-to-use CSS</h3>
+          <p>The generated background declaration updates live, so you can copy it directly into your project.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>All gradient generation happens locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/css-gradient-generator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

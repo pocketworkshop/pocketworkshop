@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online URL encoder and decoder. Encode text for URLs or decode percent-encoded text directly in your browser." />
+  <title>URL Encoder & Decoder — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/url-encoder-decoder.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="URL Encoder & Decoder — PocketWorkshop" />
+  <meta property="og:description" content="Encode text for URLs or decode percent-encoded text directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/url-encoder-decoder.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="URL Encoder & Decoder — PocketWorkshop" />
+  <meta name="twitter:description" content="Encode text for URLs or decode percent-encoded text directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .url-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .url-pane {
+      min-width: 0;
+    }
+
+    .url-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .url-pane-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .url-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .url-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .url-textarea {
+      min-height: 320px;
+      border-bottom: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92rem;
+    }
+
+    .url-options {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+    }
+
+    .url-options label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .url-options select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .url-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .url-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .url-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .url-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .url-textarea {
+        min-height: 230px;
+      }
+
+      .url-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">WEB TOOL</p>
+      <h1>URL Encoder & Decoder</h1>
+      <p class="hero-copy">
+        Encode text for URLs or decode percent-encoded text.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="url-layout">
+          <div class="url-pane">
+            <div class="url-pane-header">
+              <strong>Input</strong>
+              <span id="url-input-count" class="url-count">0 characters</span>
+            </div>
+            <textarea id="url-input" class="url-textarea" spellcheck="false" placeholder="Type or paste text here..." aria-label="URL encoder input"></textarea>
+          </div>
+
+          <div class="url-pane">
+            <div class="url-pane-header">
+              <strong>Result</strong>
+              <span id="url-output-count" class="url-count">0 characters</span>
+            </div>
+            <textarea id="url-output" class="url-textarea" spellcheck="false" placeholder="Encoded or decoded text will appear here..." aria-label="URL encoder output"></textarea>
+          </div>
+        </div>
+
+        <div class="url-options">
+          <label for="url-mode">
+            Encoding mode
+            <select id="url-mode">
+              <option value="component" selected>URL component</option>
+              <option value="full">Full URL</option>
+              <option value="form">Form style (+ for spaces)</option>
+            </select>
+          </label>
+
+          <label for="url-decode-mode">
+            Decode behavior
+            <select id="url-decode-mode">
+              <option value="component" selected>Decode component</option>
+              <option value="full">Decode full URL</option>
+              <option value="form">Decode form style</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="url-actions">
+          <button id="url-encode-button" class="button-primary" type="button">Encode</button>
+          <button id="url-decode-button" type="button">Decode</button>
+          <button id="url-swap-button" type="button">Use result as input</button>
+          <button id="url-copy-button" type="button">Copy result</button>
+          <button id="url-sample-button" type="button">Load sample</button>
+          <button id="url-clear-button" type="button">Clear</button>
+          <span id="url-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Encode and decode URL text in one place.</h2>
+        <p>Convert spaces, symbols and non-ASCII characters to percent-encoded text, or reverse encoded values back to readable text.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>URL component</h3>
+          <p>Use this for query values, path pieces and other parts of a URL where reserved characters should be encoded.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Full URL mode</h3>
+          <p>Use full URL mode when you want to preserve URL separators such as <strong>:</strong>, <strong>/</strong>, <strong>?</strong> and <strong>&amp;</strong>.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Form style</h3>
+          <p>Form-style encoding uses <strong>+</strong> for spaces, matching the common application/x-www-form-urlencoded convention.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your text is processed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/url-encoder-decoder.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

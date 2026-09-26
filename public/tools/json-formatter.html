@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online JSON formatter and validator. Pretty-print, minify, sort keys and validate JSON directly in your browser." />
+  <title>JSON Formatter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/json-formatter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="JSON Formatter — PocketWorkshop" />
+  <meta property="og:description" content="Pretty-print, minify, sort keys and validate JSON directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/json-formatter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="JSON Formatter — PocketWorkshop" />
+  <meta name="twitter:description" content="Pretty-print, minify, sort keys and validate JSON directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .json-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .json-pane {
+      min-width: 0;
+    }
+
+    .json-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .json-pane-header {
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+    }
+
+    .json-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .json-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .json-textarea {
+      min-height: 360px;
+      border-bottom: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92rem;
+      tab-size: 2;
+    }
+
+    .json-options {
+      padding: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.55);
+    }
+
+    .json-options label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .json-options select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .json-check {
+      display: flex !important;
+      align-items: center;
+      gap: 9px !important;
+      color: var(--muted);
+      font-weight: 650 !important;
+    }
+
+    .json-check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-dark);
+    }
+
+    .json-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .json-valid {
+      color: var(--accent-dark);
+      font-weight: 700;
+    }
+
+    .json-error {
+      color: #9a2f2f;
+      font-weight: 700;
+    }
+
+    @media (max-width: 760px) {
+      .json-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .json-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .json-textarea {
+        min-height: 260px;
+      }
+
+      .json-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">DATA TOOL</p>
+      <h1>JSON Formatter</h1>
+      <p class="hero-copy">
+        Format, validate, minify and sort JSON without uploading it anywhere.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="json-layout">
+          <div class="json-pane">
+            <div class="json-pane-header">
+              <strong>Input JSON</strong>
+              <span id="json-input-count" class="json-count">0 characters</span>
+            </div>
+            <textarea id="json-input" class="json-textarea" spellcheck="false" placeholder='Paste JSON here, for example: {"name":"PocketWorkshop","tools":15}' aria-label="JSON input"></textarea>
+          </div>
+
+          <div class="json-pane">
+            <div class="json-pane-header">
+              <strong>Result</strong>
+              <span id="json-output-count" class="json-count">0 characters</span>
+            </div>
+            <textarea id="json-output" class="json-textarea" spellcheck="false" placeholder="Formatted JSON will appear here..." aria-label="JSON output"></textarea>
+          </div>
+        </div>
+
+        <div class="json-options">
+          <label for="json-indent">
+            Indentation
+            <select id="json-indent">
+              <option value="2" selected>2 spaces</option>
+              <option value="4">4 spaces</option>
+              <option value="tab">Tab</option>
+            </select>
+          </label>
+
+          <label class="json-check" for="json-sort-keys">
+            <input id="json-sort-keys" type="checkbox" />
+            Sort object keys alphabetically
+          </label>
+        </div>
+
+        <div class="json-actions">
+          <button id="json-format-button" class="button-primary" type="button">Format JSON</button>
+          <button id="json-minify-button" type="button">Minify</button>
+          <button id="json-validate-button" type="button">Validate</button>
+          <button id="json-copy-button" type="button">Copy result</button>
+          <button id="json-download-button" type="button">Download .json</button>
+          <button id="json-clear-button" type="button">Clear</button>
+          <span id="json-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Make JSON readable—or compact.</h2>
+        <p>Check whether JSON is valid, pretty-print it with indentation, minify it, optionally sort keys, and download the result.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Format JSON</h3>
+          <p>Pretty-print compact JSON with 2 spaces, 4 spaces, or tabs so nested objects and arrays are easier to read.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Validate JSON</h3>
+          <p>See whether the input parses correctly. If something is wrong, the tool shows the browser's parse error message.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common uses</h3>
+          <p>Useful for API responses, configuration files, debugging, copied data, development notes and quick data inspection.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your JSON is processed locally in your browser and is not intentionally uploaded to PocketWorkshop.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/json-formatter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
