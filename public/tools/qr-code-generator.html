@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online QR code generator. Create and download a QR code from a URL or text directly in your browser." />
+  <title>QR Code Generator — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/qr-code-generator.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="QR Code Generator — PocketWorkshop" />
+  <meta property="og:description" content="Create and download a QR code from a URL or text directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/qr-code-generator.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="QR Code Generator — PocketWorkshop" />
+  <meta name="twitter:description" content="Create and download a QR code from a URL or text directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .qr-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      min-height: 430px;
+    }
+
+    .qr-controls {
+      padding: 26px;
+      border-right: 1px solid var(--line);
+    }
+
+    .qr-controls label {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .qr-controls textarea {
+      min-height: 150px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      resize: vertical;
+    }
+
+    .qr-controls textarea:focus {
+      border-color: #9ed0b5;
+      box-shadow: 0 0 0 3px rgba(34,160,107,.10);
+    }
+
+    .qr-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .qr-controls select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .qr-preview {
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 16px;
+      background: linear-gradient(180deg, rgba(233,246,239,.55), rgba(255,255,255,.3));
+    }
+
+    #qr-output {
+      width: min(100%, 300px);
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    #qr-output:empty::before {
+      content: "Your QR code will appear here";
+      max-width: 180px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .92rem;
+    }
+
+    #qr-output canvas,
+    #qr-output img {
+      width: 100% !important;
+      height: auto !important;
+      max-width: 100%;
+    }
+
+    .qr-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: .88rem;
+      text-align: center;
+    }
+
+    #qr-download-button[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 760px) {
+      .qr-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .qr-controls {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .qr-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="#tool">Tool</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">QR TOOL</p>
+      <h1>QR Code Generator</h1>
+      <p class="hero-copy">
+        Turn a URL or text into a QR code and download it as a PNG.
+        The content is processed in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="qr-layout">
+          <div class="qr-controls">
+            <label for="qr-text">
+              URL or text
+              <textarea id="qr-text" maxlength="2000" placeholder="https://example.com"></textarea>
+            </label>
+
+            <div class="qr-options">
+              <label for="qr-size">
+                Image size
+                <select id="qr-size">
+                  <option value="256">256 × 256</option>
+                  <option value="512" selected>512 × 512</option>
+                  <option value="1024">1024 × 1024</option>
+                </select>
+              </label>
+
+              <label for="qr-level">
+                Error correction
+                <select id="qr-level">
+                  <option value="L">Low</option>
+                  <option value="M" selected>Medium</option>
+                  <option value="Q">Quartile</option>
+                  <option value="H">High</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="tool-actions" style="padding:0; min-height:auto;">
+              <button id="qr-generate-button" class="button-primary" type="button">Generate QR code</button>
+              <button id="qr-clear-button" type="button">Clear</button>
+              <span id="qr-status" class="status" role="status"></span>
+            </div>
+          </div>
+
+          <div class="qr-preview">
+            <div id="qr-output" aria-live="polite"></div>
+            <button id="qr-download-button" class="button-primary" type="button" hidden>Download PNG</button>
+            <p class="qr-note">Tip: test the downloaded code with your phone camera before printing it.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Create a QR code in seconds.</h2>
+        <p>Paste a web address or type any short text, choose the image size, and download the finished QR code as a PNG.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>How to use it</h3>
+          <ol>
+            <li>Enter a URL or text.</li>
+            <li>Choose the output size and error correction level.</li>
+            <li>Select Generate QR code.</li>
+            <li>Download the PNG when it looks right.</li>
+          </ol>
+        </article>
+
+        <article class="guide-card">
+          <h3>What is error correction?</h3>
+          <p>Higher levels can make a QR code easier to scan if part of it is damaged or obscured, but they also create a denser code.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common uses</h3>
+          <p>Useful for websites, menus, event pages, contact information, signs, printed handouts, and quick sharing between devices.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your entered text is used to generate the QR code in your browser and is not intentionally uploaded to PocketWorkshop for processing.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="/tools/qr-code-generator.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
