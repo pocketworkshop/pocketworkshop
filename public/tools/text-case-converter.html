@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online text case converter. Convert text to uppercase, lowercase, title case, sentence case and more in your browser." />
+  <title>Text Case Converter — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/text-case-converter.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Text Case Converter — PocketWorkshop" />
+  <meta property="og:description" content="Convert text to uppercase, lowercase, title case, sentence case and more directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/text-case-converter.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Text Case Converter — PocketWorkshop" />
+  <meta name="twitter:description" content="Convert text to uppercase, lowercase, title case, sentence case and more directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .case-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .case-pane {
+      min-width: 0;
+    }
+
+    .case-pane:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .case-pane-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .case-pane-header strong {
+      font-size: .94rem;
+    }
+
+    .case-count {
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .case-textarea {
+      min-height: 330px;
+      border-bottom: 0;
+    }
+
+    .case-buttons {
+      padding: 18px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      background: rgba(255,255,255,.55);
+    }
+
+    .case-buttons button {
+      min-height: 46px;
+    }
+
+    .case-actions {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    @media (max-width: 760px) {
+      .case-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .case-pane:first-child {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .case-textarea {
+        min-height: 240px;
+      }
+
+      .case-buttons {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 430px) {
+      .case-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/tools.html">All Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/tools.html">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">TEXT TOOL</p>
+      <h1>Text Case Converter</h1>
+      <p class="hero-copy">
+        Change text to uppercase, lowercase, title case, sentence case and more.
+        Everything runs locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="case-layout">
+          <div class="case-pane">
+            <div class="case-pane-header">
+              <strong>Input</strong>
+              <span id="case-input-count" class="case-count">0 characters</span>
+            </div>
+            <textarea
+              id="case-input"
+              class="case-textarea"
+              placeholder="Type or paste your text here..."
+              aria-label="Text to convert"></textarea>
+          </div>
+
+          <div class="case-pane">
+            <div class="case-pane-header">
+              <strong>Result</strong>
+              <span id="case-output-count" class="case-count">0 characters</span>
+            </div>
+            <textarea
+              id="case-output"
+              class="case-textarea"
+              placeholder="Your converted text will appear here..."
+              aria-label="Converted text"></textarea>
+          </div>
+        </div>
+
+        <div class="case-buttons" aria-label="Conversion options">
+          <button type="button" data-case="upper">UPPERCASE</button>
+          <button type="button" data-case="lower">lowercase</button>
+          <button type="button" data-case="title">Title Case</button>
+          <button type="button" data-case="sentence">Sentence case</button>
+          <button type="button" data-case="capitalize">Capitalize Each Word</button>
+          <button type="button" data-case="spaces">Remove Extra Spaces</button>
+        </div>
+
+        <div class="case-actions">
+          <button id="case-copy-button" class="button-primary" type="button">Copy result</button>
+          <button id="case-use-result-button" type="button">Use result as input</button>
+          <button id="case-clear-button" type="button">Clear</button>
+          <span id="case-status" class="status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Fix text capitalization in one click.</h2>
+        <p>Paste your text, choose the style you need, and copy the converted result without uploading anything.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>Case options</h3>
+          <p>Convert text to UPPERCASE, lowercase, Title Case, Sentence case, or Capitalize Each Word.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Clean up spaces</h3>
+          <p>Remove Extra Spaces reduces repeated spaces and tabs while keeping paragraph breaks readable.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common uses</h3>
+          <p>Useful for headings, titles, pasted text, product descriptions, emails, documents, filenames, and text copied from inconsistent sources.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>Your text is processed locally in your browser and is not intentionally uploaded to PocketWorkshop for conversion.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/tools.html">All Tools</a>
+      ·
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="/tools/text-case-converter.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

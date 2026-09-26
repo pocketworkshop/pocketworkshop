@@ -80,6 +80,14 @@ window.POCKETWORKSHOP_TOOLS = [
     popular: false
   },
   {
+    title: "Text Case Converter",
+    icon: "aA",
+    description: "Convert text to uppercase, lowercase, title case, sentence case and more.",
+    url: "/tools/text-case-converter.html",
+    category: "Text",
+    popular: false
+  },
+  {
     title: "QR Code Generator",
     icon: "QR",
     description: "Create and download QR codes from URLs or text directly in your browser.",
