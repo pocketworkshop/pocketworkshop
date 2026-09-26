@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Free online JPG to PDF converter. Combine JPG, PNG and WebP images into one PDF directly in your browser." />
+  <title>JPG to PDF — PocketWorkshop</title>
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
+  <link rel="canonical" href="https://pocketworkshop.pwtools.workers.dev/tools/jpg-to-pdf.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="PocketWorkshop" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="JPG to PDF — PocketWorkshop" />
+  <meta property="og:description" content="Combine JPG, PNG and WebP images into one PDF directly in your browser." />
+  <meta property="og:url" content="https://pocketworkshop.pwtools.workers.dev/tools/jpg-to-pdf.html" />
+  <meta property="og:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="PocketWorkshop — free browser-based tools" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="JPG to PDF — PocketWorkshop" />
+  <meta name="twitter:description" content="Combine JPG, PNG and WebP images into one PDF directly in your browser." />
+  <meta name="twitter:image" content="https://pocketworkshop.pwtools.workers.dev/og-image.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .image-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .image-item {
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: white;
+    }
+
+    .image-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .image-meta {
+      min-width: 0;
+    }
+
+    .image-name {
+      display: block;
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .image-details {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .image-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .jpgpdf-options {
+      padding: 20px 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .jpgpdf-options label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .jpgpdf-options select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .jpgpdf-summary {
+      margin: 18px 18px 0;
+      padding: 15px;
+      border-radius: 14px;
+      background: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .jpgpdf-summary span {
+      color: var(--muted);
+    }
+
+    .jpgpdf-empty {
+      padding: 24px 18px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    #jpgpdf-download-panel {
+      display: none;
+    }
+
+    #jpgpdf-download-panel.ready {
+      display: flex;
+    }
+
+    @media (max-width: 760px) {
+      .jpgpdf-options {
+        grid-template-columns: 1fr;
+      }
+
+      .image-item {
+        grid-template-columns: 54px minmax(0, 1fr);
+      }
+
+      .image-thumb {
+        width: 54px;
+        height: 54px;
+      }
+
+      .image-buttons {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+      }
+
+      .jpgpdf-summary {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="#tool">Tool</a>
+    </nav>
+  </header>
+
+  <main>
+    <a class="back-link" href="/">← Back to all tools</a>
+
+    <section class="hero">
+      <p class="eyebrow">IMAGE / PDF TOOL</p>
+      <h1>JPG to PDF</h1>
+      <p class="hero-copy">
+        Combine JPG, PNG and WebP images into a single PDF.
+        Everything is processed locally in your browser.
+      </p>
+    </section>
+
+    <section class="section" id="tool">
+      <div class="tool-shell">
+        <div class="file-upload">
+          <label class="file-button" for="jpgpdf-input">Choose images</label>
+          <input id="jpgpdf-input" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+          <p id="jpgpdf-file-name" class="file-name">No images selected</p>
+          <small>JPG, PNG or WebP · select one or more images</small>
+        </div>
+
+        <div class="jpgpdf-summary">
+          <div>
+            <strong id="jpgpdf-count">0 images</strong>
+            <span id="jpgpdf-total-size">0 B total</span>
+          </div>
+          <div class="tool-actions" style="padding:0; min-height:auto;">
+            <button id="jpgpdf-clear-button" type="button">Clear</button>
+            <button id="jpgpdf-create-button" class="button-primary" type="button" disabled>Create PDF</button>
+            <span id="jpgpdf-status" class="status" role="status"></span>
+          </div>
+        </div>
+
+        <ul id="jpgpdf-list" class="image-list"></ul>
+        <div id="jpgpdf-empty" class="jpgpdf-empty">
+          Add one or more images. Use Up and Down to set the PDF page order.
+        </div>
+
+        <div class="jpgpdf-options">
+          <label for="jpgpdf-page-size">
+            Page size
+            <select id="jpgpdf-page-size">
+              <option value="a4-auto" selected>A4 · auto orientation</option>
+              <option value="fit">Fit page to image</option>
+            </select>
+          </label>
+
+          <label for="jpgpdf-margin">
+            Margin
+            <select id="jpgpdf-margin">
+              <option value="0">None</option>
+              <option value="18" selected>Small</option>
+              <option value="36">Medium</option>
+            </select>
+          </label>
+
+          <label for="jpgpdf-quality">
+            Image quality
+            <select id="jpgpdf-quality">
+              <option value="0.82">82%</option>
+              <option value="0.9" selected>90%</option>
+              <option value="0.96">96%</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="download-panel" id="jpgpdf-download-panel">
+          <div>
+            <strong>Your PDF is ready.</strong>
+            <p id="jpgpdf-download-info"></p>
+          </div>
+          <button id="jpgpdf-download-button" class="button-primary" type="button">Download PDF</button>
+        </div>
+      </div>
+
+      <p style="margin-top:18px; color:var(--muted); font-size:.94rem;">
+        Very large images may be reduced during PDF creation to keep memory use reasonable on mobile devices.
+      </p>
+    </section>
+
+    <section class="section tool-guide" aria-labelledby="about-tool">
+      <div class="section-heading">
+        <p class="eyebrow">ABOUT THIS TOOL</p>
+        <h2 id="about-tool">Turn images into one PDF.</h2>
+        <p>Select images, arrange their order, and create one PDF without uploading the images to PocketWorkshop.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <h3>How to use it</h3>
+          <ol>
+            <li>Select one or more JPG, PNG, or WebP images.</li>
+            <li>Use Up and Down to arrange the page order.</li>
+            <li>Choose page size, margin, and image quality.</li>
+            <li>Create and download the PDF.</li>
+          </ol>
+        </article>
+
+        <article class="guide-card">
+          <h3>Page size</h3>
+          <p>A4 auto orientation uses portrait or landscape depending on each image. Fit page to image keeps each PDF page close to the image's shape.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Common uses</h3>
+          <p>Useful for combining photos, scanned documents, receipts, screenshots, forms, or presentation images into a single PDF.</p>
+        </article>
+
+        <article class="guide-card">
+          <h3>Privacy</h3>
+          <p>PDF creation runs locally in your browser. Your selected images are not intentionally uploaded to PocketWorkshop for processing.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>
+      <a href="/about.html">About</a>
+      ·
+      <a href="/privacy.html">Privacy Policy</a>
+      ·
+      <a href="/terms.html">Terms of Use</a>
+    </span>
+  </footer>
+
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="/tools/jpg-to-pdf.js"></script>
+  <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a932a14feee94b75b51df4bdd66d8b79"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
