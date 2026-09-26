@@ -40,7 +40,18 @@ function baseName(name) {
 
 function refreshQualityLabel() {
   qualityValue.textContent = `${quality.value}%`;
-  qualityLabel.hidden = format.value === "image/png";
+
+  if (format.value === "image/png") {
+    qualityLabel.hidden = true;
+    outputInfo.textContent = sourceImage
+      ? `${sourceImage.naturalWidth.toLocaleString()} × ${sourceImage.naturalHeight.toLocaleString()} px · PNG is lossless`
+      : "PNG is lossless";
+  } else {
+    qualityLabel.hidden = false;
+    outputInfo.textContent = sourceImage
+      ? `${sourceImage.naturalWidth.toLocaleString()} × ${sourceImage.naturalHeight.toLocaleString()} px · Quality ${quality.value}%`
+      : `Quality ${quality.value}%`;
+  }
 }
 
 function clearOutputUrl() {
@@ -52,6 +63,7 @@ function clearOutputUrl() {
 
 function resetTool() {
   clearOutputUrl();
+
   if (sourceUrl) {
     URL.revokeObjectURL(sourceUrl);
     sourceUrl = "";
@@ -67,6 +79,7 @@ function resetTool() {
   workspace.hidden = true;
   panel.hidden = true;
   status.textContent = "";
+  badge.textContent = "";
 }
 
 input.addEventListener("change", () => {
@@ -90,13 +103,23 @@ input.addEventListener("change", () => {
   sourceImage.onload = () => {
     preview.src = sourceUrl;
     fileName.textContent = file.name;
-    originalInfo.textContent = `${sourceImage.naturalWidth.toLocaleString()} × ${sourceImage.naturalHeight.toLocaleString()} px · ${formatBytes(file.size)}`;
+    originalInfo.textContent =
+      `${sourceImage.naturalWidth.toLocaleString()} × ${sourceImage.naturalHeight.toLocaleString()} px · ${formatBytes(file.size)}`;
 
-    if (file.type === "image/png") format.value = "image/png";
-    else if (file.type === "image/webp") format.value = "image/webp";
-    else format.value = "image/jpeg";
+    /*
+      Real compression defaults:
+      - JPEG -> JPEG
+      - PNG  -> WebP (PNG quality is ignored by canvas.toBlob)
+      - WebP -> WebP
+    */
+    if (file.type === "image/jpeg") {
+      format.value = "image/jpeg";
+      quality.value = "75";
+    } else {
+      format.value = "image/webp";
+      quality.value = "75";
+    }
 
-    outputInfo.textContent = `${sourceImage.naturalWidth.toLocaleString()} × ${sourceImage.naturalHeight.toLocaleString()} px`;
     refreshQualityLabel();
     workspace.hidden = false;
     panel.hidden = true;
@@ -110,7 +133,15 @@ input.addEventListener("change", () => {
   sourceImage.src = sourceUrl;
 });
 
-format.addEventListener("change", refreshQualityLabel);
+format.addEventListener("change", () => {
+  if (format.value === "image/png") {
+    status.textContent = "PNG is lossless, so file size may not get smaller. WebP usually compresses better.";
+  } else {
+    status.textContent = "";
+  }
+  refreshQualityLabel();
+});
+
 quality.addEventListener("input", refreshQualityLabel);
 reset.addEventListener("click", resetTool);
 
@@ -120,7 +151,12 @@ button.addEventListener("click", () => {
     return;
   }
 
-  status.textContent = "Compressing…";
+  if (format.value === "image/png") {
+    status.textContent = "Compressing PNG… PNG is lossless, so the result may not be smaller.";
+  } else {
+    status.textContent = "Compressing…";
+  }
+
   button.disabled = true;
 
   requestAnimationFrame(() => {
@@ -131,7 +167,10 @@ button.addEventListener("click", () => {
       canvas.width = width;
       canvas.height = height;
 
-      const context = canvas.getContext("2d", { alpha: format.value !== "image/jpeg" });
+      const context = canvas.getContext("2d", {
+        alpha: format.value !== "image/jpeg"
+      });
+
       context.clearRect(0, 0, width, height);
 
       if (format.value === "image/jpeg") {
@@ -147,6 +186,7 @@ button.addEventListener("click", () => {
 
       canvas.toBlob((blob) => {
         button.disabled = false;
+
         if (!blob) {
           status.textContent = "The compressed image could not be created.";
           return;
@@ -157,16 +197,28 @@ button.addEventListener("click", () => {
 
         const ext = extensionFor(format.value);
         const filename = `${baseName(sourceFile.name)}-compressed.${ext}`;
-        const saved = Math.max(0, sourceFile.size - blob.size);
-        const savedPercent = sourceFile.size > 0 ? Math.max(0, Math.round((saved / sourceFile.size) * 100)) : 0;
+        const difference = sourceFile.size - blob.size;
+        const percent = sourceFile.size > 0
+          ? Math.round((Math.abs(difference) / sourceFile.size) * 100)
+          : 0;
 
         link.href = outputUrl;
         link.download = filename;
-        info.textContent = `${width.toLocaleString()} × ${height.toLocaleString()} px · ${formatBytes(blob.size)} · ${ext.toUpperCase()}`;
-        badge.textContent = saved > 0 ? `Saved ${formatBytes(saved)} (${savedPercent}%)` : "No reduction";
+        info.textContent =
+          `${width.toLocaleString()} × ${height.toLocaleString()} px · ${formatBytes(sourceFile.size)} → ${formatBytes(blob.size)} · ${ext.toUpperCase()}`;
+
+        if (difference > 0) {
+          badge.textContent = `Saved ${formatBytes(difference)} (${percent}%)`;
+          status.textContent = "Done";
+        } else if (difference === 0) {
+          badge.textContent = "Same file size";
+          status.textContent = "No size reduction. Try a lower quality or WebP.";
+        } else {
+          badge.textContent = `${formatBytes(Math.abs(difference))} larger`;
+          status.textContent = "The result is larger. Try a lower quality or WebP.";
+        }
 
         panel.hidden = false;
-        status.textContent = "Done";
         panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }, format.value, q);
     } catch (e) {
