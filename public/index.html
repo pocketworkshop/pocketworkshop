@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="PocketWorkshop is a collection of free browser-based tools for everyday tasks. Fast, simple, and privacy-friendly." />
+  <title>PocketWorkshop — Free Browser Tools</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="PocketWorkshop home">
+      <span class="brand-mark" aria-hidden="true">▣</span>
+      <span>PocketWorkshop</span>
+    </a>
+    <nav>
+      <a href="#tools">Tools</a>
+      <a href="#privacy">Privacy</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">EVERYDAY TOOLS, RIGHT IN YOUR POCKET</p>
+      <h1>Small tools.<br />Less hassle.</h1>
+      <p class="hero-copy">
+        Free browser-based utilities for text, images, PDFs, data, video, and more.
+        No account required.
+      </p>
+      <a class="primary-button" href="#word-counter">Try the Word Counter</a>
+    </section>
+
+    <section class="categories" id="tools" aria-labelledby="tools-title">
+      <div class="section-heading">
+        <p class="eyebrow">TOOLBOX</p>
+        <h2 id="tools-title">Useful tools, one pocket.</h2>
+      </div>
+
+      <div class="tool-grid">
+        <a class="tool-card active" href="#word-counter">
+          <span class="icon">Aa</span>
+          <strong>Word Counter</strong>
+          <span>Count words, characters, sentences and paragraphs instantly.</span>
+        </a>
+
+        <div class="tool-card upcoming">
+          <span class="icon">PDF</span>
+          <strong>PDF Tools</strong>
+          <span>Merge, split and reorganize PDFs.</span>
+          <small>Coming soon</small>
+        </div>
+
+        <div class="tool-card upcoming">
+          <span class="icon">IMG</span>
+          <strong>Image Tools</strong>
+          <span>Compress, resize and convert images.</span>
+          <small>Coming soon</small>
+        </div>
+
+        <div class="tool-card upcoming">
+          <span class="icon">CSV</span>
+          <strong>Data Tools</strong>
+          <span>Clean, format and transform everyday data.</span>
+          <small>Coming soon</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="counter-section" id="word-counter" aria-labelledby="counter-title">
+      <div class="section-heading">
+        <p class="eyebrow">FIRST TOOL</p>
+        <h2 id="counter-title">Word Counter</h2>
+        <p>Paste or type text below. Everything is processed locally in your browser.</p>
+      </div>
+
+      <div class="counter-shell">
+        <textarea id="text-input" placeholder="Type or paste your text here..." aria-label="Text to count"></textarea>
+
+        <div class="stats" aria-live="polite">
+          <div><strong id="words">0</strong><span>Words</span></div>
+          <div><strong id="characters">0</strong><span>Characters</span></div>
+          <div><strong id="characters-no-spaces">0</strong><span>No spaces</span></div>
+          <div><strong id="sentences">0</strong><span>Sentences</span></div>
+          <div><strong id="paragraphs">0</strong><span>Paragraphs</span></div>
+          <div><strong id="reading-time">0 min</strong><span>Reading time</span></div>
+        </div>
+
+        <div class="tool-actions">
+          <button id="clear-button" type="button">Clear</button>
+          <button id="copy-button" type="button">Copy text</button>
+          <span id="copy-status" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust" id="privacy">
+      <div>
+        <p class="eyebrow">PRIVACY FIRST</p>
+        <h2>Your files should stay yours.</h2>
+      </div>
+      <p>
+        PocketWorkshop is designed to run tools in your browser whenever practical.
+        This starter version does not upload or store the text you enter.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 PocketWorkshop</span>
+    <span>Free browser-based tools for everyday tasks.</span>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
