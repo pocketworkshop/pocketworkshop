@@ -13,26 +13,39 @@
       .replaceAll("'", "&#39;");
   }
 
+  function normalizeToolPath(pathname) {
+    let path = String(pathname || "").split("?")[0].split("#")[0];
+    if (path.length > 1) path = path.replace(/\/+$/, "");
+    if (path.startsWith("/tools/") && !path.endsWith(".html")) {
+      path += ".html";
+    }
+    return path;
+  }
+
   function getRelatedTools(tools, current) {
-    const sameCategory = tools.filter(
-      (tool) => tool.category === current.category && tool.url !== current.url
+    const fullCategory = tools.filter(
+      (tool) => tool.category === current.category
     );
 
-    if (sameCategory.length <= 3) return sameCategory;
+    if (fullCategory.length <= 1) return [];
 
-    const fullCategory = tools.filter((tool) => tool.category === current.category);
-    const currentIndex = fullCategory.findIndex((tool) => tool.url === current.url);
+    const currentIndex = fullCategory.findIndex(
+      (tool) => normalizeToolPath(tool.url) === normalizeToolPath(current.url)
+    );
+
     const result = [];
-    const used = new Set([current.url]);
+    const used = new Set([normalizeToolPath(current.url)]);
 
     for (const offset of [1, -1, 2, -2, 3, -3]) {
       if (result.length >= 3) break;
+
       const index =
         (currentIndex + offset + fullCategory.length) % fullCategory.length;
       const candidate = fullCategory[index];
+      const key = candidate ? normalizeToolPath(candidate.url) : "";
 
-      if (candidate && !used.has(candidate.url)) {
-        used.add(candidate.url);
+      if (candidate && !used.has(key)) {
+        used.add(key);
         result.push(candidate);
       }
     }
@@ -46,8 +59,10 @@
     const tools = window.POCKETWORKSHOP_TOOLS;
     if (!Array.isArray(tools) || !tools.length) return;
 
-    const currentPath = window.location.pathname;
-    const current = tools.find((tool) => tool.url === currentPath);
+    const currentPath = normalizeToolPath(window.location.pathname);
+    const current = tools.find(
+      (tool) => normalizeToolPath(tool.url) === currentPath
+    );
     if (!current) return;
 
     const related = getRelatedTools(tools, current);
