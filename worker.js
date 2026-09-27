@@ -1,33 +1,29 @@
 export default {
   async fetch(request, env) {
     const response = await env.ASSETS.fetch(request);
+    const pathname = new URL(request.url).pathname;
+    const contentType = String(response.headers.get("content-type") || "");
 
-    // The route configuration already limits this Worker to /tools/*.html.
-    // These checks keep the behavior safe if the routing is changed later.
+    // Only enhance successful HTML tool pages.
+    // Redirects (including .html -> clean URL) and non-HTML assets pass through unchanged.
     if (
       request.method !== "GET" ||
       response.status !== 200 ||
-      !new URL(request.url).pathname.startsWith("/tools/") ||
-      !new URL(request.url).pathname.endsWith(".html") ||
-      !String(response.headers.get("content-type") || "").includes("text/html")
+      !pathname.startsWith("/tools/") ||
+      !contentType.includes("text/html")
     ) {
       return response;
     }
 
-    try {
-      return new HTMLRewriter()
-        .on("body", {
-          element(element) {
-            element.append(
-              '<script src="/tools/related-tools.js"></script>',
-              { html: true }
-            );
-          }
-        })
-        .transform(response);
-    } catch {
-      // Fail open: if the enhancement cannot be applied, serve the original page.
-      return response;
-    }
+    return new HTMLRewriter()
+      .on("body", {
+        element(element) {
+          element.append(
+            '<script src="/tools/related-tools.js"></script>',
+            { html: true }
+          );
+        }
+      })
+      .transform(response);
   }
 };
