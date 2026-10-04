@@ -16,10 +16,8 @@
   function normalizeToolPath(pathname) {
     let path = String(pathname || "").split("?")[0].split("#")[0];
     if (path.length > 1) path = path.replace(/\/+$/, "");
-    if (path.startsWith("/tools/") && !path.endsWith(".html")) {
-      path += ".html";
-    }
-    return path;
+    path = path.replace(/\.html$/i, "");
+    return path || "/";
   }
 
   function getRelatedTools(tools, current) {
@@ -91,7 +89,7 @@
           <h2 id="related-tools-title">You might also need.</h2>
           <p>More PocketWorkshop tools related to ${escapeHtml(current.title)}.</p>
         </div>
-        <a class="text-link" href="/tools.html">View all tools →</a>
+        <a class="text-link" href="/tools">View all tools →</a>
       </div>
       <div class="tool-grid">${cards}</div>
     `;

@@ -3,7 +3,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "PDF Merge",
     icon: "PDF",
     description: "Combine multiple PDF files into a single PDF in your browser.",
-    url: "/tools/pdf-merge.html",
+    url: "/tools/pdf-merge",
     category: "PDF",
     popular: true
   },
@@ -11,7 +11,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "PDF Split",
     icon: "CUT",
     description: "Extract selected pages or split every page into separate PDFs.",
-    url: "/tools/pdf-split.html",
+    url: "/tools/pdf-split",
     category: "PDF",
     popular: true
   },
@@ -19,7 +19,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "PDF to JPG",
     icon: "JPG",
     description: "Convert PDF pages to JPG images directly in your browser.",
-    url: "/tools/pdf-to-jpg.html",
+    url: "/tools/pdf-to-jpg",
     category: "PDF",
     popular: true
   },
@@ -27,7 +27,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "JPG to PDF",
     icon: "PDF",
     description: "Combine JPG, PNG and WebP images into one PDF in your browser.",
-    url: "/tools/jpg-to-pdf.html",
+    url: "/tools/jpg-to-pdf",
     category: "PDF",
     popular: false
   },
@@ -35,7 +35,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "PDF Rotate",
     icon: "↻",
     description: "Rotate selected PDF pages by 90°, 180° or 270° in your browser.",
-    url: "/tools/pdf-rotate.html",
+    url: "/tools/pdf-rotate",
     category: "PDF",
     popular: false
   },
@@ -43,7 +43,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "PDF Page Organizer",
     icon: "123",
     description: "Reorder or remove PDF pages and save a cleaned-up copy.",
-    url: "/tools/pdf-page-organizer.html",
+    url: "/tools/pdf-page-organizer",
     category: "PDF",
     popular: false
   },
@@ -51,7 +51,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Image Resizer",
     icon: "IMG",
     description: "Resize JPG, PNG and WebP images directly in your browser.",
-    url: "/tools/image-resizer.html",
+    url: "/tools/image-resizer",
     category: "Image",
     popular: true
   },
@@ -59,7 +59,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Image Compressor",
     icon: "ZIP",
     description: "Compress images in your browser and download a lighter file.",
-    url: "/tools/image-compressor.html",
+    url: "/tools/image-compressor",
     category: "Image",
     popular: true
   },
@@ -67,7 +67,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Image Cropper",
     icon: "CROP",
     description: "Crop JPG, PNG and WebP images with free or fixed aspect ratios.",
-    url: "/tools/image-cropper.html",
+    url: "/tools/image-cropper",
     category: "Image",
     popular: false
   },
@@ -75,7 +75,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Image Format Converter",
     icon: "FMT",
     description: "Convert JPG, PNG and WebP images without changing their dimensions.",
-    url: "/tools/image-format-converter.html",
+    url: "/tools/image-format-converter",
     category: "Image",
     popular: false
   },
@@ -83,7 +83,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Image Rotate & Flip",
     icon: "↔",
     description: "Rotate or mirror JPG, PNG and WebP images in your browser.",
-    url: "/tools/image-rotate-flip.html",
+    url: "/tools/image-rotate-flip",
     category: "Image",
     popular: false
   },
@@ -91,7 +91,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Word Counter",
     icon: "Aa",
     description: "Count words, characters, sentences and paragraphs instantly.",
-    url: "/tools/word-counter.html",
+    url: "/tools/word-counter",
     category: "Text",
     popular: false
   },
@@ -99,7 +99,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Text Case Converter",
     icon: "aA",
     description: "Convert text to uppercase, lowercase, title case, sentence case and more.",
-    url: "/tools/text-case-converter.html",
+    url: "/tools/text-case-converter",
     category: "Text",
     popular: false
   },
@@ -107,7 +107,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Text Cleaner",
     icon: "TXT",
     description: "Remove extra spaces, blank lines, duplicate lines and other text clutter.",
-    url: "/tools/text-cleaner.html",
+    url: "/tools/text-cleaner",
     category: "Text",
     popular: false
   },
@@ -115,7 +115,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Lorem Ipsum Generator",
     icon: "LO",
     description: "Generate placeholder paragraphs, sentences or words for layouts and mockups.",
-    url: "/tools/lorem-ipsum-generator.html",
+    url: "/tools/lorem-ipsum-generator",
     category: "Text",
     popular: false
   },
@@ -123,7 +123,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Markdown Previewer",
     icon: "MD",
     description: "Write Markdown and preview the rendered result instantly in your browser.",
-    url: "/tools/markdown-previewer.html",
+    url: "/tools/markdown-previewer",
     category: "Text",
     popular: false
   },
@@ -131,7 +131,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Text Diff Checker",
     icon: "DIFF",
     description: "Compare two text versions line by line and highlight what changed.",
-    url: "/tools/text-diff-checker.html",
+    url: "/tools/text-diff-checker",
     category: "Text",
     popular: false
   },
@@ -139,7 +139,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "JSON Formatter",
     icon: "{}",
     description: "Format, validate, minify and sort JSON directly in your browser.",
-    url: "/tools/json-formatter.html",
+    url: "/tools/json-formatter",
     category: "Data",
     popular: false
   },
@@ -147,7 +147,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "CSV to JSON",
     icon: "C→J",
     description: "Convert CSV, TSV or other delimited text into JSON locally.",
-    url: "/tools/csv-to-json.html",
+    url: "/tools/csv-to-json",
     category: "Data",
     popular: false
   },
@@ -155,7 +155,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "JSON to CSV",
     icon: "J→C",
     description: "Convert arrays of JSON objects into CSV, TSV or delimited text.",
-    url: "/tools/json-to-csv.html",
+    url: "/tools/json-to-csv",
     category: "Data",
     popular: false
   },
@@ -163,7 +163,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "URL Encoder & Decoder",
     icon: "%20",
     description: "Encode text for URLs or decode percent-encoded values.",
-    url: "/tools/url-encoder-decoder.html",
+    url: "/tools/url-encoder-decoder",
     category: "Developer",
     popular: false
   },
@@ -171,7 +171,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Base64 Encoder & Decoder",
     icon: "64",
     description: "Encode Unicode text to Base64 or decode Base64 back to text.",
-    url: "/tools/base64-encoder-decoder.html",
+    url: "/tools/base64-encoder-decoder",
     category: "Developer",
     popular: false
   },
@@ -179,7 +179,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "UUID Generator",
     icon: "ID",
     description: "Generate one or many random UUID v4 values securely in your browser.",
-    url: "/tools/uuid-generator.html",
+    url: "/tools/uuid-generator",
     category: "Developer",
     popular: false
   },
@@ -187,7 +187,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Unix Timestamp Converter",
     icon: "UTC",
     description: "Convert Unix seconds or milliseconds to dates and back again.",
-    url: "/tools/unix-timestamp-converter.html",
+    url: "/tools/unix-timestamp-converter",
     category: "Developer",
     popular: false
   },
@@ -195,7 +195,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Color Converter",
     icon: "#",
     description: "Convert colors between HEX, RGB and HSL with a live preview.",
-    url: "/tools/color-converter.html",
+    url: "/tools/color-converter",
     category: "Developer",
     popular: false
   },
@@ -203,7 +203,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "CSS Gradient Generator",
     icon: "CSS",
     description: "Build linear or radial gradients and copy ready-to-use CSS.",
-    url: "/tools/css-gradient-generator.html",
+    url: "/tools/css-gradient-generator",
     category: "Developer",
     popular: false
   },
@@ -211,7 +211,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "HTML Entity Encoder & Decoder",
     icon: "&;",
     description: "Escape special characters for HTML or decode entities back to text.",
-    url: "/tools/html-entity-encoder-decoder.html",
+    url: "/tools/html-entity-encoder-decoder",
     category: "Developer",
     popular: false
   },
@@ -219,7 +219,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "QR Code Generator",
     icon: "QR",
     description: "Create and download QR codes from URLs or text directly in your browser.",
-    url: "/tools/qr-code-generator.html",
+    url: "/tools/qr-code-generator",
     category: "Other",
     popular: true
   },
@@ -227,7 +227,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Password Generator",
     icon: "***",
     description: "Generate strong random passwords with customizable character sets.",
-    url: "/tools/password-generator.html",
+    url: "/tools/password-generator",
     category: "Other",
     popular: false
   },
@@ -235,7 +235,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Random Number Generator",
     icon: "123",
     description: "Generate random integers or decimal values within a custom range.",
-    url: "/tools/random-number-generator.html",
+    url: "/tools/random-number-generator",
     category: "Other",
     popular: false
   },
@@ -243,7 +243,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Duplicate Line Remover",
     icon: "DUP",
     description: "Remove repeated lines with options for case, spaces and which occurrence to keep.",
-    url: "/tools/duplicate-line-remover.html",
+    url: "/tools/duplicate-line-remover",
     category: "Text",
     popular: false
   },
@@ -251,7 +251,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Text Sorter",
     icon: "SORT",
     description: "Sort lines alphabetically, naturally, numerically, by length or randomly.",
-    url: "/tools/text-sorter.html",
+    url: "/tools/text-sorter",
     category: "Text",
     popular: false
   },
@@ -259,7 +259,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Slug Generator",
     icon: "SLUG",
     description: "Turn titles and text into clean URL-friendly slugs.",
-    url: "/tools/slug-generator.html",
+    url: "/tools/slug-generator",
     category: "Text",
     popular: false
   },
@@ -267,7 +267,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Character Frequency Counter",
     icon: "FREQ",
     description: "Count character or word frequency and sort or filter the results.",
-    url: "/tools/character-frequency-counter.html",
+    url: "/tools/character-frequency-counter",
     category: "Text",
     popular: false
   },
@@ -275,7 +275,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "JSON to YAML Converter",
     icon: "J→Y",
     description: "Convert JSON data to readable YAML directly in your browser.",
-    url: "/tools/json-to-yaml.html",
+    url: "/tools/json-to-yaml",
     category: "Data",
     popular: false
   },
@@ -283,7 +283,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "YAML to JSON Converter",
     icon: "Y→J",
     description: "Convert YAML data to formatted or minified JSON locally.",
-    url: "/tools/yaml-to-json.html",
+    url: "/tools/yaml-to-json",
     category: "Data",
     popular: false
   },
@@ -291,7 +291,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "XML Formatter",
     icon: "XML",
     description: "Format, minify and validate XML directly in your browser.",
-    url: "/tools/xml-formatter.html",
+    url: "/tools/xml-formatter",
     category: "Data",
     popular: false
   },
@@ -299,7 +299,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "XML to JSON Converter",
     icon: "X→J",
     description: "Convert XML elements, attributes and repeated nodes into JSON.",
-    url: "/tools/xml-to-json.html",
+    url: "/tools/xml-to-json",
     category: "Data",
     popular: false
   },
@@ -307,7 +307,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "JWT Decoder",
     icon: "JWT",
     description: "Decode JWT headers and payloads and inspect common token claims.",
-    url: "/tools/jwt-decoder.html",
+    url: "/tools/jwt-decoder",
     category: "Developer",
     popular: false
   },
@@ -315,7 +315,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Hash Generator",
     icon: "HASH",
     description: "Generate SHA-1, SHA-256, SHA-384 or SHA-512 hashes for text or files.",
-    url: "/tools/hash-generator.html",
+    url: "/tools/hash-generator",
     category: "Developer",
     popular: false
   },
@@ -323,7 +323,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Regex Tester",
     icon: ".*",
     description: "Test JavaScript regular expressions, flags, matches and capture groups.",
-    url: "/tools/regex-tester.html",
+    url: "/tools/regex-tester",
     category: "Developer",
     popular: false
   },
@@ -331,7 +331,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "URL Parser",
     icon: "URL",
     description: "Break URLs into protocol, host, path, query parameters and hash.",
-    url: "/tools/url-parser.html",
+    url: "/tools/url-parser",
     category: "Developer",
     popular: false
   },
@@ -339,7 +339,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Image to Base64 Converter",
     icon: "64",
     description: "Convert images to Base64 or Data URLs and preview Base64 images.",
-    url: "/tools/image-to-base64-converter.html",
+    url: "/tools/image-to-base64-converter",
     category: "Image",
     popular: false
   },
@@ -347,7 +347,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "SVG to PNG Converter",
     icon: "SVG",
     description: "Convert SVG files or markup to PNG with custom output size and background.",
-    url: "/tools/svg-to-png-converter.html",
+    url: "/tools/svg-to-png-converter",
     category: "Image",
     popular: false
   },
@@ -355,7 +355,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Favicon Generator",
     icon: "ICO",
     description: "Create favicon.ico, PNG favicons, Apple Touch Icons and Android icons.",
-    url: "/tools/favicon-generator.html",
+    url: "/tools/favicon-generator",
     category: "Image",
     popular: false
   },
@@ -363,7 +363,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Image Watermark Tool",
     icon: "WM",
     description: "Add customizable text watermarks to images and download the result.",
-    url: "/tools/image-watermark-tool.html",
+    url: "/tools/image-watermark-tool",
     category: "Image",
     popular: false
   },
@@ -371,7 +371,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Aspect Ratio Calculator",
     icon: "16:9",
     description: "Simplify aspect ratios and calculate matching image or video dimensions.",
-    url: "/tools/aspect-ratio-calculator.html",
+    url: "/tools/aspect-ratio-calculator",
     category: "Other",
     popular: false
   },
@@ -379,7 +379,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Percentage Calculator",
     icon: "%",
     description: "Calculate percentages, percentage shares and percentage change.",
-    url: "/tools/percentage-calculator.html",
+    url: "/tools/percentage-calculator",
     category: "Other",
     popular: false
   },
@@ -387,7 +387,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Date Difference Calculator",
     icon: "DATE",
     description: "Find days, weeks, weekdays and calendar differences between two dates.",
-    url: "/tools/date-difference-calculator.html",
+    url: "/tools/date-difference-calculator",
     category: "Other",
     popular: false
   },
@@ -395,7 +395,7 @@ window.POCKETWORKSHOP_TOOLS = [
     title: "Random Picker",
     icon: "PICK",
     description: "Randomly pick one or more names, choices or ideas from a list.",
-    url: "/tools/random-picker.html",
+    url: "/tools/random-picker",
     category: "Other",
     popular: false
   }
