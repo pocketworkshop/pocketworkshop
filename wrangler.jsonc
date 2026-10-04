@@ -6,6 +6,14 @@
     "directory": "./public",
     "binding": "ASSETS",
     "run_worker_first": [
+      "/tools",
+      "/tools.html",
+      "/about",
+      "/about.html",
+      "/privacy",
+      "/privacy.html",
+      "/terms",
+      "/terms.html",
       "/tools/*",
       "!/tools/*.js"
     ]

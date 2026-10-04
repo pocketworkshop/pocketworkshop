@@ -1,29 +1,59 @@
+const PRODUCTION_ORIGIN = "https://pocketworkshop.pwtools.workers.dev";
+
+function cleanPath(pathname) {
+  if (!pathname || pathname === "/") return "/";
+  const cleaned = pathname
+    .replace(/\.html$/i, "")
+    .replace(/\/+$/, "");
+  return cleaned || "/";
+}
+
 export default {
   async fetch(request, env) {
     const response = await env.ASSETS.fetch(request);
-    const pathname = new URL(request.url).pathname;
+    const url = new URL(request.url);
+    const pathname = url.pathname;
     const contentType = String(response.headers.get("content-type") || "");
 
-    // Only enhance successful HTML tool pages.
-    // Redirects (including .html -> clean URL) and non-HTML assets pass through unchanged.
+    // Redirects and non-HTML assets pass through unchanged.
     if (
       request.method !== "GET" ||
       response.status !== 200 ||
-      !pathname.startsWith("/tools/") ||
       !contentType.includes("text/html")
     ) {
       return response;
     }
 
-    return new HTMLRewriter()
-      .on("body", {
-        element(element) {
+    const canonicalUrl = PRODUCTION_ORIGIN + cleanPath(pathname);
+    const isToolPage = cleanPath(pathname).startsWith("/tools/");
+
+    const canonicalHandler = {
+      element(element) {
+        element.setAttribute("href", canonicalUrl);
+      }
+    };
+
+    const ogUrlHandler = {
+      element(element) {
+        element.setAttribute("content", canonicalUrl);
+      }
+    };
+
+    const bodyHandler = {
+      element(element) {
+        if (isToolPage) {
           element.append(
             '<script src="/tools/related-tools.js"></script>',
             { html: true }
           );
         }
-      })
+      }
+    };
+
+    return new HTMLRewriter()
+      .on('link[rel="canonical"]', canonicalHandler)
+      .on('meta[property="og:url"]', ogUrlHandler)
+      .on("body", bodyHandler)
       .transform(response);
   }
 };
